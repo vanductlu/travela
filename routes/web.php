@@ -1,0 +1,49 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\clients\HomeController;
+use App\Http\Controllers\clients\AboutController;
+use App\Http\Controllers\clients\BookingController;
+use App\Http\Controllers\clients\ContactController;
+use App\Http\Controllers\clients\DestinationController;
+use App\Http\Controllers\clients\LoginController;
+use App\Http\Controllers\clients\MyTourController;
+use App\Http\Controllers\clients\SearchController;
+use App\Http\Controllers\clients\TourBookedController;
+use App\Http\Controllers\clients\TourDetailController;
+use App\Http\Controllers\clients\ToursController;
+use App\Http\Controllers\clients\TravelGuidesController;
+use App\Http\Controllers\clients\UserProfileController;
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+// Route::get('/', function () {
+//     return view('home');
+// });
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about', [AboutController::class, 'index'])->name('about');
+Route::get('/booking', [BookingController::class, 'index'])->name('booking');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('create-contact');
+Route::get('/destination', [DestinationController::class, 'index'])->name('destination');
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'store'])->name('create-login');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/my-tour', [MyTourController::class, 'index'])->name('my-tour');
+Route::get('/search', [SearchController::class, 'index'])->name('search');
+Route::get('/tour-booked', [TourBookedController::class, 'index'])->name('tour-booked');
+Route::get('/tour-detail', [TourDetailController::class, 'index'])->name('tour-detail');
+Route::get('/tours', [ToursController::class, 'index'])->name('tours');
+Route::get('/travel-guides', [TravelGuidesController::class, 'index'])->name('travel-guides');
+Route::get('/user-profile', [UserProfileController::class, 'index'])->name('user-profile');
+Route::post('/user-profile', [UserProfileController::class, 'update'])->name('update-user-profile');
+Route::post('/createBooking', [BookingController::class, 'store'])->name('create-booking');

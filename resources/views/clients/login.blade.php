@@ -14,7 +14,7 @@
 
                     <div class="signin-form">
                         <h2 class="form-title">Đăng nhập</h2>
-                        <form action="{{ route('user-login') }}" method="POST" class="login-form" id="login-form" style="margin-top: 15px">
+                        <form action="" method="POST" class="login-form" id="login-form" style="margin-top: 15px">
                             <div class="form-group">
                                 <label for="username_login"><i class="zmdi zmdi-account material-icons-name"></i></label>
                                 <input type="text" name="username_login" id="username_login" placeholder="Tên đăng nhập" required/>
@@ -35,7 +35,7 @@
                             <span class="social-label">Hoặc đăng nhập bằng</span>
                             <ul class="socials">
                                 <li><a href="#"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li>
-                                <li><a href="{{ route('login-google') }}"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
+                                <li><a href=""><i class="display-flex-center zmdi zmdi-google"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                     <div class="signup-form">
                         <h2 class="form-title">Đăng ký</h2>
                         <div class="loader"></div>
-                        <form action="{{ route('register') }}" method="POST" class="register-form" id="register-form" style="margin-top: 15px">
+                        <form action="" method="POST" class="register-form" id="register-form" style="margin-top: 15px">
                             <div class="form-group">
                                 <label for="username_register"><i class="zmdi zmdi-account material-icons-name"></i></label>
                                 <input type="text" name="username_register" id="username_register" placeholder="Tên tài khoản" required/>

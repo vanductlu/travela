@@ -40,7 +40,6 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('create-contact');
 Route::get('/destination', [DestinationController::class, 'index'])->name('destination');
 Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'store'])->name('create-login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/my-tour', [MyTourController::class, 'index'])->name('my-tour');
 Route::get('/search', [SearchController::class, 'index'])->name('search');

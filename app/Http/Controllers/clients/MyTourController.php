@@ -11,7 +11,7 @@ class MyTourController extends Controller
     public function index()
     {   
         $title = 'Tour của tôi';
-        return view('clients.mytour',compact('title'));
+        return view('clients.my-tour',compact('title'));
     }
 }
     

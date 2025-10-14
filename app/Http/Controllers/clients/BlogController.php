@@ -5,7 +5,7 @@ namespace App\Http\Controllers\clients;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class TourGridController extends Controller
+class BlogController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class TourGridController extends Controller
      */
     public function index()
     {
-        $title = 'Tour Grid';
-        return view('clients.tour-grid',compact('title'));
+        $title = 'Blog';
+        return view('clients.blog',compact('title'));
     }
 
     /**

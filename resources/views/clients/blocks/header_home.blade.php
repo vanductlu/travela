@@ -97,18 +97,26 @@
                                             <ul>
                                                 <li><a href="{{ route('tours') }}">Tours</a></li>
                                                 <li><a href="{{ route('travel-guides') }}">Hướng dẫn viên</a></li>
+                                                <li><a href="{{ route('tour-detail') }}">Chi tiết chuyến du lịch</a></li>
                                             </ul>
                                         </li>
 
                                         <li class="dropdown {{ Request::url() == route('destination') ? 'active' : '' }}">
                                             <a href="{{ route('destination')}}">Địa điểm du lịch</a>
                                             <ul>
-                                                <li><a href="destination1.html">Địa điểm du lịch</a></li>
+                                                <li><a href="{{ route('destination')}}">Địa điểm du lịch</a></li>
                                                 <li><a href="destination-details.html">Chi tiết Địa điểm du lịch</a></li>
                                             </ul>
                                         </li>
-                                        <li class="{{ Request::url() == route('contact') ? 'active' : '' }}"><a
+                                        <li class="dropdowwn {{ Request::url() == route('contact') ? 'active' : '' }}"><a
                                                 href="{{ route('contact') }}">Liên Hệ</a></li>
+                                        <li class="dropdown {{ Request::url() == route('blog') ? 'active' : '' }}"><a
+                                                href="{{ route('blog') }}">Blog</a>
+                                            <ul>
+                                                <li><a href="{{ route('blog') }}">Danh sách bài viết</a></li>
+                                                <li><a href="{{ route('blog-details') }}">Chi tiết bài viết</a></li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </div>
 

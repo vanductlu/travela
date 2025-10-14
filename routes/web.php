@@ -14,6 +14,10 @@ use App\Http\Controllers\clients\TourDetailController;
 use App\Http\Controllers\clients\ToursController;
 use App\Http\Controllers\clients\TravelGuidesController;
 use App\Http\Controllers\clients\UserProfileController;
+use App\Http\Controllers\clients\BlogController;
+use App\Http\Controllers\clients\BlogDetailsController;
+use App\Http\Controllers\clients\TourGridController;
+use App\Http\Controllers\clients\TourListController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -47,3 +51,7 @@ Route::get('/travel-guides', [TravelGuidesController::class, 'index'])->name('tr
 Route::get('/user-profile', [UserProfileController::class, 'index'])->name('user-profile');
 Route::post('/user-profile', [UserProfileController::class, 'update'])->name('update-user-profile');
 Route::post('/createBooking', [BookingController::class, 'store'])->name('create-booking');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog');    
+Route::get('/blog-details', [BlogDetailsController::class, 'index'])->name('blog-details');
+Route::get('/tour-grid', [TourGridController::class, 'index'])->name('tour-grid');
+Route::get('/tour-list', [TourListController::class, 'index'])->name('tour-list');

@@ -108,7 +108,6 @@
                                             <ul>
                                                 <li><a href="{{ route('tours') }}">Danh sách chuyến đi</a></li>
                                                 <li><a href="{{ route('travel-guides') }}">Hướng dẫn viên</a></li>
-                                                <li><a href="{{ route('tour-detail') }}">Chi tiết chuyến du lịch</a></li>
                                             </ul>
                                         </li>
                                         <li class="dropdown {{ Request::url() == route('destination') ? 'active' : '' }}"><a

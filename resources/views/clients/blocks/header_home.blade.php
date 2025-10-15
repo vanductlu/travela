@@ -96,7 +96,6 @@
                                             <ul>
                                                 <li><a href="{{ route('tours') }}">Tours</a></li>
                                                 <li><a href="{{ route('travel-guides') }}">Hướng dẫn viên</a></li>
-                                                <li><a href="{{ route('tour-detail') }}">Chi tiết chuyến du lịch</a></li>
                                             </ul>
                                         </li>
 
@@ -157,7 +156,7 @@
                                         @endif
                                     </button>
 
-                                    <ul class="dropdown-menu" id="dropdownMenu">
+                                    <ul class="dropdown-menu" id="dropdownMenu" >
                                         @if (session()->has('username'))
                                             <li><a href="{{ route('user-profile') }}">Thông tin cá nhân</a></li>
                                             <li><a href="{{ route('my-tours') }}">Tour đã đặt</a></li>

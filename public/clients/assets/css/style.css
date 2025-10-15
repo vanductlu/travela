@@ -716,7 +716,7 @@ a.theme-btn {
       text-align: center;
       border: 1px solid var(--border-color);
       line-height: 42px; }
-    .pagination li.disabled .page-link, .pagination li:last-child .page-link {
+    .pagination li.disabled .page-link, .pagination li:last-child .page-link, .pagination li:first-child .page-link {
       border-radius: 50%; }
     .pagination li.active .page-link, .pagination li:hover:not(.disabled) .page-link {
       color: white;
@@ -4094,7 +4094,7 @@ h6, .h6, blockquote {
       -ms-flex-wrap: wrap;
       flex-wrap: wrap; } }
   .search-filter-inner .filter-item {
-    min-width: 18%;
+    min-width: 24%;
     padding-left: 28px;
     position: relative;
     margin-bottom: 15px;
@@ -7268,7 +7268,7 @@ blockquote {
   -ms-flex-pack: justify;
   justify-content: space-between; }
   .comment-review-wrap .comment-ratting-item {
-    width: 30%;
+    /* width: 30%; */
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;

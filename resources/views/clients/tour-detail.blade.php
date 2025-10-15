@@ -1,36 +1,46 @@
 @include('clients.blocks.header')
+<section class="page-banner-two rel z-1">
+    <div class="container-fluid">
+        <hr class="mt-0">
+        <div class="container">
+            <div class="banner-inner pt-15 pb-25">
+                <h2 class="page-title mb-10 aos-init aos-animate" data-aos="fade-left" data-aos-duration="1500"
+                    data-aos-offset="50">{{ $tourDetail->destination }}</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-20 aos-init aos-animate" data-aos="fade-right"
+                        data-aos-delay="200" data-aos-duration="1500" data-aos-offset="50">
+                        <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">{{ $title }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
         <!-- Tour Gallery start -->
         <div class="tour-gallery">
             <div class="container-fluid">
                 <div class="row gap-10 justify-content-center rel">
                     <div class="col-lg-4 col-md-6">
                         <div class="gallery-item">
-                            <img src="{{ asset('clients/assets/images/destinations/destinati') }}on-details1.jpg" alt="Destination">
+                            <img src="{{ asset('clients/assets/images/gallery-tours/'.$tourDetail->images[0] . '')}}" alt="Destination">
                         </div>
                         <div class="gallery-item">
-                            <img src="{{ asset('clients/assets/images/destinations/destinati') }}on-details4.jpg" alt="Destination">
+                            <img src="{{ asset('clients/assets/images/gallery-tours/'.$tourDetail->images[1] . '')}}" alt="Destination">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="gallery-item gallery-between">
+                            <img src="{{ asset('clients/assets/images/gallery-tours/'.$tourDetail->images[2] . '')}}" alt="Destination">
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="gallery-item">
-                            <img src="{{ asset('clients/assets/images/destinations/destinati') }}on-details2.jpg" alt="Destination">
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="gallery-item">
-                            <img src="{{ asset('clients/assets/images/destinations/destinati') }}on-details3.jpg" alt="Destination">
+                            <img src="{{ asset('clients/assets/images/gallery-tours/'.$tourDetail->images[3] . '')}}" alt="Destination">
                         </div>
                         <div class="gallery-item">
-                            <img src="{{ asset('clients/assets/images/destinations/destinati') }}on-details5.jpg" alt="Destination">
+                            <img src="{{ asset('clients/assets/images/gallery-tours/'.$tourDetail->images[4] . '')}}" alt="Destination">
                         </div>
-                    </div>
-                    <div class="col-lg-12">
-                       <div class="gallery-more-btn">
-                            <a href="contact.html" class="theme-btn style-two bgc-secondary">
-                                <span data-hover="See All Photos">Xem tất cả ảnh</span>
-                                <i class="fal fa-arrow-right"></i>
-                            </a>
-                       </div>
                     </div>
                 </div>
             </div>
@@ -44,9 +54,9 @@
                 <div class="row justify-content-between">
                     <div class="col-xl-6 col-lg-7">
                         <div class="tour-header-content mb-15" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">
-                            <span class="location d-inline-block mb-10"><i class="fal fa-map-marker-alt"></i> Bali, Indonesia</span>
+                            <span class="location d-inline-block mb-10"><i class="fal fa-map-marker-alt"></i> {{ $tourDetail->destination }}a</span>
                             <div class="section-title pb-5">
-                                <h2>Relinking Beach in Nusa panada island, Bali, Indonesia</h2>
+                                <h2>{{ $tourDetail->title }}</h2>
                             </div>
                             <div class="ratting">
                                 <i class="fas fa-star"></i>
@@ -78,7 +88,7 @@
             <div class="col-lg-8">
                 <div class="tour-details-content">
                     <h3>Khám phá các tour</h3>
-                    <p>Bali, Indonesia là một thiên đường nhiệt đới nổi tiếng với những bãi biển tuyệt đẹp, nền văn hóa sôi động và cảnh quan xanh mướt. Nằm ở cực tây của quần đảo Lesser Sunda, Bali có khí hậu ấm áp, nhiệt đới, lý tưởng để du lịch quanh năm. Du khách bị thu hút bởi các bãi biển nổi tiếng như Kuta, Seminyak và Nusa Dua, rất thích hợp để lướt sóng, tắm nắng và lặn biển. Di sản văn hóa phong phú của đảo thể hiện qua nhiều ngôi đền, bao gồm Tanah Lot và Uluwatu nổi tiếng, cũng như ở Ubud - trung tâm văn hóa của Bali, nổi tiếng với các buổi biểu diễn múa truyền thống và chợ nghệ thuật. Những người yêu thiên nhiên có thể khám phá ruộng bậc thang ở Tegallalang, leo núi Batur hoặc ghé thăm các thác nước tuyệt đẹp như Tegenungan và Gitgit.</p>
+                    <p>{!! $tourDetail->description !!}</p>
                     <div class="row pb-55">
                         <div class="col-md-6">
                             <div class="tour-include-exclude mt-30">
@@ -109,168 +119,28 @@
                     </div>
                 </div>
                 
-                <h3>Hoạt động</h3>
-                <div class="tour-activities mt-30 mb-45">
-                    <div class="tour-activity-item">
-                        <i class="flaticon-hiking"></i>
-                        <b>Leo núi</b>
-                    </div>
-                    <div class="tour-activity-item">
-                        <i class="flaticon-fishing"></i>
-                        <b>Câu cá</b>
-                    </div>
-                    <div class="tour-activity-item">
-                        <i class="flaticon-man"></i>
-                        <b>Bắn súng kayak</b>
-                    </div>
-                    <div class="tour-activity-item">
-                        <i class="flaticon-kayak-1"></i>
-                        <b>Chèo thuyền kayak</b>
-                    </div>
-                    <div class="tour-activity-item">
-                        <i class="flaticon-bonfire"></i>
-                        <b>Đốt lửa trại</b>
-                    </div>
-                    <div class="tour-activity-item">
-                        <i class="flaticon-flashlight"></i>
-                        <b>Khám phá ban đêm</b>
-                    </div>
-                    <div class="tour-activity-item">
-                        <i class="flaticon-cycling"></i>
-                        <b>Đạp xe</b>
-                    </div>
-                    <div class="tour-activity-item">
-                        <i class="flaticon-meditation"></i>
-                        <b>Yoga</b>
-                    </div>
-                </div>
 
                 <h3>Chương trình chi tiết</h3>
                 <div class="accordion-two mt-25 mb-60" id="faq-accordion-two">
-                    <div class="accordion-item">
+                    @php
+                        $day = 1;   
+                    @endphp
+                    @foreach($tourDetail->timeline as $index => $timeline)
+                        <div class="accordion-item">
                         <h5 class="accordion-header">
-                            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwoOne">
-                               Ngày 1 - Đến trại
+                            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo{{  $timeline->timeLineId }}">
+                               Ngày {{ $day++ }} - {{ $timeline->title}}
                             </button>
                         </h5>
-                        <div id="collapseTwoOne" class="accordion-collapse collapse" data-bs-parent="#faq-accordion-two">
+                        <div id="collapseTwo{{  $timeline->timeLineId }}" class="accordion-collapse collapse" data-bs-parent="#faq-accordion-two">
                             <div class="accordion-body">
-                                <p>To take a trivial example which undertakes laborious physical exercise except to obtain some advantage pleasure annoying consequences</p>
+                                <p>{{ $timeline->description }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item">
-                        <h5 class="accordion-header">
-                            <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseTwoTwo">
-                                Ngày 2 - Thức dậy sớm và bắt đầu một chuyến đi bộ đường dài trong ngày
-                            </button>
-                        </h5>
-                        <div id="collapseTwoTwo" class="accordion-collapse collapse show" data-bs-parent="#faq-accordion-two">
-                            <div class="accordion-body">
-                                <p>Buổi khởi hành sớm đảm bảo rằng bạn có thể hoàn toàn đắm mình trong sự yên tĩnh của thiên nhiên trước khi thế giới hoàn toàn tỉnh dậy. Khi ánh sáng buổi sáng chiếu qua những tán cây, bạn sẽ cảm nhận được không khí trong lành, mát mẻ và âm thanh yên bình của rừng núi. Đường mòn phía trước không chỉ mang đến một thử thách về thể chất mà còn hứa hẹn những cảnh đẹp ngoạn mục.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h5 class="accordion-header">
-                            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwoThree">
-                                Ngày 3 - Tham gia chuyến đi bộ ngắm thiên nhiên có hướng dẫn viên
-                            </button>
-                        </h5>
-                        <div id="collapseTwoThree" class="accordion-collapse collapse" data-bs-parent="#faq-accordion-two">
-                            <div class="accordion-body">
-                                <p>To take a trivial example which undertakes laborious physical exercise except to obtain some advantage pleasure annoying consequences</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h5 class="accordion-header">
-                            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwoFour">
-                                Ngày 4 - Nghỉ ngơi sau những ngày leo núi
-                            </button>
-                        </h5>
-                        <div id="collapseTwoFour" class="accordion-collapse collapse" data-bs-parent="#faq-accordion-two">
-                            <div class="accordion-body">
-                                <p>To take a trivial example which undertakes laborious physical exercise except to obtain some advantage pleasure annoying consequences</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h5 class="accordion-header">
-                            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwoFive">
-                                Ngày 5 - Chuẩn bị bữa trưa và bắt đầu một chuyến đi bộ đường dài dài hơn
-                            </button>
-                        </h5>
-                        <div id="collapseTwoFive" class="accordion-collapse collapse" data-bs-parent="#faq-accordion-two">
-                            <div class="accordion-body">
-                                <p>To take a trivial example which undertakes laborious physical exercise except to obtain some advantage pleasure annoying consequences</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    @endforeach
+                    
 
-                <h3>Các câu hỏi thường gặp</h3>
-                <div class="accordion-one mt-25 mb-60" id="faq-accordion">
-                    <div class="accordion-item">
-                        <h5 class="accordion-header">
-                            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-                               01_Cách tôi đặt tour hoặc gói du lịch?
-                            </button>
-                        </h5>
-                        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#faq-accordion">
-                            <div class="accordion-body">
-                                <p>To take a trivial example which undertakes laborious physical exercise except to obtain some advantage pleasure annoying consequences</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h5 class="accordion-header">
-                            <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-                                02_Gói du lịch bao gồm những gì?
-                            </button>
-                        </h5>
-                        <div id="collapseTwo" class="accordion-collapse collapse show" data-bs-parent="#faq-accordion">
-                            <div class="accordion-body">
-                                <p>Buổi khởi hành sớm đảm bảo rằng bạn có thể hoàn toàn đắm mình trong sự yên tĩnh của thiên nhiên trước khi thế giới hoàn toàn tỉnh dậy. Khi ánh sáng buổi sáng chiếu qua những tán cây, bạn sẽ cảm nhận được không khí trong lành, mát mẻ và âm thanh yên bình của rừng núi. Đường mòn phía trước không chỉ mang đến một thử thách về thể chất mà còn hứa hẹn những cảnh đẹp ngoạn mục.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h5 class="accordion-header">
-                            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree">
-                                03_Chính sách hủy bỏ và hoàn tiền của bạn là gì?
-                            </button>
-                        </h5>
-                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faq-accordion">
-                            <div class="accordion-body">
-                                <p>To take a trivial example which undertakes laborious physical exercise except to obtain some advantage pleasure annoying consequences</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h5 class="accordion-header">
-                            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFour">
-                                04_Tôi có thể tùy chỉnh tour hoặc gói du lịch của mình không?
-                            </button>
-                        </h5>
-                        <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faq-accordion">
-                            <div class="accordion-body">
-                                <p>To take a trivial example which undertakes laborious physical exercise except to obtain some advantage pleasure annoying consequences</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h5 class="accordion-header">
-                            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFive">
-                                05_Tôi cần những tài liệu gì để đi du lịch?
-                            </button>
-                        </h5>
-                        <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#faq-accordion">
-                            <div class="accordion-body">
-                                <p>To take a trivial example which undertakes laborious physical exercise except to obtain some advantage pleasure annoying consequences</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <h3>Bản đồ</h3>
@@ -527,63 +397,39 @@
                         <h5 class="widget-title">Đặt tour</h5>
                         <form action="#">
                             <div class="date mb-25">
-                                <b>Từ ngày</b>
-                                <input type="date">
+                                <b>Ngày bắt đầu</b>
+                                <input type="text" value="{{ date('d-m-Y', strtotime($tourDetail->startDate)) }}" disabled>
+                            </div>
+                            <hr>
+                            <div class="date mb-25">
+                                <b>Ngày kết thúc</b>
+                                <input type="text" value="{{ date('d-m-Y', strtotime($tourDetail->endDate)) }}" disabled>
                             </div>
                             <hr>
                             <div class="time py-5">
                                 <b>Thời gian :</b>
-                                <ul class="radio-filter">
-                                    <li>
-                                        <input class="form-check-input" checked type="radio" name="time" id="time1">
-                                        <label for="time1">12:00</label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="time" id="time2">
-                                        <label for="time2">08:00</label>
-                                    </li>
-                                </ul>
+                                <p>{{ $tourDetail->time }}</p>
                             </div>
                             <hr class="mb-25">
                             <h6>Vé:</h6>
                             <ul class="tickets clearfix">
                                 <li>
-                                    Người lớn (18- năm) <span class="price">$28.50</span>
-                                    <select name="18-" id="18-">
-                                        <option value="value1">01</option>
-                                        <option value="value1">02</option>
-                                        <option value="value1" selected>03</option>
-                                    </select>
+                                    Trẻ em <span class="price">{{ number_format($tourDetail->priceChild, 0, ',', '.') }} VND</span>
                                 </li>
                                 <li>
-                                    Người lớn (18+ năm) <span class="price">$50.40</span>
-                                    <select name="18+" id="18+">
-                                        <option value="value1">01</option>
-                                        <option value="value1">02</option>
-                                        <option value="value1">03</option>
-                                    </select>
+                                    Người lớn<span class="price">{{ number_format($tourDetail->priceAdult, 0, ',', '.') }} VND</span>
                                 </li>
                             </ul>
                             <hr class="mb-25">
-                            <h6>Thêm dịch vụ:</h6>
-                            <ul class="radio-filter pt-5">
-                                <li>
-                                    <input class="form-check-input" checked type="radio" name="AddExtra" id="add-extra1">
-                                    <label for="add-extra1">Thêm dịch vụ theo đặt chỗ <span>$50</span></label>
-                                </li>
-                                <li>
-                                    <input class="form-check-input" type="radio" name="AddExtra" id="add-extra2">
-                                    <label for="add-extra2">Thêm dịch vụ theo cá nhân <span>$24</span></label>
-                                </li>
-                            </ul>
+                            
                             <hr>
-                            <h6>Tổng cộng: <span class="price">$74</span></h6>
+                            <h6>Tổng tiền: <span class="price">$74</span></h6>
                             <button type="submit" class="theme-btn style-two w-100 mt-15 mb-5">
                                 <span data-hover="Book Now">Đặt ngay</span>
                                 <i class="fal fa-arrow-right"></i>
                             </button>
                             <div class="text-center">
-                                <a href="contact.html">Cần giúp đỡ?</a>
+                                <a href="{{ route('contact') }}">Bạn cần trợ giúp không?</a>
                             </div>
                         </form>
                     </div>
@@ -591,26 +437,10 @@
                     <div class="widget widget-contact" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                         <h5 class="widget-title">Cần giúp đỡ?</h5>
                         <ul class="list-style-one">
-                            <li><i class="far fa-envelope"></i> <a href="emilto:helpxample@gmail.com">helpxample@gmail.com</a></li>
-                            <li><i class="far fa-phone-volume"></i> <a href="callto:+000(123)45688">+000 (123) 456 88</a></li>
+                            <li><i class="far fa-envelope"></i> <a href="emilto:nvd2k3@gmail.com">nvd2k3@gmail.com</a></li>
+                            <li><i class="far fa-phone-volume"></i> <a href="callto:0364869849">0364869849</a></li>
                         </ul>
-                    </div>
-                    
-                    <div class="widget widget-cta" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                        <div class="content text-white">
-                            <span class="h6">Khám phá thế giới</span>
-                            <h3>Địa điểm du lịch tốt nhất</h3>
-                            <a href="tour-grid.html" class="theme-btn style-two bgc-secondary">
-                                <span data-hover="Explore Now">Khám phá ngay</span>
-                                <i class="fal fa-arrow-right"></i>
-                            </a>
-                        </div>
-                        <div class="image">
-                            <img src="{{ asset('clients/assets/images/widgets/cta-widget.png') }}" alt="CTA">
-                        </div>
-                        <div class="cta-shape"><img src="{{ asset('clients/assets/images/widgets/cta-shape3.png') }}" alt="Shape"></div>
-                    </div>
-                    
+                    </div>           
                 </div>
             </div>
         </div>

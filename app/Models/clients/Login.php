@@ -10,7 +10,7 @@ class Login extends Model
     use HasFactory;
 
     protected $table = 'tbl_users';
-
+    //Đăng ký người dùng mới
     public function registerAcount($data)
     {   
         $userId = DB::table($this->table)->insertGetId($data);
@@ -20,7 +20,7 @@ class Login extends Model
         }
         return null;
     }
-
+    // Kiểm tra người dùng tồn tại theo username hoặc email
     public function checkUserExist($username, $email)
     {
         $check = DB::table($this->table)
@@ -43,4 +43,22 @@ class Login extends Model
             ->where('activation_token', $token)
             ->update(['activation_token' => null, 'isActive' => 'y']);
     }
+    //Đăng nhập
+    public function login($account)
+    {
+        $getUser = DB::table($this->table)
+            ->where('username', $account['username'])
+            ->where('password', $account['password'])
+            ->first();
+
+        return $getUser;
+    }
+    //     //Login with google
+    // public function checkUserExistGoogle($google_id)
+    // {
+    //     $check = DB::table($this->table)
+    //         ->where('google_id', $google_id)->first();
+
+    //     return $check;
+    // }
 }

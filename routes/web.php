@@ -18,6 +18,7 @@ use App\Http\Controllers\clients\BlogController;
 use App\Http\Controllers\clients\BlogDetailsController;
 use App\Http\Controllers\clients\TourGridController;
 use App\Http\Controllers\clients\TourListController;
+use App\Http\Controllers\clients\LoginGoogleController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,9 +54,14 @@ Route::get('/blog-details', [BlogDetailsController::class, 'index'])->name('blog
 Route::get('/tour-grid', [TourGridController::class, 'index'])->name('tour-grid');
 Route::get('/tour-list', [TourListController::class, 'index'])->name('tour-list');
 
+
 //Handle Login
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/register', [LoginController::class, 'register'])->name('register');
 Route::post('/login', [LoginController::class, 'login'])->name('user-login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('activate-account/{token}', [LoginController::class, 'activateAccount'])->name('activate.account');
+
+//Login with google
+Route::get('auth/google', [LoginGoogleController::class, 'redirectToGoogle'])->name('login-google');
+Route::get('auth/google/callback', [LoginGoogleController::class, 'handleGoogleCallback']);

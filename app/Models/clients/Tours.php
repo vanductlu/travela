@@ -44,4 +44,47 @@ class Tours extends Model
         }
         return $getTourDetail;
     }
+
+    //Lấy khu vực đến Bắc _ Trung _ Nam
+    function getDomain()
+    {
+        return DB::table($this->table)
+            ->select('domain', DB::raw('COUNT(*) as count'))
+            ->whereIn('domain', ['b', 't', 'n'])
+            ->groupBy('domain')
+            ->get();
+    }
+
+    //Filter tours
+    public function filterTours($filter = [], $sorting = null, $perPage = 6)
+    {
+        DB::enableQueryLog();
+        $getTours = DB::table($this->table);
+
+        // Áp dụng bộ lọc nếu có
+        if (!empty($filter))
+        {
+            $getTours = $getTours->where($filter);
+        }
+
+        if (!empty($sorting) && isset($sorting[0]) && isset($sorting[1]))
+        {
+            $getTours = $getTours->orderBy($sorting[0], $sorting[1]);
+        }
+        // Thực hiện truy vấn để ghi log
+        $tours = $getTours->get();
+
+        //In ra câu lệnh SQL đã ghi lại 
+
+        $queryLog = DB::getQueryLog();
+
+        foreach ($tours as $tour)
+        {
+            $tour->images = DB::table('tbl_images')
+                ->where('tourId', $tour->tourId)
+                ->pluck('imageUrl');
+        }
+
+        return $tours;
+    }
 }

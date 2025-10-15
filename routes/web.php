@@ -44,7 +44,6 @@ Route::get('/my-tour', [MyTourController::class, 'index'])->name('my-tour');
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/tour-booked', [TourBookedController::class, 'index'])->name('tour-booked');
 Route::get('/tour-detail/{id?}', [TourDetailController::class, 'index'])->name('tour-detail');
-Route::get('/tours', [ToursController::class, 'index'])->name('tours');
 Route::get('/travel-guides', [TravelGuidesController::class, 'index'])->name('travel-guides');
 Route::get('/user-profile', [UserProfileController::class, 'index'])->name('user-profile');
 Route::post('/user-profile', [UserProfileController::class, 'update'])->name('update-user-profile');
@@ -54,6 +53,9 @@ Route::get('/blog-details', [BlogDetailsController::class, 'index'])->name('blog
 Route::get('/tour-grid', [TourGridController::class, 'index'])->name('tour-grid');
 Route::get('/tour-list', [TourListController::class, 'index'])->name('tour-list');
 
+//Handle Get tours , filter Tours
+Route::get('/tours', [ToursController::class, 'index'])->name('tours');
+Route::get('/filter-tours', [ToursController::class, 'filterTours'])->name('filter-tours');
 
 //Handle Login
 Route::get('/login', [LoginController::class, 'index'])->name('login');

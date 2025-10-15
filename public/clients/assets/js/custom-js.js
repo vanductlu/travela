@@ -216,18 +216,18 @@ $(document).ready(function () {
             time: duration,
             sorting: sorting,
         };
-        // console.log(formDataFilter);
+        console.log(formDataFilter);
 
-        // $.ajax({
-        //     url: filterToursUrl,
-        //     method: "GET",
-        //     data: formDataFilter,
-        //     success: function (res) {
-        //         $("#tours-container").html(res).removeClass("hidden-content");
-        //         $("#tours-container .destination-item").addClass("aos-animate");
-        //         $(".loader").hide();
-        //     },
-        // });
+        $.ajax({
+            url: filterToursUrl,
+            method: "GET",
+            data: formDataFilter,
+            success: function (res) {
+                $("#tours-container").html(res).removeClass("hidden-content");
+                $("#tours-container .destination-item").addClass("aos-animate");
+                $(".loader").hide();
+            },
+        });
     }
 
     $(document).on("click", ".pagination-tours a", function (e) {

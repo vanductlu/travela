@@ -67,3 +67,11 @@ Route::get('activate-account/{token}', [LoginController::class, 'activateAccount
 //Login with google
 Route::get('auth/google', [LoginGoogleController::class, 'redirectToGoogle'])->name('login-google');
 Route::get('auth/google/callback', [LoginGoogleController::class, 'handleGoogleCallback']);
+
+// //Handle user profile
+// Route::get('/user-profile', [UserProfileController::class, 'index'])->name('user-profile');
+//Handle user profile
+Route::get('/user-profile', [UserProfileController::class, 'index'])->name('user-profile')->middleware('checkLoginClient');
+Route::post('/user-profile', [UserProfileController::class, 'update'])->name('update-user-profile');
+Route::post('/change-password-profile', [UserProfileController::class, 'changePassword'])->name('change-password');
+Route::post('/change-avatar-profile', [UserProfileController::class, 'changeAvatar'])->name('change-avatar');

@@ -123,7 +123,7 @@
     <script src="{{asset('clients/assets/js/script.js')}}"></script>
     {{-- jquery-toast  --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZQL/ZnLwN3U9057S34aIWg6w8fXwA9e7d9jO5p3c50A53a9f0Q0g0M0K0b0A9e0D0g0A9e0D0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
     {{-- paypal-payment  --}}
     <script src="https://www.paypal.com/sdk/js?client-id={{ env('PAYPAL_SANDBOX_CLIENT_ID') }}"></script>
 

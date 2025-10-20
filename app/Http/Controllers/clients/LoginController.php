@@ -92,13 +92,13 @@ class LoginController extends Controller
         ];
 
         $user_login = $this->login->login($data_login);
-        // $userId = $this->user->getUserId($username);
-        // $user = $this->user->getUser($userId);
+        $userId = $this->user->getUserId($username);
+        $user = $this->user->getUser($userId);
 
         if ($user_login != null) {
             $request->session()->put('username', $username);
-            // $request->session()->put('avatar', $user->avatar);
-            // toastr()->success("Đăng nhập thành công!",'Thông báo');
+            $request->session()->put('avatar', $user->avatar);
+            toastr()->success("Đăng nhập thành công!",'Thông báo');
             return response()->json([
                 'success' => true,
                 'message' => 'Đăng nhập thành công!',
@@ -120,7 +120,7 @@ class LoginController extends Controller
         $request->session()->forget('username');
         $request->session()->forget('avatar');
         $request->session()->forget('userId');
-        // toastr()->success("Đăng xuất thành công!",'Thông báo');
+        toastr()->success("Đăng xuất thành công!",'Thông báo');
         return redirect()->route('home');
     } 
 }

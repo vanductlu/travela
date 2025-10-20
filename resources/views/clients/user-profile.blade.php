@@ -8,11 +8,13 @@
                     <div class="card-header">Ảnh đại diện</div>
                     <div class="card-body text-center">
 
-                        <img class="img-account-profile rounded-circle mb-2"
+                        <img id="avatarPreview" class="img-account-profile rounded-circle mb-2"
                             src="{{ asset('clients/assets/images/user-profile/' . $user->avatar) }}" alt="Ảnh đại diện {{ $user->avatar }}">
 
                         <div class="small font-italic text-muted mb-4">JPG hoặc PNG không lớn hơn 5 MB</div>
-                        <input type="file" name="avatar" id="avatar" style="display: none">
+                        <input type="file" name="avatar" id="avatar" style="display: none" accept="image/*" />
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}" class="__token">
+                        <input type="hidden" name="" value="{{ route('change-avatar') }}" class="label_avatar">
                         <label for="avatar" class="btn btn-primary">Tải ảnh lên</label>
                     </div>
                 </div>

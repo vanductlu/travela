@@ -8,23 +8,9 @@ use App\Models\clients\User;
 
 class UserProfileController extends Controller
 {   
-    private $user;
-
     public function __construct()
-    {
-        $this->user = new User();
-    }
-
-    protected function getUserId()
-    {
-        if(!session()->has('userId')){
-            $username = session()->get('username');
-            if($username){
-                $userId = $this->user->getUserId($username);
-                session()->put('userId', $userId);
-            }
-        }
-        return session()->get('userId');
+    {   
+        parent::__construct(); // Gọi constructor của Controller để khởi tạo $user
     }
     public function index()
     {   

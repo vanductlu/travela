@@ -84,7 +84,13 @@ class Tours extends Model
                 ->where('tourId', $tour->tourId)
                 ->pluck('imageUrl');
         }
-
         return $tours;
+    }
+    public function updateTours($tourId,$data)
+    {
+        $update = DB::table($this->table)
+            ->where('tourId', $tourId)
+            ->update($data);
+        return $update;
     }
 }

@@ -104,12 +104,12 @@
         <div class="booking-summary">
             <div class="summary-section">
                 <div>
-                    <p>Mã tour : </p>
-                    <input type="hidden" name="tourId" id="tourId" value="">
-                    <h5 class="widget-title"></h5>
-                    <p>Ngày khởi hành : </p>
-                    <p>Ngày kết thúc :</p>
-                    <p class="quantityAvailable">Số chỗ còn nhận :</p>
+                    <p>Mã tour : {{ $tour->tourId }}</p>
+                    <input type="hidden" name="tourId" id="tourId" value="{{ $tour->tourId }}">
+                    <h5 class="widget-title">{{ $tour->title }}</h5>
+                    <p>Ngày khởi hành : {{ date('d-m-Y', strtotime($tour->startDate)) }}</p>
+                    <p>Ngày kết thúc : {{ date('d-m-Y', strtotime($tour->endDate)) }}</p>
+                    <p class="quantityAvailable">Số chỗ còn nhận : {{ $tour->quantity }}</p>
                 </div>
 
                 <div class="order-summary">

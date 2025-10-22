@@ -19,7 +19,8 @@ class CheckLoggedInClients
         
         if(!$request->session()->has('username'))
         {
-            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để tiếp tục.');
+            toastr()->error('Vui lòng đăng nhập để thực hiện.', "Thông báo");
+            return redirect()->route('login');
         }
         return $next($request);
     }

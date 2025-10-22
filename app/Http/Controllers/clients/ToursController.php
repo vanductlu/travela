@@ -23,15 +23,15 @@ class ToursController extends Controller
             'mien_trung' => optional($domain->firstWhere('domain', 't'))->count,
             'mien_nam' => optional($domain->firstWhere('domain', 'n'))->count,
         ];
-        //  // Kiểm tra nếu yêu cầu là AJAX
-        // if ($request->ajax()) {
-        //     return response()->json([
-        //         'tours' => view('clients.partials.filter-tours', compact('tours'))->render(),
-        //     ]);
-        // }
-        // $toursPopular = $this->tours->toursPopular(2);
+         // Kiểm tra nếu yêu cầu là AJAX
+        if ($request->ajax()) {
+            return response()->json([
+                'tours' => view('clients.partials.filter-tours', compact('tours'))->render(),
+            ]);
+        }
+        $toursPopular = $this->tours->toursPopular(2);
 
-        return view('clients.tours', compact('title', 'tours', 'domainsCount'));
+        return view('clients.tours', compact('title', 'tours', 'domainsCount','toursPopular'));
     }
 
     //Xử lý filter tours
@@ -56,9 +56,9 @@ class ToursController extends Controller
         }
 
         // Handle star rating filter
-        if ($req->filled('star')) {
-            $star = (int) $req->star;
-            $conditions[] = ['averageRating', '=', $star];
+        if ($req->filled('filter_star')) {
+            $star = (int) $req->filter_star;
+            $conditions[] = ['averageRating', '>=', $star];
         }
 
         // Handle duration filter
@@ -90,17 +90,17 @@ class ToursController extends Controller
 
         // // dd($conditions);
         $tours = $this->tours->filterTours($conditions, $sorting);
-        // // If not paginated, simulate pagination
-        // if (!$tours instanceof \Illuminate\Pagination\LengthAwarePaginator) {
-        //     // Create a fake paginator (pagination for non-paginated collection)
-        //     $tours = new \Illuminate\Pagination\LengthAwarePaginator(
-        //         $tours, // Collection
-        //         count($tours), // Total items
-        //         9, // Per page
-        //         1, // Current page
-        //         ['path' => url()->current()] // Path for pagination
-        //     );
-        // }
+        // If not paginated, simulate pagination
+        if (!$tours instanceof \Illuminate\Pagination\LengthAwarePaginator) {
+            // Create a fake paginator (pagination for non-paginated collection)
+            $tours = new \Illuminate\Pagination\LengthAwarePaginator(
+                $tours, // Collection
+                count($tours), // Total items
+                9, // Per page
+                1, // Current page
+                ['path' => url()->current()] // Path for pagination
+            );
+        }
 
         return view('clients.partials.filter-tours', compact('tours'));
 

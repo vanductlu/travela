@@ -59,13 +59,6 @@
                 <img src="{{ asset('clients/assets/images/contact/icon.png') }}" alt="Office Payment">
                 Thanh toán tại văn phòng
             </label>
-
-            <label class="payment-option">
-                <input type="radio" value="paypal-payment" @if ($tour_booked->paymentMethod == 'paypal-payment') checked @endif disabled>
-                <img src="{{ asset('clients/assets/images/booking/cong-thanh-toan-paypal.jpg') }}" alt="PayPal">
-                Thanh toán bằng PayPal
-            </label>
-
             <label class="payment-option">
                 <input type="radio" value="momo-payment" @if ($tour_booked->paymentMethod == 'momo-payment') checked @endif disabled>
                 <img src="{{ asset('clients/assets/images/booking/thanh-toan-momo.jpg') }}" alt="MoMo">

@@ -51,7 +51,8 @@ class BookingController extends Controller
             'numAdults' => $numAdults,
             'numChildren' => $numChildren,
             'phoneNumber' => $tel,
-            'totalPrice' => $totalPrice
+            'totalPrice' => $totalPrice,
+            'bookingStatus' => 'b'
         ];
         $bookingId = $this->booking->createBooking($dataBooking);
 
@@ -63,7 +64,7 @@ class BookingController extends Controller
         ];
         $checkout = $this->checkout->createCheckout($dataCheckout);
         
-        if (empty($bookingId) && !$checkout) {
+        if (empty($bookingId) || !$checkout) {
             toastr()->error('Đặt tour thất bại! Vui lòng thử lại.');
             return redirect()->back(); // Quay lại trang hiện tại nếu có lỗi
         }
@@ -78,6 +79,19 @@ class BookingController extends Controller
         
         /*********************************** */
         toastr()->success('Đặt tour thành công!');
-        return redirect()->route('tours');
+        return redirect()->route('tour-booked', [
+            'bookingId' => $bookingId,
+            'checkoutId' => $checkout
+        ]);
+    }
+    //Kiểm tra người dùng đã đặt và hoàn thành tour hay chưa để đánh giá
+    public function checkBooking(Request $req){
+        $tourId = $req->tourId;
+        $userId = $this->getUserId();
+        $check = $this->booking->checkBooking($tourId,$userId);
+        if (!$check) {
+            return response()->json(['success' => false]);
+        }
+        return response()->json(['success' => true]);
     }
 }

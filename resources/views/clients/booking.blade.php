@@ -81,13 +81,6 @@
                 <img src="{{ asset('clients/assets/images/contact/icon.png') }}" alt="Office Payment">
                 Thanh toán tại văn phòng
             </label>
-
-            <label class="payment-option">
-                <input type="radio" name="payment" value="paypal-payment" required>
-                <img src="{{ asset('clients/assets/images/booking/cong-thanh-toan-paypal.jpg') }}" alt="PayPal">
-                Thanh toán bằng PayPal
-            </label>
-
             <label class="payment-option">
                 <input type="radio" name="payment" value="momo-payment" required>
                 <img src="{{ asset('clients/assets/images/booking/thanh-toan-momo.jpg') }}" alt="MoMo">

@@ -85,7 +85,7 @@ class Tours extends Model
                 'tbl_tours.destination',
                 'tbl_tours.quantity'
             );
-        $getTours = $getTours->where('availability', 1);
+            $getTours = $getTours->where('availability', 1);
 
         if (!empty($filters)) {
             foreach ($filters as $filter) {

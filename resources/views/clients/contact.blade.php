@@ -39,7 +39,7 @@
                             <div class="content">
                                 <h5>Cần trợ giúp và hỗ trợ</h5>
                                 <div class="text"><i class="far fa-envelope"></i> <a
-                                        href="mailto:minhdien.dev@gmail.com">minhdien.dev@gmail.com</a></div>
+                                        href="mailto:nvd2k3@gmail.com">nvd2k3@gmail.com</a></div>
                             </div>
                         </div>
                     </div>
@@ -49,8 +49,7 @@
                             <div class="icon"><i class="fas fa-phone"></i></div>
                             <div class="content">
                                 <h5>Cần bất kỳ việc khẩn cấp nào</h5>
-                                <div class="text"><i class="far fa-phone"></i> <a href="callto:+0001234588">+000 (123)
-                                        45 88</a></div>
+                                <div class="text"><i class="far fa-phone"></i> <a href="callto:+0001234588">+0364869849</a></div>
                             </div>
                         </div>
                     </div>
@@ -59,20 +58,8 @@
                             data-aos-delay="50">
                             <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
                             <div class="content">
-                                <h5>Gia Lai</h5>
-                                <div class="text"><i class="fal fa-map-marker-alt"></i> Cửu An, An Khê, Gia Lai</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="contact-info-item" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50"
-                            data-aos-delay="100">
-                            <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
-                            <div class="content">
-                                <h5>Kí túc xá Việt Hàn</h5>
-                                <div class="text"><i class="fal fa-map-marker-alt"></i> 470 Trần Đại Nghĩa, Ngũ Hành
-                                    Sơn,
-                                    Thành phố Đà Nẵng</div>
+                                <h5>Hà Nội</h5>
+                                <div class="text"><i class="fal fa-map-marker-alt"></i>173 Khâm Thiên, Quận Đống Đa, Hà Nội</div>
                             </div>
                         </div>
                     </div>

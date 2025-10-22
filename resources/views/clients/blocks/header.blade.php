@@ -110,12 +110,8 @@
                                                 <li><a href="{{ route('travel-guides') }}">Hướng dẫn viên</a></li>
                                             </ul>
                                         </li>
-                                        <li class="dropdown {{ Request::url() == route('destination') ? 'active' : '' }}"><a
+                                        <li class="{{ Request::url() == route('destination') ? 'active' : '' }}"><a
                                                 href="{{ route('destination') }}">Địa điểm du lịch</a>
-                                            <ul>
-                                                <li><a href="{{ route('destination')}}">Địa điểm du lịch</a></li>
-                                                <li><a href="destination-details.html">Chi tiết Địa điểm du lịch</a></li>
-                                            </ul>
                                         </li>
                                         <li class="{{ Request::url() == route('contact') ? 'active' : '' }}"><a
                                                 href="{{ route('contact') }}">Liên Hệ</a></li>

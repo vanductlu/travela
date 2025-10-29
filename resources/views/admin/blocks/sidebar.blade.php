@@ -37,6 +37,7 @@
                     </li>
 
                     <li><a href="{{ route('admin.booking') }}"><i class="fa fa-home"></i> Quản lý Booking</a> </li>
+                    <li><a href="{{ route('admin.blog') }}"><i class="fa fa-home"></i> Quản lý Blog</a> </li>
                     <li><a href="{{ route('admin.contact') }}"><i class="fa fa-envelope-o"></i> Liên hệ </a> </li>
                 </ul>
             </div>

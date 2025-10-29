@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Title -->
-    <title>Travela - {{ $title }}</title>
+    <title>Travela - {{ $title ?? Travela }}</title>
     <!-- Favicon Icon -->
     <link rel="shortcut icon" href="{{ asset('clients/assets/images/logos/favicon.png') }}" type="image/x-icon">
     <!-- Google Fonts -->
@@ -115,12 +115,8 @@
                                         </li>
                                         <li class="{{ Request::url() == route('contact') ? 'active' : '' }}"><a
                                                 href="{{ route('contact') }}">Liên Hệ</a></li>
-                                        <li class="dropdown {{ Request::url() == route('blog') ? 'active' : '' }}"><a
+                                        <li class="{{ Request::url() == route('blog') ? 'active' : '' }}"><a
                                                 href="{{ route('blog') }}">Blog</a>
-                                            <ul>
-                                                <li><a href="{{ route('blog') }}">Danh sách bài viết</a></li>
-                                                <li><a href="{{ route('blog-details') }}">Chi tiết bài viết</a></li>
-                                            </ul>
                                         </li>
                                     </ul>
                                 </div>

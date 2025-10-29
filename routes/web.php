@@ -28,6 +28,7 @@ use App\Http\Controllers\admin\UserManagementController;
 use App\Http\Controllers\admin\ToursManagementController;
 use App\Http\Controllers\admin\BookingManagementController;
 use App\Http\Controllers\admin\ContactManagementController;
+use App\Http\Controllers\admin\BlogManagementController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,11 +58,10 @@ Route::get('/travel-guides', [TravelGuidesController::class, 'index'])->name('tr
 Route::get('/user-profile', [UserProfileController::class, 'index'])->name('user-profile');
 Route::post('/user-profile', [UserProfileController::class, 'update'])->name('update-user-profile');
 Route::post('/createBooking', [BookingController::class, 'store'])->name('create-booking');
-Route::get('/blog', [BlogController::class, 'index'])->name('blog');    
-Route::get('/blog-details', [BlogDetailsController::class, 'index'])->name('blog-details');
-Route::get('/tour-grid', [TourGridController::class, 'index'])->name('tour-grid');
-Route::get('/tour-list', [TourListController::class, 'index'])->name('tour-list');
 
+//Handle Blog
+Route::get('/blog', [BlogController::class, 'index'])->name('blog');   
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog-details');
 //Handle Get tours , filter Tours
 Route::get('/tours', [ToursController::class, 'index'])->name('tours');
 Route::get('/filter-tours', [ToursController::class, 'filterTours'])->name('filter-tours');
@@ -103,6 +103,8 @@ Route::post('/checkBooking', [BookingController::class, 'checkBooking'])->name('
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/create-contact', [ContactController::class, 'createContact'])->name('create-contact');
 
+//Payment with Momo
+Route::post('/create-momo-payment', [BookingController::class, 'createMomoPayment'])->name('createMomoPayment');
 
 //Search 
 Route::get('/search', [SearchController::class, 'index'])->name(name: 'search');
@@ -116,7 +118,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/logout', [LoginAdminController::class, 'logout'])->name('admin.logout');
 
 });
-
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
@@ -157,5 +158,11 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     //Contact management
     Route::get('/contact', [ContactManagementController::class, 'index'])->name('admin.contact');
     Route::post('/reply-contact', [ContactManagementController::class, 'replyContact'])->name('admin.reply-contact');
-
+    // Nhóm route cho admin/blog
+    Route::get('/blog', [BlogManagementController::class, 'index'])->name('admin.blog');        // /admin/blog
+    Route::get('/blog/create', [BlogManagementController::class, 'create'])->name('admin.blog.create'); // /admin/blog/create
+    Route::post('/blog/store', [BlogManagementController::class, 'store'])->name('admin.blog.store');   // POST /admin/blog/store
+    Route::get('/blog/{id}/edit', [BlogManagementController::class, 'edit'])->name('admin.blog.edit');  // /admin/blog/{id}/edit
+    Route::put('/blog/{id}/update', [BlogManagementController::class, 'update'])->name('admin.blog.update'); // POST /admin/blog/{id}/update
+    Route::delete('/blog/{id}/delete', [BlogManagementController::class, 'destroy'])->name('admin.blog.delete'); // GET /admin/blog/{id}/delete
 });

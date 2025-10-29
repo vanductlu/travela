@@ -104,11 +104,9 @@
                                         </li>
                                         <li class="{{ Request::url() == route('contact') ? 'active' : '' }}"><a
                                                 href="{{ route('contact') }}">Liên Hệ</a></li>
-                                        <li class="dropdown {{ Request::url() == route('blog') ? 'active' : '' }}"><a
+                                        <li class="{{ Request::url() == route('blog') ? 'active' : '' }}"><a
                                                 href="{{ route('blog') }}">Blog</a>
                                             <ul>
-                                                <li><a href="{{ route('blog') }}">Danh sách bài viết</a></li>
-                                                <li><a href="{{ route('blog-details') }}">Chi tiết bài viết</a></li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -132,7 +130,7 @@
                         <!-- Menu Button -->
                         <div class="menu-btns py-10">
                             <a href="{{ route('tours') }}" class="theme-btn style-two bgc-secondary">
-                                <span data-hover="Đặt Ngay">Book Now</span>
+                                <span data-hover="Đặt Ngay">Đặt Ngay</span>
                                 <i class="fal fa-arrow-right"></i>
                             </a>
                             <!-- menu sidbar -->

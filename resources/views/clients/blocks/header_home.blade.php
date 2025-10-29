@@ -119,7 +119,7 @@
                         <!-- Nav Search -->
                         <div class="nav-search">
                             <button class="far fa-search"></button>
-                            <form action="" class="hide" method="GET">
+                            <form action="{{ route('search-voice-text') }}" class="hide" method="GET">
                                 <input type="text" name="keyword" placeholder="Search" class="searchbox" required>
                                 <i class="fa fa-microphone" aria-hidden="true" style="margin: 0 16px"
                                     id="voice-search"></i>

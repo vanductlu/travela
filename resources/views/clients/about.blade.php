@@ -1,6 +1,6 @@
 @include('clients.blocks.header')
 @include('clients.blocks.banner')
-
+@include('clients.partials.chat')
 
 <!-- About Area start -->
 <section class="about-area-two py-100 rel z-1">

@@ -19,8 +19,8 @@ use App\Http\Controllers\clients\BlogDetailsController;
 use App\Http\Controllers\clients\TourGridController;
 use App\Http\Controllers\clients\TourListController;
 use App\Http\Controllers\clients\LoginGoogleController;
-
-
+use App\Http\Controllers\clients\ChatController;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\admin\LoginAdminController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\AdminManagementController;
@@ -109,6 +109,43 @@ Route::post('/create-momo-payment', [BookingController::class, 'createMomoPaymen
 //Search 
 Route::get('/search', [SearchController::class, 'index'])->name(name: 'search');
 Route::get('/search-voice-text', [SearchController::class, 'searchTours'])->name('search-voice-text');
+//Chatbot
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
+// Route::get('/test-gemini', function() {
+//     $apiKey = env('GEMINI_API_KEY');
+    
+//     $client = new \GuzzleHttp\Client([
+//         'base_uri' => 'https://generativelanguage.googleapis.com/v1beta/',
+//     ]);
+    
+//     try {
+//         $response = $client->post("models/gemini-2.0-flash:generateContent?key={$apiKey}", [
+//             'json' => [
+//                 'contents' => [
+//                     [
+//                         'role' => 'user',
+//                         'parts' => [['text' => 'Hello, say hi!']]
+//                     ]
+//                 ]
+//             ]
+//         ]);
+        
+//         $result = json_decode($response->getBody()->getContents(), true);
+        
+//         return response()->json([
+//             'success' => true,
+//             'result' => $result
+//         ]);
+        
+//     } catch (\Exception $e) {
+//         return response()->json([
+//             'success' => false,
+//             'error' => $e->getMessage(),
+//             'response' => $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : null
+//         ]);
+//     }
+// });
 
 //ADMIN
 // Routes without middleware

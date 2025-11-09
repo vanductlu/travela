@@ -1,6 +1,6 @@
 @include('clients.blocks.header')
 @include('clients.blocks.banner')
-
+@include('clients.partials.chat')
 <section class="container" style="margin-top:50px; margin-bottom: 100px">
     {{-- <h1 class="text-center booking-header">Tổng Quan Về Chuyến Đi</h1> --}}
 

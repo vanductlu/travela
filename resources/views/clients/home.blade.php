@@ -16,6 +16,7 @@
                         phổ biến nhất mà bạn sẽ nhớ</p>
                 </div>
             </div>
+            
         </div>
         <div class="row justify-content-center">
             @foreach ($tours as $tour)
@@ -44,10 +45,11 @@
                 </div>
             @endforeach
         </div>
+        
     </div>
 </section>
 <!-- Destinations Area end -->
-
+@include('clients.partials.chat')
 
 <!-- About Us Area start -->
 <section class="about-us-area py-100 rpb-90 rel z-1">

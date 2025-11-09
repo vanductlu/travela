@@ -1,4 +1,5 @@
 @include('clients.blocks.header')
+@include('clients.partials.chat')
     <div class="user-profile">
             <div class="container-xl px-4 mt-4">
         <div class="row">

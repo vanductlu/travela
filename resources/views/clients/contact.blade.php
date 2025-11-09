@@ -1,6 +1,6 @@
 @include('clients.blocks.header')
 @include('clients.blocks.banner')
-
+@include('clients.partials.chat')
 
 <!-- Contact Info Area start -->
 <section class="contact-info-area pt-100 rel z-1">

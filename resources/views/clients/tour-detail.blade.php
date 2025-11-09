@@ -1,4 +1,5 @@
 @include('clients.blocks.header')
+@include('clients.partials.chat')
 <section class="page-banner-two rel z-1">
     <div class="container-fluid">
         <hr class="mt-0">

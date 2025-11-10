@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\clients\Tours;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 class TourDetailController extends Controller
 {   
     private $tours;
@@ -33,27 +34,13 @@ class TourDetailController extends Controller
         }
 
         
-        // Gọi API Python để lấy danh sách tour liên quan
-        try {
-            $apiUrl = 'http://127.0.0.1:5555/api/tour-recommendations';
-            $response = Http::get($apiUrl, [
-                'tour_id' => $id
-            ]);
-
-            if ($response->successful()) {
-                $relatedTours = $response->json('related_tours');
-            } else {
-                $relatedTours = [];
-            }
-        } catch (\Exception $e) {
-            // Xử lý lỗi khi gọi API
-            $relatedTours = [];
-            \Log::error('Lỗi khi gọi API liên quan: ' . $e->getMessage());
-        }
-
-        $id_toursRe = $relatedTours;
-
-        $tourRecommendations = $this->tours->toursRecommendation($id_toursRe);
+        $relatedTours = DB::table('tbl_tours')
+        ->where('tourId', '!=', $id)
+        ->where('availability', 1)
+        ->limit(3)
+        ->pluck('tourId')
+        ->toArray();
+        $tourRecommendations = $this->tours->toursRecommendation($relatedTours);
         // dd($tourRecommendations);    
         // dd($avgStar);
 

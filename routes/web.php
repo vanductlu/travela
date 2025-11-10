@@ -62,6 +62,10 @@ Route::post('/createBooking', [BookingController::class, 'store'])->name('create
 //Handle Blog
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');   
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog-details');
+// Like và Comment bắt buộc đăng nhập
+Route::post('/blog/{id}/like', [BlogController::class, 'like'])->name('blog.like');
+Route::post('/blog/{id}/comment', [BlogController::class, 'comment'])->name('blog.comment');
+
 //Handle Get tours , filter Tours
 Route::get('/tours', [ToursController::class, 'index'])->name('tours');
 Route::get('/filter-tours', [ToursController::class, 'filterTours'])->name('filter-tours');

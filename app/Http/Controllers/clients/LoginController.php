@@ -17,7 +17,16 @@ class LoginController extends Controller
         $this->login = new Login();
         $this->user = new User();
     }
+    protected function redirectTo()
+    {
+    // Nếu có tham số redirect thì quay lại trang cũ sau khi login
+    if (request()->has('redirect')) {
+        return request()->get('redirect');
+    }
 
+    // Mặc định quay về trang chủ
+    return '/';
+    }
     public function index()
     {
         $title = 'Đăng nhập';

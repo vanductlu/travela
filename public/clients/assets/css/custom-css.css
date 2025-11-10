@@ -377,3 +377,18 @@
     text-overflow: ellipsis; /* Thêm dấu ba chấm vào cuối */
     word-break: break-word; /* Đảm bảo từ không bị tràn ra ngoài */
 }
+.comment-section .comment {
+    background-color: #f9f9f9;
+}
+
+.comment-section .avatar img {
+    object-fit: cover;
+}
+
+.comment-section textarea {
+    resize: vertical;
+}
+
+.comment-section button.btn-success {
+    min-width: 100px;
+}

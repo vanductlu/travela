@@ -17,6 +17,69 @@
                     </ul>
                     <p><strong>{{ $blog->excerpt }}</strong></p>
                     <div>{!! $blog->content !!}</div>
+                            <hr>
+<div class="comment-section mt-5">
+    <h5 class="mb-4">💬 Bình luận</h5>
+
+    {{-- Thông báo thành công hoặc lỗi --}}
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @elseif(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
+    @php
+        $user = session('user'); // Lấy thông tin người dùng từ session
+    @endphp
+
+    {{-- Form bình luận --}}
+    @if($user)
+        <form action="{{ route('blog.comment', $blog->blogId) }}" method="POST" class="mb-4">
+            @csrf
+            <div class="mb-3">
+                <textarea name="content" class="form-control" rows="3" placeholder="Nhập bình luận..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Gửi bình luận</button>
+        </form>
+    @else
+        <p class="text-muted">
+            Bạn cần <a href="{{ route('login', ['redirect' => request()->fullUrl()]) }}">đăng nhập</a> để bình luận.
+        </p>
+    @endif
+
+    {{-- Danh sách bình luận --}}
+    @php
+        $comments = DB::table('tbl_comments')
+            ->where('blog_id', $blog->blogId)
+            ->orderByDesc('created_at')
+            ->get();
+    @endphp
+
+    <div class="comments-list">
+        @foreach($comments as $comment)
+            <div class="comment d-flex align-items-start border rounded p-3 mb-3">
+                {{-- Avatar ngẫu nhiên hoặc từ user --}}
+                <div class="avatar me-3">
+                    <img src="https://i.pravatar.cc/50?u={{ $comment->user_id ?? $comment->name }}" 
+                         alt="{{ $comment->name }}" class="rounded-circle" width="50" height="50">
+                </div>
+                <div class="comment-content">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <strong>{{ $comment->name }}</strong>
+                        <small class="text-muted">{{ \Carbon\Carbon::parse($comment->created_at)->format('d/m/Y H:i') }}</small>
+                    </div>
+                    <p class="mb-0">{{ $comment->content }}</p>
+                </div>
+            </div>
+        @endforeach
+
+        @if($comments->isEmpty())
+            <p class="text-muted">Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>
+        @endif
+    </div>
+</div>
+
+
                 </article>
             </div>
 

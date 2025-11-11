@@ -29,6 +29,7 @@ use App\Http\Controllers\admin\ToursManagementController;
 use App\Http\Controllers\admin\BookingManagementController;
 use App\Http\Controllers\admin\ContactManagementController;
 use App\Http\Controllers\admin\BlogManagementController;
+use App\Http\Controllers\admin\CommentManagementController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -61,7 +62,10 @@ Route::post('/createBooking', [BookingController::class, 'store'])->name('create
 
 //Handle Blog
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');   
-Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog-details');
+Route::middleware(['web'])->group(function () {
+    Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog-details');
+});
+
 // Like và Comment bắt buộc đăng nhập
 Route::post('/blog/{id}/like', [BlogController::class, 'like'])->name('blog.like');
 Route::post('/blog/{id}/comment', [BlogController::class, 'comment'])->name('blog.comment');
@@ -206,4 +210,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/blog/{id}/edit', [BlogManagementController::class, 'edit'])->name('admin.blog.edit');  // /admin/blog/{id}/edit
     Route::put('/blog/{id}/update', [BlogManagementController::class, 'update'])->name('admin.blog.update'); // POST /admin/blog/{id}/update
     Route::delete('/blog/{id}/delete', [BlogManagementController::class, 'destroy'])->name('admin.blog.delete'); // GET /admin/blog/{id}/delete
+    Route::get('/comments', [CommentManagementController::class, 'index'])->name('admin.comments');
+    Route::delete('/comments/{id}', [CommentManagementController::class, 'destroy'])->name('admin.comments.delete');
+    Route::delete('/comments/blog/{blogId}', [CommentManagementController::class, 'deleteByBlog'])->name('admin.comments.deleteByBlog');
 });

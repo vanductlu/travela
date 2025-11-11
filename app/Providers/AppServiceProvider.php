@@ -4,7 +4,7 @@ namespace App\Providers;
 use App\Models\admin\ContactModel;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-
+use Carbon\Carbon;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -30,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
 
         $view->with('unreadCount', $data['countUnread']);
         $view->with('unreadContacts', $data['contacts']);
+        Carbon::setLocale('vi'); // Nếu muốn hiển thị tiếng Việt
+        date_default_timezone_set('Asia/Ho_Chi_Minh'); // Giờ Việt Nam
     });
     }
 }

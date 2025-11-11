@@ -1,6 +1,7 @@
 @include('clients.blocks.header')
 @include('clients.blocks.banner')
 @include('clients.partials.chat')
+
 <section class="blog-details-page py-100 rel z-1">
     <div class="container">
         <div class="row">
@@ -12,100 +13,325 @@
                     <h2>{{ $blog->title }}</h2>
                     <ul class="blog-meta mb-3">
                         <li><i class="far fa-user"></i> {{ $blog->author }}</li>
-                        <li><i class="far fa-calendar-alt"></i> {{ $blog->created_at->format('d/m/Y') }}</li>
+                        <li><i class="far fa-calendar-alt"></i> 
+                            {{ $blog->created_at->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y H:i') }} 
+                            ({{ $blog->created_at->diffForHumans() }})
+                        </li>
                         <li><i class="far fa-eye"></i> {{ $blog->views }} lượt xem</li>
                     </ul>
                     <p><strong>{{ $blog->excerpt }}</strong></p>
                     <div>{!! $blog->content !!}</div>
-                            <hr>
-<div class="comment-section mt-5">
-    <h5 class="mb-4">💬 Bình luận</h5>
 
-    {{-- Thông báo thành công hoặc lỗi --}}
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @elseif(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
+                    <hr>
+                    {{-- ======================= PHẦN BÌNH LUẬN ======================= --}}
+                    <div class="comment-section mt-5">
+                        <h5 class="mb-4">💬 Bình luận</h5>
 
-    @php
-        $user = session('user'); // Lấy thông tin người dùng từ session
-    @endphp
+                        {{-- Thông báo --}}
+                        @if(session('success'))
+                            <div class="alert alert-success">{{ session('success') }}</div>
+                        @elseif(session('error'))
+                            <div class="alert alert-danger">{{ session('error') }}</div>
+                        @endif
 
-    {{-- Form bình luận --}}
-    @if($user)
-        <form action="{{ route('blog.comment', $blog->blogId) }}" method="POST" class="mb-4">
-            @csrf
-            <div class="mb-3">
-                <textarea name="content" class="form-control" rows="3" placeholder="Nhập bình luận..." required></textarea>
-            </div>
-            <button type="submit" class="btn btn-success">Gửi bình luận</button>
-        </form>
-    @else
-        <p class="text-muted">
-            Bạn cần <a href="{{ route('login', ['redirect' => request()->fullUrl()]) }}">đăng nhập</a> để bình luận.
-        </p>
-    @endif
+                        @php
+                            $user = session('username'); // Lấy tên người dùng từ session
+                        @endphp
 
-    {{-- Danh sách bình luận --}}
-    @php
-        $comments = DB::table('tbl_comments')
-            ->where('blog_id', $blog->blogId)
-            ->orderByDesc('created_at')
-            ->get();
-    @endphp
+                        {{-- Form bình luận --}}
+                        @if($user)
+                            <form action="{{ route('blog.comment', $blog->blogId) }}" method="POST" class="mb-4">
+                                @csrf
+                                <div class="mb-3">
+                                    <textarea name="content" class="form-control" rows="3" placeholder="Nhập bình luận..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Gửi bình luận</button>
+                            </form>
+                        @else
+                            <p class="text-muted">
+                                Bạn cần <a href="{{ route('login', ['redirect' => request()->fullUrl()]) }}">đăng nhập</a> để bình luận.
+                            </p>
+                        @endif
 
-    <div class="comments-list">
-        @foreach($comments as $comment)
-            <div class="comment d-flex align-items-start border rounded p-3 mb-3">
-                {{-- Avatar ngẫu nhiên hoặc từ user --}}
-                <div class="avatar me-3">
-                    <img src="https://i.pravatar.cc/50?u={{ $comment->user_id ?? $comment->name }}" 
-                         alt="{{ $comment->name }}" class="rounded-circle" width="50" height="50">
-                </div>
-                <div class="comment-content">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <strong>{{ $comment->name }}</strong>
-                        <small class="text-muted">{{ \Carbon\Carbon::parse($comment->created_at)->format('d/m/Y H:i') }}</small>
+                        {{-- Lấy bình luận gốc --}}
+                        @php
+                            $comments = DB::table('tbl_comments')
+                                ->where('blog_id', $blog->blogId)
+                                ->whereNull('parent_id')
+                                ->orderByDesc('created_at')
+                                ->get();
+                        @endphp
+
+                        {{-- Hàm hiển thị bình luận con --}}
+                        @php
+                        if (!function_exists('renderReplies')) {
+                            function renderReplies($commentId) {
+                            $replies = DB::table('tbl_comments')
+                                ->where('parent_id', $commentId)
+                                ->orderBy('created_at', 'asc')
+                                ->get();
+
+                            foreach ($replies as $reply) {
+                                $userData = DB::table('tbl_users')->where('username', $reply->name)->first();
+                                $avatarPath = $userData && $userData->avatar
+                                    ? asset('clients/assets/images/user-profile/' . $userData->avatar)
+                                    : 'https://i.pravatar.cc/50?u=' . urlencode($reply->name);
+
+                                echo '<div class="comment reply d-flex align-items-start border rounded p-3 ms-5 mt-2">';
+                                echo '<div class="avatar me-3">';
+                                echo '<img src="' . $avatarPath . '" class="rounded-circle" width="40" height="40">';
+                                echo '</div>';
+                                echo '<div class="comment-content">';
+                                echo '<div class="d-flex justify-content-between align-items-center mb-1">';
+                                echo '<strong>' . htmlspecialchars($reply->name) . '</strong>';
+                                echo '<small class="text-muted ms-2">' 
+                                     . \Carbon\Carbon::parse($reply->created_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y H:i') 
+                                     . ' (' . \Carbon\Carbon::parse($reply->created_at)->diffForHumans() . ')' 
+                                     . '</small>';
+                                echo '</div>';
+                                echo '<p class="mb-1">' . htmlspecialchars($reply->content) . '</p>';
+                                echo '<a href="#" class="reply-btn text-primary small" data-id="' . $reply->id . '">Trả lời</a>';
+                                echo '</div>';
+                                echo '</div>';
+
+                                renderReplies($reply->id);
+                            }
+                        }
+                        }
+                        @endphp
+
+                        {{-- Hiển thị danh sách bình luận --}}
+                        <div class="comments-list">
+                            @foreach($comments as $comment)
+                                <div class="comment d-flex align-items-start border rounded p-3 mb-3">
+                                    <div class="avatar me-3">
+                                        @php
+                                            $userData = DB::table('tbl_users')->where('username', $comment->name)->first();
+                                            $avatarPath = $userData && $userData->avatar
+                                                ? asset('clients/assets/images/user-profile/' . $userData->avatar)
+                                                : 'https://i.pravatar.cc/50?u=' . urlencode($comment->name);
+                                        @endphp
+                                        <img src="{{ $avatarPath }}" alt="{{ $comment->name }}" class="rounded-circle" width="50" height="50">
+                                    </div>
+                                    <div class="comment-content w-100">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <strong>{{ $comment->name }}</strong>
+                                            <small class="text-muted">
+                                                {{ \Carbon\Carbon::parse($comment->created_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y H:i') }}
+                                                ({{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }})
+                                            </small>
+                                        </div>
+                                        <p class="mb-1">{{ $comment->content }}</p>
+                                        <a href="#" class="reply-btn text-primary small" data-id="{{ $comment->id }}">Trả lời</a>
+                                    </div>
+                                </div>
+
+                                {{-- Gọi hiển thị bình luận con --}}
+                                {!! renderReplies($comment->id) !!}
+                            @endforeach
+
+                            @if($comments->isEmpty())
+                                <p class="text-muted">Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>
+                            @endif
+                        </div>
                     </div>
-                    <p class="mb-0">{{ $comment->content }}</p>
-                </div>
-            </div>
-        @endforeach
-
-        @if($comments->isEmpty())
-            <p class="text-muted">Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>
-        @endif
-    </div>
-</div>
-
-
                 </article>
             </div>
-
+            {{-- ================== CỘT BÊN PHẢI - SIDEBAR ================== --}}
             <div class="col-lg-4 col-md-8 col-sm-10 rmt-75">
                 <div class="blog-sidebar">
-                    <div class="widget widget-news">
-                        <h5 class="widget-title">Bài viết mới</h5>
-                        <ul>
+                    
+                    {{-- Widget Tìm kiếm --}}
+                    <div class="widget widget-search">
+                        <h5 class="widget-title">🔍 Tìm kiếm</h5>
+                        <form action="{{ route('blog') }}" method="GET" class="search-form">
+                            <div class="search-input-wrapper">
+                                <input type="text" name="search" placeholder="Tìm kiếm bài viết..." 
+                                       value="{{ request('search') }}" class="search-input">
+                                <button type="submit" class="search-button">
+                                    <i class="far fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    {{-- Widget Danh mục --}}
+                    <div class="widget widget-categories">
+                        <h5 class="widget-title">📂 Danh mục</h5>
+                        <ul class="category-list">
+                            @php
+                                $categories = DB::table('tbl_blog')
+                                    ->select('category', DB::raw('count(*) as total'))
+                                    ->whereNotNull('category')
+                                    ->groupBy('category')
+                                    ->get();
+                            @endphp
+                            @if($categories->isNotEmpty())
+                                @foreach($categories as $cat)
+                                <li>
+                                    <a href="{{ route('blog') }}?category={{ urlencode($cat->category) }}">
+                                        <span class="cat-name">{{ $cat->category }}</span>
+                                        <span class="cat-count">{{ $cat->total }}</span>
+                                    </a>
+                                </li>
+                                @endforeach
+                            @else
+                                <li style="text-align: center; color: #65676b;">Chưa có danh mục</li>
+                            @endif
+                        </ul>
+                    </div>
+
+                    {{-- Widget Bài viết mới --}}
+                    <div class="widget widget-recent-posts">
+                        <h5 class="widget-title">🔥 Bài viết mới</h5>
+                        <ul class="recent-posts-list">
                             @foreach($recent as $item)
                             <li>
-                                <div class="image">
-                                    <img src="{{ asset('clients/assets/images/blog/' . $item->image) }}" alt="{{ $item->title }}">
-                                </div>
-                                <div class="content">
-                                    <h6><a href="{{ route('blog-details', $item->slug) }}">{{ Str::limit($item->title, 50) }}</a></h6>
-                                    <span class="date"><i class="far fa-calendar-alt"></i> {{ $item->created_at->format('d/m/Y') }}</span>
-                                </div>
+                                <a href="{{ route('blog-details', $item->slug) }}" class="post-item">
+                                    <div class="post-image">
+                                        <img src="{{ asset('clients/assets/images/blog/' . $item->image) }}" alt="{{ $item->title }}">
+                                    </div>
+                                    <div class="post-content">
+                                        <h6 class="post-title">{{ Str::limit($item->title, 50) }}</h6>
+                                        <span class="post-date">
+                                            <i class="far fa-calendar-alt"></i>
+                                            {{ $item->created_at->diffForHumans() }}
+                                        </span>
+                                    </div>
+                                </a>
                             </li>
                             @endforeach
                         </ul>
                     </div>
+
+                    {{-- Widget Bài viết phổ biến --}}
+                    <div class="widget widget-popular-posts">
+                        <h5 class="widget-title">⭐ Bài viết phổ biến</h5>
+                        <ul class="popular-posts-list">
+                            @php
+                                $popularPosts = DB::table('tbl_blog')
+                                    ->orderByDesc('views')
+                                    ->limit(5)
+                                    ->get();
+                            @endphp
+                            @foreach($popularPosts as $post)
+                            <li>
+                                <a href="{{ route('blog-details', $post->slug) }}" class="popular-item">
+                                    <div class="popular-number">{{ $loop->iteration }}</div>
+                                    <div class="popular-content">
+                                        <h6 class="popular-title">{{ Str::limit($post->title, 60) }}</h6>
+                                        <div class="popular-meta">
+                                            <span class="views"><i class="far fa-eye"></i> {{ $post->views }}</span>
+                                            <span class="date"><i class="far fa-clock"></i> {{ \Carbon\Carbon::parse($post->created_at)->diffForHumans() }}</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    {{-- Widget Tags --}}
+                    <div class="widget widget-tags">
+                        <h5 class="widget-title">🏷️ Tags phổ biến</h5>
+                        <div class="tags-cloud">
+                            @php
+                                $tags = ['Du lịch', 'Khám phá', 'Ẩm thực', 'Văn hóa', 'Thiên nhiên', 
+                                         'Phượt', 'Check-in', 'Tips', 'Review', 'Kinh nghiệm', 
+                                         'Địa điểm', 'Miền Bắc', 'Miền Nam', 'Miền Trung'];
+                            @endphp
+                            @foreach($tags as $tag)
+                            <a href="{{ route('blog') }}?tag={{ urlencode($tag) }}" class="tag-item">
+                                {{ $tag }}
+                            </a>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Widget Newsletter --}}
+                    <div class="widget widget-newsletter">
+                        <h5 class="widget-title">📧 Đăng ký nhận tin</h5>
+                        <p class="newsletter-desc">Nhận thông báo về bài viết mới nhất qua email</p>
+                        <form action="#" method="POST" class="newsletter-form">
+                            @csrf
+                            <div class="newsletter-input-wrapper">
+                                <input type="email" name="email" placeholder="Email của bạn..." required class="newsletter-input">
+                                <button type="submit" class="newsletter-button">
+                                    <i class="far fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <div class="newsletter-checkbox">
+                                <input type="checkbox" id="agree" required>
+                                <label for="agree">Tôi đồng ý nhận email từ website</label>
+                            </div>
+                        </form>
+                    </div>
+
+                    {{-- Widget Social --}}
+                    <div class="widget widget-social">
+                        <h5 class="widget-title">🌐 Theo dõi chúng tôi</h5>
+                        <div class="social-links">
+                            <a href="#" class="social-item facebook">
+                                <i class="fab fa-facebook-f"></i>
+                                <span>Facebook</span>
+                            </a>
+                            <a href="#" class="social-item instagram">
+                                <i class="fab fa-instagram"></i>
+                                <span>Instagram</span>
+                            </a>
+                            <a href="#" class="social-item youtube">
+                                <i class="fab fa-youtube"></i>
+                                <span>Youtube</span>
+                            </a>
+                            <a href="#" class="social-item tiktok">
+                                <i class="fab fa-tiktok"></i>
+                                <span>Tiktok</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    {{-- Widget Banner quảng cáo --}}
+                    <div class="widget widget-ad">
+                        <a href="#" class="ad-banner">
+                            <div class="ad-content">
+                                <div class="ad-icon">🎉</div>
+                                <h6>Khuyến mãi đặc biệt</h6>
+                                <p>Giảm đến 50% cho tour mùa hè</p>
+                                <span class="ad-button">Xem ngay</span>
+                            </div>
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+{{-- Form trả lời động --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const replyButtons = document.querySelectorAll('.reply-btn');
+    replyButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const parentId = this.dataset.id;
+            const existingForm = document.querySelector('.reply-form');
+            if (existingForm) existingForm.remove();
+
+            const formHtml = `
+                <form action="{{ route('blog.comment', $blog->blogId) }}" method="POST" class="reply-form mt-2">
+                    @csrf
+                    <input type="hidden" name="parent_id" value="${parentId}">
+                    <textarea name="content" class="form-control mb-2" rows="2" placeholder="Nhập phản hồi..." required></textarea>
+                    <button type="submit" class="btn btn-sm btn-primary">Gửi</button>
+                </form>
+            `;
+            this.insertAdjacentHTML('afterend', formHtml);
+        });
+    });
+});
+</script>
 
 @include('clients.blocks.new_letter')
 @include('clients.blocks.footer')

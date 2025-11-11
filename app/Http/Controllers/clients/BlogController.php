@@ -42,7 +42,7 @@ class BlogController extends Controller
     public function comment(Request $request, $id)
     {
     // Kiểm tra user trong session
-    if (!$request->session()->has('user')) {
+    if (!$request->session()->has('username')) {
         // Chuyển hướng đến trang login và lưu lại URL hiện tại để redirect sau khi đăng nhập
         return redirect()->route('login', ['redirect' => url()->previous()])
                          ->with('error', 'Vui lòng đăng nhập để bình luận.');
@@ -53,8 +53,9 @@ class BlogController extends Controller
 
     DB::table('tbl_comments')->insert([
         'blog_id' => $id,
-        'name' => $request->name,
+        'name' => session('username'),
         'content' => $request->content,
+        'parent_id' => $request->parent_id, // nếu có parent_id
         'created_at' => now(),
     ]);
 

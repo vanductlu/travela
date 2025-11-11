@@ -44,9 +44,10 @@
         href="{{ asset('clients/assets/css/css-login/fonts/material-icon/css/material-design-iconic-font.min.css') }}">
     <!-- Main css -->
     <link rel="stylesheet" href="{{ asset('clients/assets/css/css-login/style.css') }}">
-    {{-- custom css by Dien --}}
+    {{-- custom css --}}
     <link rel="stylesheet" href="{{ asset('clients/assets/css/custom-css.css') }}" />
-
+    {{-- blog css --}}
+    <link rel="stylesheet" href="{{ asset('clients/assets/css/blog.css') }}" />
     {{-- User Profile  --}}
     <link rel="stylesheet" href="{{ asset('clients/assets/css/user-profile.css') }}" />
 

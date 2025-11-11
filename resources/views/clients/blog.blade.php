@@ -7,9 +7,10 @@
             <!-- Danh sách bài viết -->
             <div class="col-lg-8">
                 @foreach($blogs as $blog)
-                <div class="blog-item style-three" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                <div class="blog-item style-three" data-aos="fade-up">
                     <div class="image">
                         <img src="{{ asset('clients/assets/images/blog/' . $blog->image) }}" alt="{{ $blog->title }}">
+                        <span class="badge-new">Mới</span>
                     </div>
                     <div class="content">
                         <a href="#" class="category">{{ $blog->category }}</a>
@@ -26,6 +27,7 @@
                         </a>
                     </div>
                 </div>
+
                 @endforeach
 
                 <div class="mt-4">

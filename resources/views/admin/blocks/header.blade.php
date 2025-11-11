@@ -50,7 +50,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <!-- Dropzone.js -->
     <link href="{{ asset('admin/vendors/dropzone/dist/min/dropzone.min.css') }}" rel="stylesheet" />
-    {{-- Custom css by DevDien  --}}
+    {{-- Custom --}}
     <link href="{{ asset('admin/assets/css/custom-css.css') }}" rel="stylesheet" />
 </head>
 

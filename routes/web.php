@@ -117,6 +117,7 @@ Route::post('/create-momo-payment', [BookingController::class, 'createMomoPaymen
 //Search 
 Route::get('/search', [SearchController::class, 'index'])->name(name: 'search');
 Route::get('/search-voice-text', [SearchController::class, 'searchTours'])->name('search-voice-text');
+Route::get('/api/search-suggestions', [SearchController::class, 'getSuggestions']);
 //Chatbot
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');

@@ -174,8 +174,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 {{-- paypal-payment  --}}
 {{-- <script src="https://www.paypal.com/sdk/js?client-id={{ env('PAYPAL_SANDBOX_CLIENT_ID') }}"></script> --}}
-<!-- Custom script by Dev dien-->
+<!-- Custom script-->
 <script src="{{ asset('clients/assets/js/custom-js.js') }}"></script>
+<script src="{{ asset('clients/assets/js/search-autocomplete.js') }}"></script>
 <script src="{{ asset('clients/assets/js/jquery.datetimepicker.full.min.js') }}"></script>
 
 </body>

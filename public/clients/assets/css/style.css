@@ -3668,7 +3668,22 @@ h6, .h6, blockquote {
 /* Header Search */
 .nav-search {
   position: relative;
+  display: flex;
+  align-items: center;
   margin-right: 10px; }
+.nav-search form {
+    display: flex;
+    align-items: center;
+}
+
+.nav-search .searchbox {
+    padding: 6px 10px;
+    font-size: 14px;
+}
+
+.nav-search .searchbutton {
+    margin-left: 5px;
+}
   @media only screen and (max-width: 375px) {
     .nav-search {
       display: none; } }
@@ -3712,7 +3727,31 @@ h6, .h6, blockquote {
     .nav-search form button {
       background: transparent;
       padding: 15px 20px 15px 0; }
+.nav-search .searchbox:focus {
+    width: 250px !important;
+    box-shadow: none;
+}
+/* Gợi ý dropdown */
+#suggestionList {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
 
+#suggestionList li {
+    padding: 8px 12px;
+    cursor: pointer;
+    white-space: nowrap; /* Không wrap chữ xuống dòng */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Nếu dài thì ... */
+}
+
+#suggestionList li:hover {
+    background-color: #f0f0f0;
+}
 /* White Menu */
 .main-header.white-menu .top-left {
   font-weight: 400;

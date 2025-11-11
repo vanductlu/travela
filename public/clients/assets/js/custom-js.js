@@ -1001,6 +1001,4 @@ $(document).ready(function () {
         console.log('Speech recognition not supported in this browser.');
         toastr.error('Trình duyệt của bạn không hỗ trợ nhận diện giọng nói.');
     }
-    
-    
 });

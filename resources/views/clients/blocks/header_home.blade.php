@@ -119,10 +119,14 @@
                         <!-- Nav Search -->
                         <div class="nav-search">
                             <button class="far fa-search"></button>
-                            <form action="{{ route('search-voice-text') }}" class="hide" method="GET">
-                                <input type="text" name="keyword" placeholder="Search" class="searchbox" required>
-                                <i class="fa fa-microphone" aria-hidden="true" style="margin: 0 16px"
-                                    id="voice-search"></i>
+                            <form id="searchForm" action="{{ route('search-voice-text') }}" class="position-relative" method="GET" autocomplete="off">
+                                <div class="position-relative" style="width: 250px;">
+                                    <input type="text" id="searchInput" name="keyword" placeholder="Tìm kiếm chuyến đi..."
+                                        class="searchbox form-control" required>
+                                    <ul id="suggestionList" class="list-group position-absolute w-100 mt-1"
+                                        style="z-index: 1000; display: none; max-height: 240px; overflow-y: auto;"></ul>
+                                </div>
+                                <i class="fa fa-microphone" aria-hidden="true" style="margin: 0 16px" id="voice-search"></i>
                                 <button type="submit" class="searchbutton far fa-search"></button>
                             </form>
                         </div>

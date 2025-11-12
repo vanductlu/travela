@@ -20,6 +20,7 @@ use App\Http\Controllers\clients\TourGridController;
 use App\Http\Controllers\clients\TourListController;
 use App\Http\Controllers\clients\LoginGoogleController;
 use App\Http\Controllers\clients\ChatController;
+use App\Http\Controllers\clients\AiTranslateController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\admin\LoginAdminController;
 use App\Http\Controllers\admin\DashboardController;
@@ -155,7 +156,7 @@ Route::get('/api/search-suggestions', [SearchController::class, 'getSuggestions'
 //         ]);
 //     }
 // });
-
+Route::post('/ai/translate', [AiTranslateController::class, 'translate'])->name('ai.translate');
 //ADMIN
 // Routes without middleware
 Route::prefix('admin')->group(function () {

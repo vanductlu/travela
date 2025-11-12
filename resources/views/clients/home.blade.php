@@ -237,7 +237,7 @@
     </div>
 </section>
 <!-- Features Area end -->
-
+@include('clients.partials.ai-widget')
 <!-- CTA Area start -->
 <section class="cta-area pt-100 rel z-1">
     <div class="container-fluid">
@@ -280,7 +280,6 @@
         </div>
     </div>
 </section>
+
 <!-- CTA Area end -->
-
-
 @include('clients.blocks.footer_home')

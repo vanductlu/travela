@@ -23,6 +23,7 @@
                 <option value="en" selected>Anh</option>
                 <option value="vi">Việt</option>
             </select>
+            <button id="aiTranslateNowBtn" type="button" style="padding:3px 8px; border:1px solid #28a745; background:white; cursor:pointer; font-size:12px;">Dịch ngay</button>
         </div>
         <button id="aiCloseBtn" type="button" style="border:none; background:none; color:#dc3545; font-size:18px; cursor:pointer;">×</button>
     </div>
@@ -30,22 +31,4 @@
         ⏳ Dịch tự động...
     </div>
 </div>
-
-{{-- Nút bật/tắt AI Dịch --}}
-<button id="aiToggleBtn" style="
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    background: #007bff;
-    color: white;
-    border: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    cursor: pointer;
-    font-size: 22px;
-    z-index: 9999999;
-">🌐</button>
-
 <script src="{{ asset('clients/assets/js/ai-widget.js') }}"></script>

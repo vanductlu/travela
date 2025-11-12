@@ -60,132 +60,25 @@
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-xl-3 col-lg-4 col-sm-6">
-                <div class="team-item hover-content" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                    <img src="{{ asset('clients/assets/images/team/guide1.jpg') }}" alt="Guide">
-                    <div class="content">
-                        <h6>DEV DIEN</h6>
-                        <span class="designation">Founder</span>
-                        <div class="social-style-one inner-content">
-                            <a href="https://www.facebook.com"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://www.facebook.com"><i class="fab fa-instagram"></i></a>
-                            <a href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-sm-6">
-                <div class="team-item hover-content" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                    <img src="{{ asset('clients/assets/images/team/guide2.jpg') }}" alt="Guide">
-                    <div class="content">
-                        <h6>BAO NGAN</h6>
-                        <span class="designation">Co-founder</span>
-                        <div class="social-style-one inner-content">
-                            <a href="contact.html"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
-                            <a href="contact.html"><i class="fab fa-instagram"></i></a>
-                            <a href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-sm-6">
-                <div class="team-item hover-content" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                    <img src="{{ asset('clients/assets/images/team/guide1.jpg') }}" alt="Guide">
-                    <div class="content">
-                        <h6>MINH TOAN</h6>
-                        <span class="designation">Travel Guide</span>
-                        <div class="social-style-one inner-content">
-                            <a href="contact.html"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
-                            <a href="contact.html"><i class="fab fa-instagram"></i></a>
-                            <a href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-sm-6">
-                <div class="team-item hover-content" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500"
-                    data-aos-offset="50">
-                    <img src="{{ asset('clients/assets/images/team/guide2.jpg') }}" alt="Guide">
-                    <div class="content">
-                        <h6>TRONG HAI</h6>
-                        <span class="designation">Senior Guide</span>
-                        <div class="social-style-one inner-content">
-                            <a href="contact.html"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
-                            <a href="contact.html"><i class="fab fa-instagram"></i></a>
-                            <a href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-sm-6">
-                <div class="team-item hover-content" data-aos="fade-up" data-aos-delay="100"
-                    data-aos-duration="1500" data-aos-offset="50">
-                    <img src="{{ asset('clients/assets/images/team/guide3.jpg') }}" alt="Guide">
-                    <div class="content">
-                        <h6>NGOC THU</h6>
-                        <span class="designation">Travel Guide</span>
-                        <div class="social-style-one inner-content">
-                            <a href="contact.html"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
-                            <a href="contact.html"><i class="fab fa-instagram"></i></a>
-                            <a href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-sm-6">
-                <div class="team-item hover-content" data-aos="fade-up" data-aos-delay="150"
-                    data-aos-duration="1500" data-aos-offset="50">
-                    <img src="{{ asset('clients/assets/images/team/guide4.jpg') }}" alt="Guide">
-                    <div class="content">
-                        <h6>DUC ANH</h6>
-                        <span class="designation">Travel Guide</span>
-                        <div class="social-style-one inner-content">
-                            <a href="contact.html"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
-                            <a href="contact.html"><i class="fab fa-instagram"></i></a>
-                            <a href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-sm-6">
-                <div class="team-item hover-content" data-aos="fade-up" data-aos-duration="1500"
-                    data-aos-offset="50">
-                    <img src="{{ asset('clients/assets/images/team/guide5.jpg') }}" alt="Guide">
-                    <div class="content">
-                        <h6>THANH NHAN</h6>
-                        <span class="designation">Co-founder</span>
-                        <div class="social-style-one inner-content">
-                            <a href="contact.html"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
-                            <a href="contact.html"><i class="fab fa-instagram"></i></a>
-                            <a href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-sm-6">
-                <div class="team-item hover-content" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500"
-                    data-aos-offset="50">
-                    <img src="{{ asset('clients/assets/images/team/guide6.jpg') }}" alt="Guide">
-                    <div class="content">
-                        <h6>CONG LAM</h6>
-                        <span class="designation">Senior Guide</span>
-                        <div class="social-style-one inner-content">
-                            <a href="contact.html"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
-                            <a href="contact.html"><i class="fab fa-instagram"></i></a>
-                            <a href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
+    @foreach($guides as $guide)
+    <div class="col-xl-3 col-lg-4 col-sm-6">
+        <div class="team-item hover-content" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+            <img src="{{ asset('clients/assets/images/team/' . $guide->image) }}" alt="{{ $guide->name }}">
+            <div class="content">
+                <h6>{{ $guide->name }}</h6>
+                <span class="designation">{{ $guide->designation }}</span>
+                <div class="social-style-one inner-content">
+                    @if($guide->twitter)<a href="{{ $guide->twitter }}"><i class="fab fa-twitter"></i></a>@endif
+                    @if($guide->facebook)<a href="{{ $guide->facebook }}"><i class="fab fa-facebook-f"></i></a>@endif
+                    @if($guide->instagram)<a href="{{ $guide->instagram }}"><i class="fab fa-instagram"></i></a>@endif
+                    @if($guide->youtube)<a href="{{ $guide->youtube }}"><i class="fab fa-youtube"></i></a>@endif
                 </div>
             </div>
         </div>
+    </div>
+    @endforeach
+</div>
+
     </div>
 </section>
 <!-- Team Area end -->

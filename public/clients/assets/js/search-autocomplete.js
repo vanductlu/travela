@@ -9,8 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let debounceTimer;
     const DEBOUNCE_DELAY = 300;
-    const API_URL = window.location.origin + "/api/search-suggestions"; // Gọi API Laravel
-
+    const API_URL = "http://127.0.0.1:5555/api/search-suggestions";
     function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }

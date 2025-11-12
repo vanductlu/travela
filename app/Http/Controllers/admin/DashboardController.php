@@ -5,15 +5,16 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\admin\DashboardModel;
 use Illuminate\Http\Request;
-
+use App\Models\Admin\UserModel;
 class DashboardController extends Controller
 {
 
     private $dashboard;
-
+    private $users;
     public function __construct()
     {
         $this->dashboard = new DashboardModel();
+        $this->users = new UserModel();
     }
     public function index()
     {
@@ -30,14 +31,11 @@ class DashboardController extends Controller
         ];
 
         $paymentStatus = $this->dashboard->getValuePayment();
-
+        $summary['totalUsers'] = $this->users->getTotalUsers(); // thêm vào summary
         $toursBooked = $this->dashboard->getMostTourBooked();
         $newBooking = $this->dashboard->getNewBooking();
         $revenue = $this->dashboard->getRevenuePerMonth();
         // dd($revenue);
-
         return view('admin.dashboard', compact('title', 'summary', 'dataDomain', 'paymentStatus','toursBooked','newBooking','revenue'));
     }
-
-
 }

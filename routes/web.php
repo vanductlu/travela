@@ -22,6 +22,7 @@ use App\Http\Controllers\clients\LoginGoogleController;
 use App\Http\Controllers\clients\ChatController;
 use App\Http\Controllers\clients\AiTranslateController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\admin\TravelGuidesManagement;
 use App\Http\Controllers\admin\LoginAdminController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\AdminManagementController;
@@ -215,4 +216,13 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/comments', [CommentManagementController::class, 'index'])->name('admin.comments');
     Route::delete('/comments/{id}', [CommentManagementController::class, 'destroy'])->name('admin.comments.delete');
     Route::delete('/comments/blog/{blogId}', [CommentManagementController::class, 'deleteByBlog'])->name('admin.comments.deleteByBlog');
+
 });
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('travelguides', [TravelGuidesManagement::class, 'index'])->name('travelguides');
+    Route::post('team/store', [TravelGuidesManagement::class, 'store'])->name('team.store');
+    Route::post('team/update/{team}', [TravelGuidesManagement::class, 'update'])->name('team.update');
+    Route::get('team/delete/{team}', [TravelGuidesManagement::class, 'delete'])->name('team.delete');
+    Route::get('team/activate/{team}', [TravelGuidesManagement::class, 'activate'])->name('team.activate');
+});
+

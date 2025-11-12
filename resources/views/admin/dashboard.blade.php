@@ -4,34 +4,29 @@
     <div class="main_container">
         @include('admin.blocks.sidebar')
 
-
         <!-- page content -->
         <div class="right_col" role="main">
             <!-- top tiles -->
             <div class="row" style="display: inline-block;width: 100%">
                 <div class="tile_count">
                     <div class="col-md-3 col-sm-4  tile_stats_count">
-                        <span class="count_top"><i class="fa fa-user"></i> Tổng số tours đang hoạt động</span>
+                        <span class="count_top"><i class="fa fa-suitcase"></i> Tổng số tours đang hoạt động</span>
                         <div class="count green"><i class="fa fa-sort-asc"></i> {{ $summary['tourWorking'] }}</div>
                     </div>
                     <div class="col-md-3 col-sm-4  tile_stats_count">
-                        <span class="count_top"><i class="fa fa-clock-o"></i> Tổng số lượt booking</span>
+                        <span class="count_top"><i class="fa fa-calendar-check-o"></i> Tổng số lượt booking</span>
                         <div class="count green"><i class="fa fa-sort-asc"></i> {{ $summary['countBooking'] }}</div>
                     </div>
                     <div class="col-md-3 col-sm-4  tile_stats_count">
-                        <span class="count_top"><i class="fa fa-user"></i> Số người dùng đăng ký</span>
-                        <div class="count green"><i class="fa fa-sort-asc"></i> 2,500</div>
+                        <span class="count_top"><i class="fa fa-users"></i> Số người dùng đăng ký</span>
+                        <div class="count green"><i class="fa fa-sort-asc"></i> {{ number_format($summary['totalUsers'], 0, ',', '.') }}</div>
                     </div>
                     <div class="col-md-3 col-sm-4  tile_stats_count">
-                        <span class="count_top"><i class="fa fa-user"></i> Tổng doanh thu</span>
+                        <span class="count_top"><i class="fa fa-money"></i> Tổng doanh thu</span>
                         <div class="count red">{{ number_format($summary['totalAmount'], 0, ',', '.') }} vnđ</div>
-                        <span class="sparkline_two" style="height: 160px;"><canvas width="196" height="40"
-                                style="display: inline-block; width: 196px; height: 40px; vertical-align: top;"></canvas></span>
                     </div>
                 </div>
             </div>
-
-
 
             <div class="row">
                 <div class="col-md-6 col-sm-4 ">
@@ -116,21 +111,18 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
-
                             <div id="echart_donut" data-payment-method='{{ json_encode($paymentStatus) }}'
-                                style="height: 350px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background-color: transparent;"
-                                _echarts_instance_="ec_1733563825119">
-                                <div
-                                    style="position: relative; overflow: hidden; width: 380px; height: 350px; cursor: default;">
+                                style="height: 350px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background-color: transparent;">
+                                <div style="position: relative; overflow: hidden; width: 380px; height: 350px; cursor: default;">
                                     <canvas width="380" height="350" data-zr-dom-id="zr_0"
-                                        style="position: absolute; left: 0px; top: 0px; width: 380px; height: 350px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></canvas>
+                                        style="position: absolute; left: 0px; top: 0px; width: 380px; height: 350px; user-select: none;"></canvas>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-6 col-sm-6  ">
                     <div class="x_panel">
@@ -165,10 +157,10 @@
                                     @endforeach
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>
+
                 <div class="col-md-6 col-sm-6  ">
                     <div class="x_panel">
                         <div class="x_title">
@@ -182,7 +174,6 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
-
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -201,7 +192,7 @@
                                             </th>
                                             <td>{{ $item->fullName }}</td>
                                             <td>{{ $item->tour_name }}</td>
-                                            <td>{{ number_format($item->totalPrice, 0, ',', '.') }}</td>
+                                            <td>{{ number_format($item->totalPrice, 0, ',', '.') }} vnđ</td>
                                             <td>
                                                 <span class="badge badge-warning">Chưa xác nhận</span>
                                             </td>
@@ -209,14 +200,13 @@
                                     @endforeach
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-12 col-sm-12 ">
-
                     <div class="x_panel">
                         <div class="x_title">
                             <h2>Doanh thu theo tháng</h2>
@@ -233,14 +223,11 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
-                            <canvas id="lineChart" data-revenue-per-month = {{ json_encode($revenue)}}></canvas>
+                            <canvas id="lineChart" data-revenue-per-month="{{ json_encode($revenue) }}"></canvas>
                         </div>
-
                     </div>
-
                     <div class="clearfix"></div>
                 </div>
-
             </div>
         </div>
         <!-- /page content -->

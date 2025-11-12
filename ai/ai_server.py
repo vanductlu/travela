@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
+import unicodedata
 app = Flask(__name__)
 CORS(app)
 
@@ -16,19 +16,28 @@ all_tours = [
     {"tourId": 8, "title": "Tour Sài Gòn - Miền Tây 4N3Đ"}
 ]
 
+def normalize_text(text):
+    """
+    Chuyển tiếng Việt có dấu -> không dấu + viết thường.
+    """
+    text = unicodedata.normalize('NFD', text)
+    text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
+    return text.lower()
+
 @app.route('/api/search-suggestions', methods=['GET'])
 def search_suggestions():
-    """
-    Trả về danh sách 'suggestions' (mảng chuỗi) dùng cho autocomplete JS.
-    Query: ?keyword=...
-    """
-    keyword = request.args.get('keyword', '').strip().lower()
+    keyword = request.args.get('keyword', '').strip()
     if not keyword:
-        # trả một số suggestions mặc định nếu rỗng
-        return jsonify({"suggestions": [t["title"] for t in all_tours[:6]]})
+        return jsonify({"suggestions": [t["title"] for t in all_tours[:6]], "count": 6})
 
-    suggestions = [t["title"] for t in all_tours if keyword in t["title"].lower()]
-    return jsonify({"suggestions": suggestions[:10]})
+    normalized_keyword = normalize_text(keyword)
+
+    suggestions = [
+        t["title"]
+        for t in all_tours
+        if normalized_keyword in normalize_text(t["title"])
+    ]
+    return jsonify({"suggestions": suggestions[:10], "count": len(suggestions)})
 
 @app.route('/api/search-tours', methods=['GET'])
 def search_tours():

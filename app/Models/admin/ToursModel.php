@@ -39,47 +39,70 @@ class ToursModel extends Model
         return DB::table('tbl_timeline')->insert($data);
     }
 
-    public function updateTour($tourId,$data){
+    public function updateTour($tourId, $data)
+    {
         $updated = DB::table($this->table)
-        ->where('tourId',$tourId)
-        ->update($data);
+            ->where('tourId', $tourId)
+            ->update($data);
 
         return $updated;
     }
+
+    // ✅ FIX: Sửa logic xóa tour - KHÔNG XÓA tbl_temp_images
     public function deleteTour($tourId)
     {
-        // Xóa các dữ liệu liên quan trong bảng 'tbl_timeline' và 'tbl_images'
-        $deleteTimeLine = DB::table('tbl_timeline')->where('tourId', $tourId)->delete();
-        $deleteImages = DB::table('tbl_images')->where('tourId', $tourId)->delete();
+        try {
+            DB::beginTransaction();
 
-        if ($deleteTimeLine && $deleteImages) {
+            // Xóa timeline
+            DB::table('tbl_timeline')->where('tourId', $tourId)->delete();
+            
+            // Xóa images
+            DB::table('tbl_images')->where('tourId', $tourId)->delete();
+
+            // Xóa tour chính
             $deleteTour = DB::table($this->table)->where('tourId', $tourId)->delete();
 
-            // Trả về kết quả xóa tour
             if ($deleteTour) {
+                DB::commit();
                 return ['success' => true, 'message' => 'Tour đã được xóa thành công.'];
             } else {
-                return ['success' => false, 'message' => 'Không thể xóa tour chính.'];
+                DB::rollBack();
+                return ['success' => false, 'message' => 'Không tìm thấy tour để xóa.'];
             }
-        } else {
-            return ['success' => false, 'message' => 'Không thể xóa các dữ liệu liên quan (timeline, images).'];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ['success' => false, 'message' => 'Lỗi khi xóa tour: ' . $e->getMessage()];
         }
     }
 
-    public function getTour($tourId){
+    public function getTour($tourId)
+    {
         return DB::table($this->table)->where('tourId', $tourId)->first();
     }
 
-    public function getImages($tourId){
-        return DB::table('tbl_images')->where('tourId', $tourId)->get();
+    // ✅ FIX: Lấy images dưới dạng mảng
+    public function getImages($tourId)
+    {
+        return DB::table('tbl_images')
+            ->where('tourId', $tourId)
+            ->pluck('imageURL')
+            ->toArray();
     }
 
-    public function getTimeLine($tourId){
+    public function getTimeLine($tourId)
+    {
         return DB::table('tbl_timeline')->where('tourId', $tourId)->get();
     }
 
-    public function deleteData($tourId, $tbl){
+    public function deleteData($tourId, $tbl)
+    {
         return DB::table($tbl)->where('tourId', $tourId)->delete();
     }
 
+    // ✅ THÊM: Kiểm tra xem tour có images chưa
+    public function hasImages($tourId)
+    {
+        return DB::table('tbl_images')->where('tourId', $tourId)->exists();
+    }
 }

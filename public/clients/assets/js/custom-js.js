@@ -914,36 +914,39 @@ $(document).ready(function () {
      *             HANDLE SEARCH            *
      * ***************************************/
 
-    $('#search_form').on('submit', function(event) {
-        // Lấy giá trị các trường cần kiểm tra
-        var destination = $('#destination').val();
-        var startDate = $('#start_date').val();
-        var endDate = $('#end_date').val();
+$('#search_form').on('submit', function(event) {
+    var destination = $('#destination').val().trim();
+    var startDate = $('#start_date').val().trim();
+    var endDate = $('#end_date').val().trim();
 
-        if (destination === "") {
+    // Xóa lỗi cũ
+    $('.error').remove();
+
+    // Kiểm tra nếu bỏ trống
+    if (destination === "") {
+        event.preventDefault();
+        $('#destination').after('<span class="error" style="color:red;">Vui lòng nhập điểm đến.</span>');
+        return false;
+    }
+
+    if (sqlInjectionPattern.test(destination)) {
+        event.preventDefault();
+        $('#destination').after('<span class="error" style="color:red;">Không được chứa ký tự đặc biệt.</span>');
+        return false;
+    }
+
+    // Kiểm tra ngày bắt đầu nhỏ hơn ngày kết thúc
+    if (startDate && endDate) {
+        const start = new Date(startDate.split("/").reverse().join("-"));
+        const end = new Date(endDate.split("/").reverse().join("-"));
+        if (start > end) {
             event.preventDefault();
-            toastr.error('Vui lòng chọn điểm đến.');
-            return;
+            $('#end_date').after('<span class="error" style="color:red;">Ngày kết thúc phải sau ngày bắt đầu.</span>');
+            return false;
         }
+    }
+});
 
-        // Chuyển đổi định dạng ngày từ DD/MM/YYYY sang YYYY-MM-DD
-        function convertDateFormat(date) {
-            var parts = date.split('/');
-            return parts[2] + '-' + parts[1] + '-' + parts[0];
-        }
-
-        if (startDate && endDate) {
-            var startDateFormatted = new Date(convertDateFormat(startDate));
-            var endDateFormatted = new Date(convertDateFormat(endDate));
-
-            // Kiểm tra nếu "start_date" lớn hơn "end_date"
-            if (startDateFormatted > endDateFormatted) {
-                event.preventDefault();
-                toastr.error('Ngày khởi hành không thể lớn hơn ngày kết thúc.');
-                return;
-            }
-        }
-    });
 
 
     /****************************************

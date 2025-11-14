@@ -1,15 +1,29 @@
 /****************************************
- *  HANDLE SEARCH AI - Lấy gợi ý từ Database    *
+ *  HANDLE SEARCH AI - Lấy gợi ý từ Flask API (Port 5555)   *
  *****************************************/
 document.addEventListener("DOMContentLoaded", function () {
     const input = document.getElementById("searchInput");
     const suggestionList = document.getElementById("suggestionList");
     
-    if (!input) return;
+    if (!input) {
+        console.error("Không tìm thấy #searchInput");
+        return;
+    }
+
+    if (!suggestionList) {
+        console.error("Không tìm thấy #suggestionList");
+        return;
+    }
 
     let debounceTimer;
     const DEBOUNCE_DELAY = 300;
+    
+    // ✅ GỌI FLASK API TRÊN PORT 5555
     const API_URL = "http://127.0.0.1:5555/api/search-suggestions";
+    
+    console.log("🚀 Search suggestion initialized");
+    console.log("📡 API URL:", API_URL);
+    
     function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
@@ -24,10 +38,13 @@ document.addEventListener("DOMContentLoaded", function () {
     function showSuggestions(suggestions, keyword) {
         suggestionList.innerHTML = "";
         
-        if (suggestions.length === 0) {
+        if (!suggestions || suggestions.length === 0) {
             suggestionList.style.display = "none";
+            console.log("❌ Không có gợi ý");
             return;
         }
+
+        console.log("✅ Hiển thị", suggestions.length, "gợi ý:", suggestions);
 
         suggestions.forEach(item => {
             const li = document.createElement("li");
@@ -38,7 +55,12 @@ document.addEventListener("DOMContentLoaded", function () {
             li.addEventListener("click", () => {
                 input.value = item;
                 suggestionList.style.display = "none";
-                document.getElementById("searchForm").submit();
+                const form = document.getElementById("searchForm");
+                if (form) {
+                    form.submit();
+                } else {
+                    console.error("Không tìm thấy #searchForm");
+                }
             });
             
             suggestionList.appendChild(li);
@@ -50,7 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
     async function fetchSuggestions(keyword) {
         clearTimeout(debounceTimer);
 
-        // Nếu không có keyword, ẩn gợi ý
         if (!keyword || keyword.length < 2) {
             suggestionList.style.display = "none";
             return;
@@ -58,21 +79,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
         debounceTimer = setTimeout(async () => {
             try {
-                const res = await fetch(`${API_URL}?keyword=${encodeURIComponent(keyword)}`);
+                const url = `${API_URL}?keyword=${encodeURIComponent(keyword)}`;
+                console.log("📤 Fetching:", url);
+                
+                const res = await fetch(url);
+                
+                console.log("📥 Response status:", res.status);
                 
                 if (!res.ok) {
-                    console.error("API error:", res.status);
+                    console.error("❌ API error:", res.status, res.statusText);
+                    suggestionList.style.display = "none";
                     return;
                 }
 
                 const data = await res.json();
+                console.log("📦 Data received:", data);
+                
                 const suggestions = data.suggestions || [];
-
-                // Hiển thị gợi ý từ database
                 showSuggestions(suggestions, keyword);
 
             } catch (err) {
-                console.error("Lỗi khi lấy gợi ý:", err);
+                console.error("❌ Lỗi khi lấy gợi ý:", err);
                 suggestionList.style.display = "none";
             }
         }, DEBOUNCE_DELAY);
@@ -80,7 +107,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Lắng nghe sự kiện input
     input.addEventListener("input", e => {
-        fetchSuggestions(e.target.value.trim());
+        const keyword = e.target.value.trim();
+        console.log("⌨️ User typed:", keyword);
+        fetchSuggestions(keyword);
     });
 
     // Ẩn gợi ý khi click ra ngoài
@@ -93,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Xử lý phím mũi tên và Enter
     input.addEventListener("keydown", e => {
         const items = suggestionList.querySelectorAll("li");
-        let currentFocus = -1;
+        let currentFocus = Array.from(items).findIndex(item => item.classList.contains("active"));
 
         if (e.key === "ArrowDown") {
             e.preventDefault();
@@ -119,6 +148,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (index < 0) index = items.length - 1;
         
         items[index].classList.add("active");
+        const text = items[index].textContent.replace(/<\/?b>/g, '');
+        input.value = text;
     }
 
     function removeActive(items) {

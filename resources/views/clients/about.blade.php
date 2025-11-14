@@ -138,7 +138,7 @@
 <!-- About Us Area end -->
 
 
-<!-- Team Area start -->
+{{-- <!-- Team Area start -->
 <section class="about-team-area pb-70 rel z-1">
     <div class="container">
         <div class="row justify-content-center">
@@ -188,7 +188,7 @@
         </div>
     </div>
 </section>
-<!-- Team Area end -->
+<!-- Team Area end --> --}}
 
 
 <!-- Features Area start -->

@@ -8,6 +8,7 @@ use App\Models\clients\Login;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Models\clients\User;
+use Illuminate\Support\Facades\Hash;
 class LoginController extends Controller
 {
     private $login;
@@ -53,7 +54,7 @@ class LoginController extends Controller
         $dataInsert = [
             'username'         => $username_regis,
             'email'            => $email,
-            'password'         => md5($password_regis),
+            'password'         => md5($request->password),
             'activation_token' => $activation_token
         ];
 

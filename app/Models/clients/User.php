@@ -10,7 +10,11 @@ class User extends Model
     use HasFactory;
 
     protected $table = 'tbl_users';
-
+    protected $hidden = [
+    'password',
+    'reset_token',
+    'reset_token_expire',
+];
     public function getUserId($username)
     {
         return DB::table($this->table)

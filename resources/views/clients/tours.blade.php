@@ -148,8 +148,11 @@
                                 <div class="destination-item tour-grid style-three bgc-lighter">
                                     <div class="image">
                                         <span class="badge">10% Off</span>
-                                        <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}"
-                                            alt="Tour">
+@if(isset($tour->images) && count($tour->images) > 0)
+    <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}" alt="Destination">
+@else
+    <img src="{{ asset('clients/assets/images/gallery-tours/bien-dao-3n2d-con-dao-3.jpg') }}" alt="Destination">
+@endif
                                     </div>
                                     <div class="content">
                                         <div class="destination-header">

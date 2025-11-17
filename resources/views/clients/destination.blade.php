@@ -32,8 +32,11 @@
                     <div class="destination-item style-two" data-aos-duration="1500" data-aos-offset="50">
                         <div class="image" style="max-height: 250px">
                             <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                            <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}"
-                                alt="Destination">
+@if(isset($tour->images) && count($tour->images) > 0)
+    <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}" alt="Destination">
+@else
+    <img src="{{ asset('clients/assets/images/gallery-tours/bien-dao-3n2d-con-dao-3.jpg') }}" alt="Destination">
+@endif
                         </div>
                         <div class="content">
                             <h6 class="tour-title"><a

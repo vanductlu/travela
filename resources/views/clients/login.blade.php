@@ -26,6 +26,12 @@
                                 <input type="password" name="password_login" id="password_login" placeholder="Mật khẩu" required/>
                             </div>
                             <div class="invalid-feedback" style="margin-top:-15px" id="validate_password"></div>
+                            <div class="text-right" style="margin-top: -10px; margin-bottom: 10px;">
+                                <a href="{{ route('password.forgot') }}" style="font-size: 14px; color:#0c0c0c;">
+                                     Quên mật khẩu?
+                                </a>
+                            </div>
+
                             <div class="form-group form-button">
                                 <input type="submit" name="signin" id="signin" class="form-submit"
                                     value="Đăng nhập" />

@@ -2364,17 +2364,17 @@ function init_SmartWizard() {
     });
     // Handle image upload for Step 2
     Dropzone.autoDiscover = false; // Disable auto discover for dropzone
-
+    var myDropzone = null;
     if ($("#myDropzone").length) {
         // Khởi tạo Dropzone cho bước 2
-        var myDropzone = new Dropzone("#myDropzone", {
+        myDropzone = new Dropzone("#myDropzone", {
             url: "http://travela:8000/admin/add-images-tours",
             paramName: "image",
             maxFilesize: 5,
             acceptedFiles: "image/*",
             addRemoveLinks: true,
             autoProcessQueue: false, // Không tự động upload
-            maxFiles: 5, // Giới hạn số file tối đa
+            maxFiles: 10, // Giới hạn số file tối đa
             parallelUploads: 5, // Số file được upload song song
         });
 
@@ -2384,19 +2384,7 @@ function init_SmartWizard() {
                 $(".add-tours #wizard").smartWizard("currentStep");
             if (currentStep === 2) {
                 event.preventDefault(); // Ngăn hành vi mặc định
-
-                // Kiểm tra xem có tệp nào trong Dropzone không
-                if (myDropzone.getQueuedFiles().length >= 5) {
-                    console.log("Uploading images...");
-
-                    // Xử lý upload toàn bộ hàng đợi
-                    myDropzone.processQueue();
-                } else {
-                    toastr.warning(
-                        "Vui lòng thêm ít nhất 5 hình ảnh trước khi tiếp tục."
-                    );
-                }
-            }
+    }
         });
 
         // Thêm tourid vào formData khi gửi tệp

@@ -20,6 +20,7 @@ use App\Http\Controllers\clients\TourGridController;
 use App\Http\Controllers\clients\TourListController;
 use App\Http\Controllers\clients\LoginGoogleController;
 use App\Http\Controllers\clients\ChatController;
+use App\Http\Controllers\clients\PasswordResetController;
 use App\Http\Controllers\clients\AiTranslateController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\admin\TravelGuidesManagement;
@@ -82,6 +83,14 @@ Route::post('/register', [LoginController::class, 'register'])->name('register')
 Route::post('/login', [LoginController::class, 'login'])->name('user-login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('activate-account/{token}', [LoginController::class, 'activateAccount'])->name('activate.account');
+//Handle reset password
+// Quên mật khẩu
+Route::get('/forgot-password', [PasswordResetController::class, 'showForgotForm'])->name('password.forgot');
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('password.send');
+
+// Đặt lại mật khẩu
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset.form');
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.reset');
 
 //Login with google
 Route::get('auth/google', [LoginGoogleController::class, 'redirectToGoogle'])->name('login-google');
@@ -108,14 +117,14 @@ Route::get('/tour-booked', [TourBookedController::class, 'index'])->name('tour-b
 Route::post('/cancel-booking', [TourBookedController::class, 'cancelBooking'])->name('cancel-booking');
 Route::post('/reviews', [TourDetailController::class, 'reviews'])->name('reviews')->middleware('checkLoginClient');
 Route::post('/checkBooking', [BookingController::class, 'checkBooking'])->name('checkBooking')->middleware('checkLoginClient');
-
+Route::post('/tour/apply-coupon', [TourBookedController::class, 'applyCoupon'])->name('tour.apply.coupon')->middleware('checkLoginClient');
 //Contact
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/create-contact', [ContactController::class, 'createContact'])->name('create-contact');
 
 //Payment with Momo
 Route::post('/create-momo-payment', [BookingController::class, 'createMomoPayment'])->name('createMomoPayment');
-
+Route::post('/booking/momo/callback', [BookingController::class, 'handlePaymentMomoCallback'])->name('booking.momo.callback');
 //Search 
 Route::get('/search', [SearchController::class, 'index'])->name(name: 'search');
 Route::get('/search-voice-text', [SearchController::class, 'searchTours'])->name('search-voice-text');
@@ -185,8 +194,9 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/page-add-tours', [ToursManagementController::class, 'pageAddTours'])->name('admin.page-add-tours');
     Route::post('/add-tours', [ToursManagementController::class, 'addTours'])->name('admin.add-tours');
     Route::post('/add-images-tours', [ToursManagementController::class, 'addImagesTours'])->name('admin.add-images-tours');
+    Route::get('/add-timeline', [ToursManagementController::class, 'addTimeline'])->name('admin.add-timeline');
     Route::post('/add-timeline', [ToursManagementController::class, 'addTimeline'])->name('admin.add-timeline');
-
+    Route::get('/check-before-delete-tour', [ToursManagementController::class, 'checkBeforeDelete'])->name('admin.check-before-delete-tour');
     Route::post('/delete-tour', [ToursManagementController::class, 'deleteTour'])->name('admin.delete-tour');
 
     Route::get('/tour-edit', [ToursManagementController::class, 'getTourEdit'])->name('admin.tour-edit');

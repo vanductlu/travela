@@ -133,16 +133,34 @@ class Tours extends Model
         return $update;
     }
         //Lấy detail tour đã đặt
-    public function tourBooked($bookingId, $checkoutId)
+    public function tourBooked($bookingId, $checkoutId = null)
     {
-        $booked = DB::table($this->table)
-            ->join('tbl_booking', 'tbl_tours.tourId', '=', 'tbl_booking.tourId')
-            ->join('tbl_checkout', 'tbl_booking.bookingId', '=', 'tbl_checkout.bookingId')
-            ->where('tbl_booking.bookingId', '=', $bookingId)
-            ->where('tbl_checkout.checkoutId', '=', $checkoutId)
-            ->first();
-
-        return $booked;
+        $query = DB::table('tbl_booking as b')
+        ->join('tbl_tours as t', 'b.tourId', '=', 't.tourId')
+        ->leftJoin('tbl_checkout as c', 'b.bookingId', '=', 'c.bookingId')
+        ->select(
+            'b.*',
+            't.title',
+            't.priceAdult',
+            't.priceChild',
+            't.time',
+            't.description',
+            't.destination',
+            't.startDate',
+            't.endDate',
+            't.quantity as tourQuantity',
+            'c.checkoutId',
+            'c.paymentMethod',
+            'c.paymentStatus',
+            'c.amount'
+        )
+        ->where('b.bookingId', $bookingId);
+        
+    if ($checkoutId) {
+        $query->where('c.checkoutId', $checkoutId);
+    }
+    
+    return $query->first();
     }
         //Tạo đánh giá về tours
     public function createReviews($data)

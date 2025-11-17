@@ -54,7 +54,6 @@ class BookingManagementController extends Controller
             ], 500);
         }
     }
-
     public function showDetail($bookingId)
     {
         $title = 'Chi tiết đơn đặt';

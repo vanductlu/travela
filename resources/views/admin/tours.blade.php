@@ -79,7 +79,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div id="wizard" class="form_wizard wizard_horizontal wizard-edit-tour">
+                        <div id="wizard-edit" class="form_wizard wizard_horizontal wizard-edit-tour">
                             <ul class="wizard_steps">
                                 <li>
                                     <a href="#step-1">

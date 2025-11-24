@@ -212,8 +212,8 @@ $(document).ready(function () {
             minPrice: minPrice,
             maxPrice: maxPrice,
             domain: domain,
-            star: star,
-            time: duration,
+            filter_star: star,
+            duration: duration,
             sorting: sorting,
         };
         console.log(formDataFilter);
@@ -277,6 +277,9 @@ $(document).ready(function () {
             url: url,
             type: "GET",
             dataType: "json",
+            headers: {
+            'X-Requested-With': 'XMLHttpRequest'  // ✔ báo cho Laravel đây là AJAX
+          },
             success: function (response) {
                 // Cập nhật toàn bộ nội dung (tours và phân trang)
                 $("#tours-container")

@@ -23,6 +23,7 @@ use App\Http\Controllers\clients\ChatController;
 use App\Http\Controllers\clients\PasswordResetController;
 use App\Http\Controllers\clients\AiTranslateController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\admin\CouponManagementController;
 use App\Http\Controllers\admin\TravelGuidesManagement;
 use App\Http\Controllers\admin\LoginAdminController;
 use App\Http\Controllers\admin\DashboardController;
@@ -58,13 +59,13 @@ Route::get('/my-tour', [MyTourController::class, 'index'])->name('my-tour');
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/tour-booked', [TourBookedController::class, 'index'])->name('tour-booked');
 Route::get('/tour-detail/{id?}', [TourDetailController::class, 'index'])->name('tour-detail');
-Route::get('/travel-guides', [TravelGuidesController::class, 'index'])->name('travel-guides');
+Route::get('/travel-guides', [TravelGuidesController::class, 'index'])->name('travel-guides')->middleware('checkLoginClient');
 Route::get('/user-profile', [UserProfileController::class, 'index'])->name('user-profile');
 Route::post('/user-profile', [UserProfileController::class, 'update'])->name('update-user-profile');
 Route::post('/createBooking', [BookingController::class, 'store'])->name('create-booking');
 
 //Handle Blog
-Route::get('/blog', [BlogController::class, 'index'])->name('blog');   
+Route::get('/blog', [BlogController::class, 'index'])->name('blog')->middleware('checkLoginClient');  
 Route::middleware(['web'])->group(function () {
     Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog-details');
 });
@@ -201,8 +202,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
     Route::get('/tour-edit', [ToursManagementController::class, 'getTourEdit'])->name('admin.tour-edit');
     Route::post('/edit-tour', [ToursManagementController::class, 'updateTour'])->name('admin.edit-tour');
-    Route::post('/add-temp-images', [ToursManagementController::class, 'uploadTempImagesTours'])->name('admin.add-temp-images');
-
+    Route::post('/add-images-tours', [ToursManagementController::class, 'addImagesTours'])->name('admin.add-images-tours');
     //Management Booking
     Route::get('/booking', [BookingManagementController::class, 'index'])->name('admin.booking');
     Route::post('/confirm-booking', [BookingManagementController::class, 'confirmBooking'])->name('admin.confirm-booking');
@@ -210,8 +210,17 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/finish-booking', [BookingManagementController::class, 'finishBooking'])->name('admin.finish-booking');
     Route::post('/received-money', [BookingManagementController::class, 'receiviedMoney'])->name('admin.received');
 
+    //Coupon management
+    Route::get('/coupon', [CouponManagementController::class, 'index'])->name('admin.coupon.index');
+    Route::get('/coupon/create', [CouponManagementController::class, 'create'])->name('admin.coupon.create');
+    Route::post('/coupon', [CouponManagementController::class, 'store'])->name('admin.coupon.store');
+    Route::get('/coupon/{id}', [CouponManagementController::class, 'show'])->name('admin.coupon.show');
+    Route::get('/coupon/{id}/edit', [CouponManagementController::class, 'edit'])->name('admin.coupon.edit');
+    Route::put('/coupon/{id}', [CouponManagementController::class, 'update'])->name('admin.coupon.update');
+    Route::delete('/coupon/{id}', [CouponManagementController::class, 'destroy'])->name('admin.coupon.destroy');
+    Route::post('/coupon/{id}/toggle-status', [CouponManagementController::class, 'toggleStatus'])->name('admin.coupon.toggle-status');
     //Send mail pdf
-    Route::post('/admin/send-pdf', [BookingManagementController::class, 'sendPdf'])->name('admin.send.pdf');
+    Route::post('/send-pdf', [BookingManagementController::class, 'sendPdf'])->name('admin.send.pdf');
 
     //Contact management
     Route::get('/contact', [ContactManagementController::class, 'index'])->name('admin.contact');

@@ -171,683 +171,616 @@ window.init_SmartWizard = function() {
     console.log("SmartWizard default init is disabled on Add Tour page!");
 };
     
-    /********************************************
- * THÊM TOUR - HOÀN CHỈNH                *
+/********************************************
+ * THÊM TOUR - HOÀN CHỈNH
  ********************************************/
 let timelineCounter = 1;
 let maxTimelineDays = null;
 var myDropzone = null;
 
-// ===================================
-// 2. INIT CKEDITOR
-// ===================================
-if ($(".add-tours #description").length) {
-    CKEDITOR.replace("description");
-    console.log('✅ CKEDITOR init: description');
-}
-
-// ===================================
-// 3. INIT DATEPICKER
-// ===================================
-$("#start_date, #end_date").datetimepicker({
-    format: "d/m/Y",
-    timepicker: false,
-});
-
-// ===================================
-// 4. EVENT LISTENER CHO maxTimelineDays
-// ===================================
-$(document).on("dataUpdated", function (event, daysDifference) {
-    maxTimelineDays = daysDifference;
-    console.log('📅 maxTimelineDays updated:', maxTimelineDays);
-});
-
-// ===================================
-// 5. ĐỊNH NGHĨA TIMELINE FUNCTIONS
-// ===================================
-function addTimelineEntry() {
-    console.log('➕ Adding timeline entry. Counter:', timelineCounter, 'Max:', maxTimelineDays);
-    
-    if (maxTimelineDays && timelineCounter > maxTimelineDays) {
-        toastr.error(`Không thể thêm quá ${maxTimelineDays} ngày.`);
+/* -----------------------------------
+ * CKEDITOR INIT SAFE
+ * -----------------------------------*/
+function initCK(id) {
+    if (!document.getElementById(id)) {
+        console.warn("CKEDITOR: element not found", id);
         return;
     }
-    
-    const timelineEntry = `
-        <div class="timeline-entry" id="timeline-entry-${timelineCounter}">
-            <label for="day-${timelineCounter}">Ngày ${timelineCounter}</label>
-            <input type="text" class="form-control" id="day-${timelineCounter}" 
-                   name="day-${timelineCounter}" placeholder="Ngày thứ..." required>
-            
-            <label for="itinerary-${timelineCounter}" style="margin-top: 10px; display: block;">Lộ trình:</label>
-            <textarea id="itinerary-${timelineCounter}" name="itinerary-${timelineCounter}" required></textarea>
-            
-            <button type="button" class="btn btn-round btn-danger remove-btn" data-id="${timelineCounter}">
-                Xóa Timeline này
-            </button>
+
+    // Xóa instance cũ nếu tồn tại
+    if (CKEDITOR.instances[id]) {
+        CKEDITOR.instances[id].destroy(true);
+    }
+    CKEDITOR.replace(id);
+}
+
+if ($("#description").length) initCK("description");
+
+/* -----------------------------------
+ * DATE PICKER
+ * -----------------------------------*/
+$('#start_date, #end_date').datetimepicker({
+    format: 'd/m/Y',
+    timepicker: false,
+});
+$(document).on('dataUpdated', function (event, days) {
+    maxTimelineDays = parseInt(days);
+
+    // Reset timeline
+    timelineCounter = 1;
+    $("#timeline-container").html("");
+
+    // Tạo timeline ngày 1 mặc định
+    addTimelineEntry();
+
+    console.log("Số ngày tour:", maxTimelineDays);
+});
+
+
+/* -------------------------
+ * TẠO GIAO DIỆN TIMELINE CARD
+ * -------------------------*/
+function createTimelineCard(id) {
+    return `
+        <div class="timeline-entry card border rounded p-3 mt-3 shadow-sm" id="timeline-entry-${id}">
+            <div class="d-flex justify-content-between align-items-center bg-light p-2 rounded mb-3">
+                <h4 class="m-0 text-primary">🗓️ Ngày ${id}</h4>
+                ${id === 1 ? "" : `<button class="btn btn-danger btn-sm remove-btn" data-id="${id}">Xóa</button>`}
+            </div>
+
+            <label><strong>Tiêu đề ngày</strong></label>
+            <input type="text" class="form-control" name="day-${id}" placeholder="Nhập tiêu đề..." required>
+
+            <label class="mt-3"><strong>Lộ trình chi tiết</strong></label>
+            <textarea id="itinerary-${id}" name="itinerary-${id}"></textarea>
         </div>
     `;
+}
+/* -----------------------------------
+ * ADD TIMELINE ENTRY
+ * -----------------------------------*/
+function addTimelineEntry() {
 
-    $(".add-tours #step-3").append(timelineEntry);
-
-    if ($(`#itinerary-${timelineCounter}`).length) {
-        try {
-            CKEDITOR.replace(`itinerary-${timelineCounter}`);
-            console.log(`✅ CKEDITOR init: itinerary-${timelineCounter}`);
-        } catch (e) {
-            console.error('CKEDITOR error:', e);
-        }
+     if (maxTimelineDays && timelineCounter > maxTimelineDays) {
+        toastr.error(`Tour chỉ có ${maxTimelineDays} ngày!`);
+        return;
     }
 
+    $('#timeline-container').append(createTimelineCard(timelineCounter));
+
+let currentId = timelineCounter; // Lưu lại ID đúng
+
+setTimeout(() => {
+    initCK(`itinerary-${currentId}`);
+}, 200);
     timelineCounter++;
+    console.log("CK instances:", CKEDITOR.instances);
 }
 
-// ===================================
-// 6. INIT SMARTWIZARD v3.3.1 - CHỈ CHO ADD-TOURS
-// ===================================
-if ($(".add-tours #wizard").length && !$(".wizard-edit-tour").length) {
-    $("#wizard").smartWizard({
-        selected: 0,
-        keyNavigation: false,
-        enableAllSteps: false,
-        transitionEffect: 'fade',
-        cycleSteps: false,
-        enableFinishButton: false,
-        labelNext: 'Tiếp theo',
-        labelPrevious: 'Quay lại',
-        labelFinish: 'Hoàn thành'
-    });
-    
-    console.log('✅ SmartWizard v3.3.1 initialized');
-
-    // ✅ BIND NÚT NEXT (CHỈ 1 LẦN DUY NHẤT)
-    $(document).off('click', '.buttonNext').on('click', '.buttonNext', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        var currentStep = $('#wizard').smartWizard('currentStep');
-        console.log('🔘 Next button clicked! Current step:', currentStep);
-        
-        // STEP 1: Validate và tạo tour
-        if (currentStep === 1) {
-            console.log('📝 Validating step 1...');
-            var isValid = true;
-            
-            $("#form-step1 input[required], #form-step1 select[required]").each(function() {
-                if (!$(this).val()) {
-                    isValid = false;
-                    $(this).addClass("is-invalid");
-                    toastr.error("Vui lòng điền đầy đủ thông tin!");
-                    return false;
-                } else {
-                    $(this).removeClass("is-invalid");
-                }
-            });
-            
-            if (CKEDITOR.instances['description']) {
-                var desc = CKEDITOR.instances['description'].getData();
-                if (!desc || desc.trim() === '') {
-                    isValid = false;
-                    toastr.error("Vui lòng điền mô tả!");
-                }
-            }
-            
-            if (!isValid) {
-                return false;
-            }
-            
-            console.log('✅ Validation passed. Creating tour...');
-            
-            $.ajax({
-                url: '/admin/add-tours',
-                method: 'POST',
-                data: $("#form-step1").serialize(),
-                success: function(response) {
-                    console.log('📥 Response:', response);
-                    if (response.success) {
-                        $('.hiddenTourId').val(response.tourId);
-                        toastr.success("Tạo tour thành công");
-                        
-                        // ✅ CHO PHÉP CHUYỂN STEP
-                        $('#wizard').smartWizard('goForward');
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function() {
-                    toastr.error("Lỗi tạo tour!");
-                }
-            });
-            
-            return false;
-        }
-        
-        // STEP 2: Validate images
-        if (currentStep === 2) {
-            console.log('📸 Validating step 2...');
-            
-            if (!myDropzone) {
-                toastr.error('Dropzone chưa khởi tạo!');
-                return false;
-            }
-            
-            const uploaded = myDropzone.files.filter(f => f.status === "success").length;
-            console.log('📊 Images uploaded:', uploaded);
-            
-            if (uploaded < 1) {
-                toastr.error('Vui lòng upload ít nhất 1 ảnh!');
-                return false;
-            }
-            
-            console.log('✅ Images OK');
-            $('#wizard').smartWizard('goForward');
-            return false;
-        }
-        
-        // ✅ Các step khác cho phép chuyển bình thường
-        $('#wizard').smartWizard('goForward');
-        return false;
-    });
-    
-    // ✅ SAU KHI SMARTWIZARD INIT, THÊM TIMELINE
-    if ($(".add-tours #step-3").length) {
-        const addButton = `<button type="button" id="add-timeline" class="btn btn-round btn-info" style="margin-top: 20px;">Thêm Timeline</button>`;
-        $(".add-tours #step-3").append(addButton);
-        addTimelineEntry();
-        console.log('✅ First timeline entry added');
-    }
-}
-
-// ===================================
-// 7. INIT DROPZONE
-// ===================================
-if ($("#myDropzone").length) {
-    try {
-        if (Dropzone.forElement("#myDropzone")) {
-            Dropzone.forElement("#myDropzone").destroy();
-            console.log('Destroyed existing Dropzone');
-        }
-    } catch (e) {
-        // Chưa có Dropzone
-    }
-    
-    myDropzone = new Dropzone("#myDropzone", {
-        url: "/admin/add-images-tours",
-        method: "post",
-        paramName: "image",
-        acceptedFiles: "image/*",
-        addRemoveLinks: true,
-        dictRemoveFile: "Xóa ảnh",
-        autoProcessQueue: true,
-        parallelUploads: 1,
-        maxFiles: 10,
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-        },
-        init: function() {
-            this.on("sending", function(file, xhr, formData) {
-                const tourId = $('.hiddenTourId').val();
-                
-                if (!tourId) {
-                    console.error('❌ tourId is missing!');
-                    toastr.error('Lỗi: Chưa có Tour ID! Vui lòng quay lại bước 1.');
-                    this.removeFile(file);
-                    return false;
-                }
-                
-                formData.append("tourId", tourId);
-                console.log('📤 Uploading image with tourId:', tourId);
-            });
-            
-            this.on("success", function(file, response) {
-                console.log('✅ Upload success:', response);
-                toastr.success('Upload ảnh thành công: ' + file.name);
-            });
-            
-            this.on("error", function(file, errorMessage, xhr) {
-                console.error('❌ Upload error:', errorMessage);
-                
-                let msg = 'Lỗi upload ảnh';
-                if (typeof errorMessage === 'string') {
-                    msg = errorMessage;
-                } else if (errorMessage.message) {
-                    msg = errorMessage.message;
-                }
-                
-                toastr.error(msg);
-                this.removeFile(file);
-            });
-            
-            this.on("complete", function(file) {
-                console.log('Upload complete:', file.name, 'Status:', file.status);
-            });
-        }
-    });
-    
-    console.log('✅ Dropzone initialized');
-}
-
-// ===================================
-// 8. EVENT HANDLERS CHO TIMELINE
-// ===================================
-$(".add-tours #step-3").on("click", "#add-timeline", function () {
+/* -------------------------
+ * NÚT + THÊM NGÀY
+ * -------------------------*/
+$(document).on("click", "#add-timeline", function () {
     addTimelineEntry();
 });
 
-$(".add-tours #step-3").on("click", ".remove-btn", function () {
-    const id = $(this).data("id");
-    const editorId = `itinerary-${id}`;
-    
-    if (CKEDITOR.instances[editorId]) {
-        CKEDITOR.instances[editorId].destroy();
-        console.log(`✅ Destroyed: ${editorId}`);
+/* -------------------------
+ * XÓA NGÀY
+ * -------------------------*/
+$(document).on('click', '.remove-btn', function () {
+    let id = $(this).data('id');
+
+    let instance = CKEDITOR.instances[`itinerary-${id}`];
+    if (instance) {
+    instance.destroy(true);
     }
-    
+
     $(`#timeline-entry-${id}`).remove();
 });
 
-// ===================================
-// 9. XỬ LÝ NÚT FINISH
-// ===================================
-$(document).on("click", ".buttonFinish", function (e) {
+/* -----------------------------------
+ * DROPZONE INIT 
+ * -----------------------------------*/
+if ($('#myDropzone').length) {
+    try {
+        if (Dropzone.forElement('#myDropzone')) Dropzone.forElement('#myDropzone').destroy();
+    } catch {}
+
+    myDropzone = new Dropzone('#myDropzone', {
+        url: '/admin/add-images-tours',
+        method: 'post',
+        paramName: 'image',
+        acceptedFiles: 'image/*',
+        addRemoveLinks: true,
+        autoProcessQueue: true,
+        parallelUploads: 1,
+        maxFiles: 10,
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        init: function () {
+            this.on('sending', function (file, xhr, formData) {
+                let id = $('.hiddenTourId').val();
+                if (!id) {
+                    toastr.error('Chưa có Tour ID!');
+                    this.removeFile(file);
+                    return false;
+                }
+                formData.append('tourId', id);
+            });
+        }
+    });
+}
+/* -----------------------------------
+ * FINISH BUTTON
+ * -----------------------------------*/
+$(document).on('click', '.buttonFinish', function (e) {
     e.preventDefault();
-    
-    const form = $("#timeline-form")[0];
-    const tourId = $('.hiddenTourId').val();
-
-    console.log('=== FINISH BUTTON CLICKED ===');
-    console.log('Tour ID:', tourId);
-
+    // ============================
+    // CẬP NHẬT TẤT CẢ CKEDITOR
+    // ============================
+    for (let key in CKEDITOR.instances) {
+        CKEDITOR.instances[key].updateElement();
+    }
+    let tourId = $('.hiddenTourId').val();
     if (!tourId) {
-        toastr.error('Không tìm thấy Tour ID! Vui lòng quay lại bước 1.');
+        toastr.error("Thiếu Tour ID!");
         return;
     }
 
-    // ✅ Kiểm tra tour có ảnh chưa
+    let invalid = false;
+    let timelineData = [];
+
+    $('.timeline-entry').each(function () {
+        let textareaId = $(this).find('textarea').attr('id');
+        let title = $(this).find('input').val();
+        let editor = CKEDITOR.instances[textareaId];
+        let content = editor ? editor.getData() : "";
+
+        if (!title.trim() || !content.trim()) {
+            invalid = true;
+        }
+
+        timelineData.push({
+            day: $(this).attr("id").replace("timeline-entry-", ""),
+            title: title,
+            content: content
+        });
+    });
+
+    if (invalid) {
+        toastr.error("Vui lòng điền đầy đủ thông tin timeline!");
+        return;
+    }
+
     $.ajax({
-        url: '/admin/check-tour-images',
-        method: 'GET',
-        data: { tourId: tourId },
-        success: function(response) {
-            console.log('Check images response:', response);
-            
-            if (!myDropzone) {
-                toastr.error('Dropzone chưa được khởi tạo!');
-                return;
-            }
-            
-            const uploaded = myDropzone.getAcceptedFiles().filter(f => f.status === "success").length;
-            if (uploaded === 0) {
-                toastr.error('Vui lòng upload ít nhất 1 ảnh trước khi hoàn tất!');
-                $("#wizard").smartWizard("goToStep", 2);
-                return;
-            }
-
-            console.log(`✅ Tour có ${response.count} ảnh`);
-
-            // ✅ Kiểm tra timeline
-            const timelineCount = $('.timeline-entry').length;
-            if (timelineCount === 0) {
-                toastr.error('Vui lòng thêm ít nhất 1 ngày trong lộ trình!');
-                return;
-            }
-
-            // ✅ Kiểm tra tất cả timeline đều có nội dung
-            let hasEmpty = false;
-            let emptyFields = [];
-            
-            $('.timeline-entry').each(function() {
-                const entryId = $(this).attr('id');
-                const title = $(this).find('[name^="day-"]').val();
-                const textareaId = $(this).find('textarea').attr('id');
-                
-                if (!CKEDITOR.instances[textareaId]) {
-                    console.error(`CKEDITOR not found for ${textareaId}`);
-                    hasEmpty = true;
-                    emptyFields.push(entryId);
-                    return false;
-                }
-                
-                const content = CKEDITOR.instances[textareaId].getData();
-                
-                if (!title || !content || content.trim() === '') {
-                    hasEmpty = true;
-                    emptyFields.push(entryId);
-                }
-            });
-            
-            if (hasEmpty) {
-                console.error('Empty timeline fields:', emptyFields);
-                toastr.error('Vui lòng điền đầy đủ thông tin cho tất cả các ngày!');
-                return;
-            }
-
-            // ✅ Submit form
-            if (form && form.checkValidity()) {
-                console.log('✅ All validations passed. Submitting form...');
-                $("#timeline-form").submit();
+        url: "/admin/add-timeline",
+        type: "POST",
+        data: {
+            _token: $('meta[name="csrf-token"]').attr("content"),
+            tourId: tourId,
+            timeline: JSON.stringify(timelineData)
+        },
+        success: function (res) {
+            if (res.success) {
+                toastr.success("Hoàn tất thêm Tour!");
             } else {
-                toastr.error("Vui lòng điền đầy đủ thông tin trong form!");
-                if (form) form.reportValidity();
+                toastr.error("Có lỗi khi thêm timeline.");
             }
         },
-        error: function(xhr) {
-            console.error('Check images error:', xhr);
-            toastr.error('Có lỗi khi kiểm tra ảnh. Vui lòng thử lại!');
+        error: function () {
+            toastr.error("Lỗi server!");
+        }
+    });
+    console.log(timelineData);
+});
+
+
+
+
+
+
+/********************************************
+ * EDIT TOUR - single-file complete
+ ********************************************/
+
+let timelineCounter_edit = 1;
+let formDataEdit = {};
+let tourIdSendingImage = null;
+let wizardInitialized = false;
+
+let dropzoneOldImages = null;   // Dropzone instance
+let existingImages = [];        // filenames của ảnh cũ giữ lại
+let newImages = [];             // filenames mới được upload (server trả về)
+let removedImages = [];         // filenames bị xóa
+
+// HELPER: lấy mime-type từ extension (không cố định jpeg)
+function getFileTypeFromURL(url) {
+    if (!url || typeof url !== 'string') return 'application/octet-stream';
+    const ext = url.split('.').pop().toLowerCase();
+    const map = {
+        jpg: "image/jpeg",
+        jpeg: "image/jpeg",
+        png: "image/png",
+        webp: "image/webp",
+        gif: "image/gif",
+        bmp: "image/bmp",
+        svg: "image/svg+xml",
+        tif: "image/tiff",
+        tiff: "image/tiff",
+    };
+    return map[ext] || "image/*";
+}
+
+/* ===========================
+   CLICK EDIT (bắt đầu)
+   =========================== */
+$(document).on("click", ".edit-tour", function () {
+    console.log("🟩 [EDIT CLICK] Bắt đầu mở Modal Edit Tour");
+
+    const tourId = $(this).data("tourid");
+    const urlEdit = $(this).data("urledit");
+    console.log("🔍 tourId:", tourId, " urlEdit:", urlEdit);
+
+    tourIdSendingImage = tourId;
+    $(".hiddenTourId").val(tourId);
+
+    // reset timeline zone
+    $("#step-3").empty();
+    timelineCounter_edit = 1;
+    existingImages = [];
+    newImages = [];
+    removedImages = [];
+
+    if (!wizardInitialized) {
+        init_SmartWizard_Edit_Tour();
+        wizardInitialized = true;
+    }
+
+    $.ajax({
+        url: urlEdit,
+        method: "GET",
+        data: { tourId },
+        success: function (res) {
+            console.log("📥 [AJAX EDIT] Response:", res);
+            if (!res.success) {
+                toastr.error(res.message || "Lỗi tải dữ liệu");
+                return;
+            }
+
+            fillStep1Data(res.tour);
+            loadTimeline(res.timeline || []);
+            // load images into dropzone
+            setTimeout(() => loadOldImages(res.images || []), 200);
+        },
+        error: function (xhr) {
+            console.error("AJAX getTourEdit lỗi:", xhr);
+            toastr.error("Lỗi tải dữ liệu từ server");
         }
     });
 });
 
-    /********************************************
-     * ✅ EDIT TOUR                             *
-     ********************************************/
-    
-    var timelineCounter_edit;
-    var formDataEdit = {};
-    var tourIdSendingImage;
-    var dropzoneOldImages;
+/* ===========================
+   FILL STEP1 DATA
+   =========================== */
+function fillStep1Data(tour) {
+    console.log("🟦 [STEP1] Load dữ liệu:", tour);
+    $("#edit-tour-modal input[name='name']").val(tour.title || "");
+    $("#edit-tour-modal input[name='destination']").val(tour.destination || "");
+    $("#domain").val(tour.domain || "");
+    $("#edit-tour-modal input[name='number']").val(tour.quantity || "");
+    $("#edit-tour-modal input[name='price_adult']").val(tour.priceAdult || "");
+    $("#edit-tour-modal input[name='price_child']").val(tour.priceChild || "");
+    $("#start_date").val(moment(tour.startDate).format("DD/MM/YYYY") || "");
+    $("#end_date").val(moment(tour.endDate).format("DD/MM/YYYY") || "");
 
-    $(document).on("click", ".edit-tour", function (e) {
-        e.preventDefault();
-        console.log("=== EDIT TOUR ===");
-        
-        var tourId = $(this).data("tourid");
-        var urlEdit = $(this).data("urledit");
-        tourIdSendingImage = tourId;
-
-        init_SmartWizard_Edit_Tour();
-
-        $.ajax({
-            url: urlEdit,
-            method: 'GET',
-            data: { tourId: tourId },
-            success: function (response) {
-                console.log('Edit data:', response);
-                
-                if (!response.success) {
-                    toastr.error(response.message);
-                    return;
-                }
-                
-                const tour = response.tour;
-                const images = response.images;
-                const timeline = response.timeline;
-
-                loadOldImages(images);
-
-                const startDate = moment(tour.startDate).format("DD/MM/YYYY");
-                const endDate = moment(tour.endDate).format("DD/MM/YYYY");
-
-                $("#edit-tour-modal input[name='name']").val(tour.title);
-                $("#edit-tour-modal input[name='destination']").val(tour.destination);
-                $("#edit-tour-modal select[name='domain']").val(tour.domain);
-                $("#edit-tour-modal input[name='number']").val(tour.quantity);
-                $("#edit-tour-modal input[name='price_adult']").val(tour.priceAdult);
-                $("#edit-tour-modal input[name='price_child']").val(tour.priceChild);
-                $("#edit-tour-modal #start_date").val(startDate);
-                $("#edit-tour-modal #end_date").val(endDate);
-
-                setTimeout(function() {
-                    if (CKEDITOR.instances.description) {
-                        CKEDITOR.instances.description.setData(tour.description);
-                    }
-                }, 500);
-                
-                timelineCounter_edit = 1;
-                $("#edit-tour-modal #step-3").empty();
-                timeline.forEach(item => editTimelineEntry(item));
-            },
-            error: function(xhr) {
-                console.error('Load error:', xhr);
-                toastr.error('Lỗi tải dữ liệu');
-            }
-        });
-    });
-
-    function init_SmartWizard_Edit_Tour() {
-        if (typeof $.fn.smartWizard === "undefined") {
-            console.error('SmartWizard not found');
-            return;
-        }
-
-        if ($("#edit-tour-modal #description").length && !CKEDITOR.instances.description) {
+    // CKEDITOR safe set
+    setTimeout(() => {
+        if (CKEDITOR.instances.description) {
+            console.log("📝 CKEDITOR - SetData");
+            CKEDITOR.instances.description.setData(tour.description || "");
+        } else {
             CKEDITOR.replace("description");
-            console.log('✅ CKEDITOR init: description (edit)');
+            setTimeout(()=> {
+                CKEDITOR.instances.description.setData(tour.description || "");
+            }, 200);
         }
+    }, 100);
+}
 
-        $("#edit-tour-modal #wizard").smartWizard({
-            onLeaveStep: function (obj, context) {
-                var stepIndex = context.fromStep;
-                var finishStep1 = true;
-                var finishStep2 = true;
+/* ===========================
+   SMART WIZARD INIT (1 lần)
+   =========================== */
+let step2Visited = false;
 
-                if (stepIndex === 1) {
-                    $("#edit-tour-modal #form-step1 input, #edit-tour-modal #form-step1 select").each(function () {
-                        if ($(this).prop("required") && $(this).val().trim() === "") {
-                            finishStep1 = false;
-                            $(this).addClass("is-invalid");
-                            toastr.error("Vui lòng điền đầy đủ!");
-                        } else {
-                            $(this).removeClass("is-invalid");
-                        }
-                    });
+function init_SmartWizard_Edit_Tour() {
+    console.log("🟦 [INIT WIZARD] chạy 1 lần");
 
-                    var domain = $("#edit-tour-modal #domain").val();
-                    if (!domain) {
-                        finishStep1 = false;
-                        toastr.error("Vui lòng chọn khu vực!");
-                    }
+    if (!CKEDITOR.instances.description) {
+        console.log("📝 CKEDITOR khởi tạo");
+        CKEDITOR.replace("description");
+    }
 
-                    var description = '';
-                    if (CKEDITOR.instances.description) {
-                        description = CKEDITOR.instances.description.getData();
-                    } else {
-                        finishStep1 = false;
-                        toastr.error("Vui lòng chờ CKEDITOR!");
-                    }
-                    
-                    if (!description) {
-                        finishStep1 = false;
-                        toastr.error("Vui lòng điền mô tả!");
-                    }
-
-                    formDataEdit = {
-                        tourId: tourIdSendingImage,
-                        name: $("#edit-tour-modal input[name='name']").val(),
-                        destination: $("#edit-tour-modal input[name='destination']").val(),
-                        domain: $("#edit-tour-modal #domain").val(),
-                        number: $("#edit-tour-modal input[name='number']").val(),
-                        price_adult: $("#edit-tour-modal input[name='price_adult']").val(),
-                        price_child: $("#edit-tour-modal input[name='price_child']").val(),
-                        start_date: $("#edit-tour-modal #start_date").val(),
-                        end_date: $("#edit-tour-modal #end_date").val(),
-                        description: description,
-                        _token: $('input[name="_token"]').val(),
-                        images: [],
-                        timeline: [],
-                    };
-
-                    return finishStep1;
-                }
-
-                if (stepIndex === 2) {
-                    var formDataImages = getFormDataImages();
-                    if (formDataImages === false) {
-                        return false;
-                    }
-                    formDataEdit.images = formDataImages;
-                    return finishStep2;
-                }
-                
-                return true;
-            },
-        });
-
-        Dropzone.autoDiscover = false;
-        if ($("#edit-tour-modal #myDropzone-listTour").length) {
-            if (dropzoneOldImages) {
-                dropzoneOldImages.destroy();
-            }
-            
-            dropzoneOldImages = new Dropzone("#edit-tour-modal #myDropzone-listTour", {
-                url: window.location.origin + "/admin/add-temp-images",
-                method: "post",
-                paramName: "image",
-                acceptedFiles: "image/*",
-                addRemoveLinks: true,
-                dictRemoveFile: "Xóa",
-                autoProcessQueue: true,
-                maxFiles: 10,
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-                },
-                init: function () {
-                    this.on("sending", function (file, xhr, formData) {
-                        formData.append("tourId", tourIdSendingImage);
-                    });
-                }
-            });
+    $("#wizard").smartWizard({
+        transitionEffect: "fade",
+        onLeaveStep: function (obj, ctx) {
+            console.log("🔄 [CHANGE STEP] From:", ctx.fromStep, "To:", ctx.toStep);
+            if (ctx.toStep === 2) step2Visited = true;
+            if (ctx.fromStep === 1) return validateStep1();
+            if (ctx.fromStep === 2 && ctx.toStep === 3) return validateStep2();
+            return true;
         }
+    });
+}
 
-        $(".buttonNext").addClass("btn btn-success");
-        $(".buttonPrevious").addClass("btn btn-primary");
-        $(".buttonFinish").addClass("btn btn-default");
-    }
-
-    function getFormDataImages() {
-        var formDataImages = [];
-        if (!dropzoneOldImages) return [];
-
-        var oldImages = dropzoneOldImages.files.filter(function (file) {
-            return file.status === "accepted" || file.status === "complete";
-        });
-
-        oldImages.forEach(function (file) {
-            formDataImages.push(file.name);
-        });
-
-        dropzoneOldImages.getAcceptedFiles().forEach(function (file) {
-            if (file.xhr && file.xhr.responseText) {
-                var response = JSON.parse(file.xhr.responseText);
-                if (response.success && response.data && response.data.filename) {
-                    formDataImages.push(response.data.filename);
-                }
-            }
-        });
-
-        formDataImages = [...new Set(formDataImages)];
-
-        if (formDataImages.length < 1) {
-            toastr.error("Vui lòng tải lên ít nhất 1 ảnh.");
-            return false;
+/* ===========================
+   VALIDATE STEP1
+   =========================== */
+function validateStep1() {
+    let ok = true;
+    $("#form-step1 input, #form-step1 select").each(function () {
+        if ($(this).prop("required") && !$(this).val()) {
+            ok = false;
+            toastr.error("Vui lòng nhập đầy đủ thông tin!");
         }
-
-        return formDataImages;
-    }
-
-    function loadOldImages(images) {
-        if (!dropzoneOldImages) return;
-        
-        images.forEach(function (image) {
-            const imageUrl = window.location.origin + `/clients/assets/images/gallery-tours/${image.imageURL}`;
-            const mockFile = {
-                name: image.imageURL,
-                url: imageUrl,
-                status: "accepted"
-            };
-            
-            dropzoneOldImages.emit("addedfile", mockFile);
-            dropzoneOldImages.emit("thumbnail", mockFile, imageUrl);
-            dropzoneOldImages.emit("complete", mockFile);
-            dropzoneOldImages.files.push(mockFile);
-        });
-    }
-
-    function editTimelineEntry(data) {
-        const title = data ? data.title : `Ngày ${timelineCounter_edit}`;
-        const description = data ? data.description : "";
-        const editorId = `itinerary-edit-${timelineCounter_edit}`;
-
-        const html = `
-        <div class="timeline-entry" id="timeline-edit-${timelineCounter_edit}">
-            <label for="day-${timelineCounter_edit}">Ngày ${timelineCounter_edit}</label>
-            <input type="text" class="form-control" 
-                   name="day-${timelineCounter_edit}" 
-                   value="${title}" required>
-            
-            <label for="${editorId}">Lộ trình:</label>
-            <textarea id="${editorId}" name="itinerary-${timelineCounter_edit}">${description}</textarea>
-        </div>
-        `;
-
-        $("#edit-tour-modal #step-3").append(html);
-
-        setTimeout(function() {
-            if ($(`#${editorId}`).length && !CKEDITOR.instances[editorId]) {
-                try {
-                    CKEDITOR.replace(editorId);
-                    console.log(`✅ CKEDITOR init: ${editorId}`);
-                } catch (e) {
-                    console.error('CKEDITOR error:', e);
-                }
-            }
-        }, 100);
-
-        timelineCounter_edit++;
-    }
-
-    $("#edit-tour-modal").on("shown.bs.modal", function () {
-        $("#edit-tour-modal .buttonFinish").off("click").on("click", function () {
-            console.log('=== EDIT FINISH ===');
-            
-            formDataEdit.timeline = [];
-            
-            $("#edit-tour-modal .timeline-entry").each(function () {
-                const title = $(this).find('input[name^="day-"]').val();
-                const textareaId = $(this).find("textarea").attr("id");
-                
-                if (!CKEDITOR.instances[textareaId]) {
-                    toastr.error('Lỗi CKEDITOR');
-                    return false;
-                }
-                
-                const itinerary = CKEDITOR.instances[textareaId].getData();
-                formDataEdit.timeline.push({ title, itinerary });
-            });
-
-            $.ajax({
-                url: '/admin/edit-tour',
-                method: 'POST',
-                data: formDataEdit,
-                success: function (response) {
-                    if (response.success) {
-                        toastr.success(response.message);
-                        $("#edit-tour-modal").modal("hide");
-                        setTimeout(() => location.reload(), 1000);
-                    }
-                },
-                error: function (xhr) {
-                    console.error('Update error:', xhr);
-                    toastr.error('Lỗi cập nhật');
-                }
-            });
-        });
     });
 
-    $("#edit-tour-modal").on("hidden.bs.modal", function () {
-        console.log('=== MODAL CLOSED ===');
-        
-        for (let instance in CKEDITOR.instances) {
-            if (instance.startsWith('itinerary-edit-')) {
-                CKEDITOR.instances[instance].destroy();
-            }
-        }
-        
-        if (dropzoneOldImages) {
+    // CKEditor getData
+    const desc = CKEDITOR.instances.description ? CKEDITOR.instances.description.getData().trim() : "";
+    if (!desc) {
+        ok = false;
+        toastr.error("Mô tả không được để trống!");
+    }
+
+    formDataEdit = {
+        tourId: tourIdSendingImage,
+        name: $("input[name='name']").val(),
+        destination: $("input[name='destination']").val(),
+        domain: $("#domain").val(),
+        number: $("input[name='number']").val(),
+        price_adult: $("input[name='price_adult']").val(),
+        price_child: $("input[name='price_child']").val(),
+        start_date: $("#start_date").val(),
+        end_date: $("#end_date").val(),
+        description: desc,
+        images: [], timeline: []
+    };
+
+    console.log("FORM DATA STEP1 built:", formDataEdit);
+    return ok;
+}
+
+/* ===========================
+   DROPZONE - load old images + allow new uploads
+   =========================== */
+Dropzone.autoDiscover = false;
+
+function loadOldImages(images) {
+    console.log("🟨 [LOAD OLD IMAGES] images =", images);
+
+    // ensure any existing Dropzone instance destroyed
+    try {
+        if (dropzoneOldImages && dropzoneOldImages.destroy) {
+            console.log("🟧 Destroying old dropzone instance");
             dropzoneOldImages.destroy();
-            dropzoneOldImages = null;
+        }
+    } catch (err) {
+        console.warn("Destroy dropzone error:", err);
+    }
+    dropzoneOldImages = null;
+    existingImages = [];
+    newImages = [];
+    removedImages = [];
+
+    // create Dropzone instance
+    dropzoneOldImages = new Dropzone("#myDropzone-editTour", {
+        url: "/admin/add-images-tours", // your controller route
+        method: "POST",
+        paramName: "image",
+        acceptedFiles: "image/*",
+        addRemoveLinks: true,
+        autoProcessQueue: true,
+        parallelUploads: 2,
+        maxFiles: 20,
+        params: {
+            tourId: tourIdSendingImage   // 💥 GỬI TOUR ID Ở ĐÂY
+        },
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+        },
+        init: function () {
+            const dz = this;
+            console.log("🟦 Dropzone INIT thành công (edit) - instance:", dz);
+
+            // Load old server images as mock files
+            images.forEach((img, idx) => {
+                // img may have field imageUrl or imageURL or be raw string
+                const filename = img.imageUrl || img.imageURL || img.image || img;
+                if (!filename) return;
+
+                const mockFile = {
+                    name: filename,
+                    size: 12345,
+                    type: getFileTypeFromURL(filename),
+                    accepted: true,
+                    status: Dropzone.SUCCESS,
+                    isOld: true // mark as old file
+                };
+                dz.emit("addedfile", mockFile);
+                dz.emit("thumbnail", mockFile, "/clients/assets/images/gallery-tours/" + filename);
+                dz.emit("complete", mockFile);
+                dz.files.push(mockFile);
+                existingImages.push(filename);
+                console.log(`🖼 Load old image #${idx}:`, filename);
+            });
+
+            // On successful new upload -> server must return { success:true, data:{ filename: '...' } } or { filename: '...' }
+            dz.on("success", function (file, response) {
+                console.log("🟩 Dropzone success response:", response);
+                // try both possible response shapes
+                const filename = (response && (response.data && response.data.filename)) || response.filename || response.file || response.fileName || response.file || null;
+                if (filename) {
+                    file.isOld = false;
+                    // store server filename in file.uploadedFilename so we can reference later
+                    file.uploadedFilename = filename;
+                    newImages.push(filename);
+                    console.log("➕ New image added:", filename);
+                } else {
+                    console.warn("Dropzone uploaded but server did not return filename:", response);
+                }
+            });
+
+            dz.on("error", function(file, err) {
+                console.error("Dropzone upload error:", err, file);
+                toastr.error("Upload ảnh thất bại");
+            });
+
+            dz.on("removedfile", function (file) {
+                console.log("🗑️ Dropzone removedfile event:", file);
+                // file.isOld -> remove from existingImages
+                if (file.isOld) {
+                    removedImages.push(file.name);
+                    existingImages = existingImages.filter(f => f !== file.name);
+                    console.log("➖ Removed existing image:", file.name);
+                } else {
+                    // new uploaded file (server filename stored in uploadedFilename)
+                    const fn = file.uploadedFilename || file.name;
+                    newImages = newImages.filter(f => f !== fn);
+                    // Also try to notify server to delete physical file if needed (optional)
+                    console.log("➖ Removed new image (not saved):", fn);
+                }
+            });
+
+            console.log("📁 Dropzone ready. existingImages:", existingImages);
         }
     });
+}
+
+/* ===========================
+   VALIDATE STEP2 (images)
+   =========================== */
+function validateStep2() {
+    if (!step2Visited) {
+        console.log("[validateStep2] step2 not visited - skip");
+        return true;
+    }
+
+    const total = existingImages.length + newImages.length;
+    console.log("🔎 validateStep2 -> existing:", existingImages.length, "new:", newImages.length, "removed:", removedImages.length);
+    if (total === 0) {
+        toastr.error("Cần ít nhất 1 ảnh!");
+        return false;
+    }
+
+    // For "A" option: we send combined filenames (existing + new)
+    formDataEdit.images = existingImages.concat(newImages);
+    console.log("formDataEdit.images prepared:", formDataEdit.images);
+    return true;
+}
+
+/* ===========================
+   TIMELINE
+   =========================== */
+function loadTimeline(list) {
+    console.log("📅 loadTimeline:", list);
+    list.forEach(item => addTimeline(item));
+}
+
+function addTimeline(item) {
+    const editorId = "itinerary-edit-" + timelineCounter_edit;
+    const title = (item && (item.title || item.day)) || `Ngày ${timelineCounter_edit}`;
+    const descr = (item && (item.description || item.itinerary)) || (item && item.content) || "";
+
+    const html = `
+        <div class="timeline-entry mb-3" id="timeline-entry-${timelineCounter_edit}">
+            <label>Ngày ${timelineCounter_edit}</label>
+            <input type="text" class="form-control mb-2" value="${escapeHtml(title)}" name="day-${timelineCounter_edit}">
+            <textarea id="${editorId}" name="itinerary-${timelineCounter_edit}">${escapeHtml(descr)}</textarea>
+        </div>
+    `;
+    $("#step-3").append(html);
+
+    setTimeout(() => {
+        // ensure not double-init
+        if (CKEDITOR.instances[editorId]) {
+            CKEDITOR.instances[editorId].destroy(true);
+        }
+        CKEDITOR.replace(editorId);
+        console.log("CKEDITOR init for", editorId);
+    }, 150);
+
+    timelineCounter_edit++;
+}
+
+/* small helper to escape double quotes/newlines */
+function escapeHtml(str) {
+    if (str === null || str === undefined) return "";
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* ===========================
+   FINISH - SAVE EDIT
+   =========================== */
+$(".buttonFinishEdit").on("click", function (e) {
+    e.preventDefault();
+    console.log("🔘 [SAVE CLICK] Bắt đầu lưu");
+
+    // update CKEDITOR instances to textarea values (not necessary for our ajax but safe)
+    for (let k in CKEDITOR.instances) {
+        if (CKEDITOR.instances.hasOwnProperty(k)) {
+            try { CKEDITOR.instances[k].updateElement(); } catch (err) {}
+        }
+    }
+
+    // rebuild timeline
+    formDataEdit.timeline = [];
+    $(".timeline-entry").each(function () {
+        const title = $(this).find("input").val();
+        const textareaId = $(this).find("textarea").attr("id");
+        const content = CKEDITOR.instances[textareaId] ? CKEDITOR.instances[textareaId].getData() : $(this).find("textarea").val() || "";
+        formDataEdit.timeline.push({ title, itinerary: content });
+    });
+
+    // ensure we have the latest step1 data
+    formDataEdit.tourId = tourIdSendingImage;
+    formDataEdit.name = $("#edit-tour-modal input[name='name']").val();
+    formDataEdit.destination = $("#edit-tour-modal input[name='destination']").val();
+    formDataEdit.domain = $("#domain").val();
+    formDataEdit.number = $("#edit-tour-modal input[name='number']").val();
+    formDataEdit.price_adult = $("#edit-tour-modal input[name='price_adult']").val();
+    formDataEdit.price_child = $("#edit-tour-modal input[name='price_child']").val();
+    formDataEdit.description = CKEDITOR.instances.description ? CKEDITOR.instances.description.getData() : "";
+
+    // If user didn't visit step2, still prepare images as existingImages (unchanged)
+    formDataEdit.images = existingImages.concat(newImages);
+
+    console.log("📤 DATA GỬI LÊN:", formDataEdit);
+
+    $.ajax({
+        url: "/admin/edit-tour",
+        type: "POST",
+        data: JSON.stringify(formDataEdit),
+        contentType: "application/json",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+        },
+        success: function (res) {
+            console.log("📥 Response update:", res);
+            if (res.success) {
+                toastr.success(res.message || "Cập nhật thành công!");
+                $("#edit-tour-modal").modal("hide");
+                setTimeout(() => location.reload(), 700);
+            } else {
+                toastr.error(res.message || "Lỗi cập nhật");
+            }
+        },
+        error: function (xhr) {
+            console.error("AJAX update error:", xhr);
+            toastr.error("Lỗi cập nhật (xem console).");
+        }
+    });
+});
+
+
+
 
     /********************************************
      * BOOKING MANAGEMENT                       *
@@ -1144,5 +1077,4 @@ $(document).on("click", ".buttonFinish", function (e) {
             });
         }
     });
-
-}); // ✅ Đóng $(document).ready()
+});

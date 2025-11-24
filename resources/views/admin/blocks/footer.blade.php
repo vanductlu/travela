@@ -55,21 +55,23 @@
 <script src="{{ asset('admin/vendors/pdfmake/build/vfs_fonts.js') }}"></script>
 <!-- Dropzone.js -->
 <script src="{{ asset('admin/vendors/dropzone/dist/min/dropzone.min.js') }}"></script>
-<!-- Custom Theme Scripts -->
-<script src="{{ asset('admin/build/js/custom.js') }}"></script>
+
 <!-- jQuery Smart Wizard -->
 <script src="{{ asset('admin/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js') }}"></script>
 {{-- jquery-toast  --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
 {{-- ckeditor  --}}
 <script src="{{ asset('admin/assets/js/ckeditor/ckeditor.js') }}"></script>
 
 {{-- datetimepicker  --}}
 <script src="{{ asset('admin/assets/js/jquery.datetimepicker.full.min.js') }}"></script>
-<!-- Custom Scripts By DevDien -->
-<script src="{{ asset('admin/assets/js/custom-js.js') }}"></script>
 
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="{{ asset('admin/assets/js/coupon.js') }}"></script>
+<!-- Custom Theme Scripts -->
+<script src="{{ asset('admin/build/js/custom.js') }}"></script>
+<script src="{{ asset('admin/assets/js/custom-js.js') }}"></script>
 </body>
 
 </html>

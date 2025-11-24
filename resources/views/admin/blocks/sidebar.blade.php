@@ -26,21 +26,36 @@
             <div class="menu_section">
                 <h3>Tổng quan</h3>
                 <ul class="nav side-menu">
-                    <li><a href="{{ route('admin.dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard</a> </li>
-                    <li><a href="{{ route('admin.admin') }}"><i class="fa fa-table"></i> Quản lý Admin</a> </li>
-                    <li><a href="{{ route('admin.users') }}"><i class="fa fa-table"></i> Quản lý người dùng</a> </li>
-                    <li><a><i class="fa fa-table"></i> Quản lý Tours<span class="fa fa-chevron-down"></span></a>
+                    <li><a href="{{ route('admin.dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    
+                    <li><a href="{{ route('admin.admin') }}"><i class="fa fa-user-secret"></i> Quản lý Admin</a></li>
+                    
+                    <li><a href="{{ route('admin.users') }}"><i class="fa fa-users"></i> Quản lý người dùng</a></li>
+                    
+                    <li><a><i class="fa fa-map-marker"></i> Quản lý Tours<span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="{{ route('admin.page-add-tours') }}">Thêm Tours</a></li>
                             <li><a href="{{ route('admin.tours') }}">Danh sách Tours</a></li>
                         </ul>
                     </li>
 
-                    <li><a href="{{ route('admin.booking') }}"><i class="fa fa-home"></i> Quản lý Booking</a> </li>
-                    <li><a href="{{ route('admin.blog') }}"><i class="fa fa-home"></i> Quản lý Blog</a> </li>
+                    <li><a href="{{ route('admin.booking') }}"><i class="fa fa-calendar-check-o"></i> Quản lý Booking</a></li>
+                    
+                    <!-- Quản lý Coupon - MỚI -->
+                    <li><a><i class="fa fa-ticket"></i> Quản lý Coupon<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="{{ route('admin.coupon.index') }}">Danh sách mã giảm giá</a></li>
+                            <li><a href="{{ route('admin.coupon.create') }}">Tạo mã mới</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li><a href="{{ route('admin.blog') }}"><i class="fa fa-file-text"></i> Quản lý Blog</a></li>
+                    
                     <li><a href="{{ route('admin.comments') }}"><i class="fa fa-comments"></i> Quản lý Bình luận</a></li>
-                    <li><a href="{{ route('admin.travelguides') }}"><i class="fa fa-comments"></i> Quản lý Hướng dẫn viên</a></li>
-                    <li><a href="{{ route('admin.contact') }}"><i class="fa fa-envelope-o"></i> Liên hệ </a> </li>
+                    
+                    <li><a href="{{ route('admin.travelguides') }}"><i class="fa fa-street-view"></i> Quản lý Hướng dẫn viên</a></li>
+                    
+                    <li><a href="{{ route('admin.contact') }}"><i class="fa fa-envelope-o"></i> Liên hệ</a></li>
                 </ul>
             </div>
         </div>
@@ -113,3 +128,63 @@
     </div>
 </div>
 <!-- /top navigation -->
+
+<style>
+/* Active menu highlighting */
+.side-menu li.active > a {
+    background-color: #1ABB9C !important;
+    color: #fff !important;
+    border-left: 3px solid #148f77;
+}
+
+.side-menu li.active > a i {
+    color: #fff !important;
+}
+
+.child_menu li.active a {
+    background-color: rgba(26, 187, 156, 0.2) !important;
+    color: #1ABB9C !important;
+    font-weight: bold;
+}
+
+/* Hover effects */
+.side-menu li:hover > a {
+    background-color: rgba(26, 187, 156, 0.1);
+}
+</style>
+
+<script>
+$(document).ready(function() {
+    // Active menu highlighting
+    var currentPath = window.location.pathname;
+    
+    // Check each menu item
+    $('.side-menu li a').each(function() {
+        var href = $(this).attr('href');
+        
+        if (href && currentPath.indexOf(href) !== -1 && href !== '/admin') {
+            // Remove active from all
+            $('.side-menu li').removeClass('active');
+            
+            // Add active to current
+            $(this).parent('li').addClass('active');
+            
+            // If it's a child menu, also activate parent
+            if ($(this).closest('.child_menu').length) {
+                $(this).closest('.child_menu').parent('li').addClass('active');
+            }
+        }
+    });
+    
+    // Special handling for coupon routes
+    if (currentPath.indexOf('/admin/coupon') !== -1) {
+        $('.side-menu li').removeClass('active');
+        $('.side-menu li a').each(function() {
+            if ($(this).text().indexOf('Quản lý Coupon') !== -1) {
+                $(this).parent('li').addClass('active');
+                return false;
+            }
+        });
+    }
+});
+</script>

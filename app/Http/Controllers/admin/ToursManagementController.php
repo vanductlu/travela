@@ -137,50 +137,56 @@ public function addImagesTours(Request $request)
 }
 
 
-    // ✅ FIX: Kiểm tra có ảnh trước khi hoàn tất tour
-    public function addTimeline(Request $request)
-    {
-        $tourId = $request->tourId;
+public function addTimeline(Request $request)
+{
+    $tourId = $request->tourId;
 
-        // ✅ Kiểm tra xem tour đã có ảnh chưa
-        $hasImages = $this->tours->hasImages($tourId);
-        
-        if (!$hasImages) {
-            toastr()->error('Vui lòng upload ít nhất 1 ảnh cho tour!');
-            return redirect()->back();
-        }
-
-        // Tạo một mảng chứa các timeline
-        $timelines = [];
-
-        // Lặp qua tất cả các keys trong request
-        foreach ($request->all() as $key => $value) {
-            if (preg_match('/^day-(\d+)$/', $key, $matches)) {
-                $dayNumber = $matches[1];
-
-                $itineraryKey = "itinerary-{$dayNumber}";
-                if ($request->has($itineraryKey)) {
-                    $timelines[] = [
-                        'tourId' => $tourId,
-                        'title' => $value,
-                        'description' => $request->input($itineraryKey),
-                    ];
-                }
-            }
-        }
-
-        // Lưu timeline
-        foreach ($timelines as $timeline) {
-            $this->tours->addTimeLine($timeline);
-        }
-
-        // Cập nhật availability
-        $dataUpdate = ['availability' => 1];
-        $updateAvailability = $this->tours->updateTour($tourId, $dataUpdate);
-
-        toastr()->success('Thêm tour thành công!');
-        return redirect()->route('admin.page-add-tours');
+    // Kiểm tra ID
+    if (!$tourId) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Thiếu Tour ID'
+        ], 400);
     }
+
+    // Kiểm tra ảnh
+    $hasImages = $this->tours->hasImages($tourId);
+    if (!$hasImages) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Vui lòng upload ít nhất 1 ảnh cho tour!'
+        ], 400);
+    }
+
+    // Lấy dữ liệu timeline (JSON)
+    $timelineJson = $request->timeline;
+    $timelineArray = json_decode($timelineJson, true);
+
+    if (!$timelineArray || !is_array($timelineArray)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Dữ liệu timeline không hợp lệ'
+        ], 400);
+    }
+
+    // Lưu timeline vào database
+    foreach ($timelineArray as $item) {
+        $this->tours->addTimeLine([
+            'tourId' => $tourId,
+            'title' => $item['title'],
+            'description' => $item['content']
+        ]);
+    }
+
+    // Cập nhật trạng thái hoàn thành tour
+    $this->tours->updateTour($tourId, ['availability' => 1]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Thêm timeline thành công!'
+    ]);
+}
+
 
     public function getTourEdit(Request $request)
     {
@@ -257,35 +263,36 @@ public function uploadTempImagesTours(Request $request)
 }
 
 
-    public function updateTour(Request $request)
-    {
+public function updateTour(Request $request)
+{
+    try {
         $tourId = $request->tourId;
+        if (!$tourId) {
+            return response()->json(['success' => false, 'message' => 'Missing tourId'], 400);
+        }
+
         $name = $request->input('name');
-        $destination = $request->input('destination');
-        $domain = $request->input('domain');
-        $quantity = $request->input('number');
-        $price_adult = $request->input('price_adult');
-        $price_child = $request->input('price_child');
         $description = $request->input('description');
+        // bạn có thể validate fields ở đây
 
         $dataTours = [
             'title' => $name,
             'description' => $description,
-            'quantity' => $quantity,
-            'priceAdult' => $price_adult,
-            'priceChild' => $price_child,
-            'destination' => $destination,
-            'domain' => $domain,
+            'quantity' => $request->input('number'),
+            'priceAdult' => $request->input('price_adult'),
+            'priceChild' => $request->input('price_child'),
+            'destination' => $request->input('destination'),
+            'domain' => $request->input('domain'),
         ];
 
-        // Xóa dữ liệu cũ
+        // XÓA DỮ LIỆU CŨ
         $this->tours->deleteData($tourId, 'tbl_timeline');
         $this->tours->deleteData($tourId, 'tbl_images');
 
-        // Cập nhật tour
+        // CẬP NHẬT TOUR
         $updateTour = $this->tours->updateTour($tourId, $dataTours);
 
-        // Thêm images mới
+        // ADD images mới (JS gửi array filenames trực tiếp)
         $images = $request->input('images');
         if ($images && is_array($images)) {
             foreach ($images as $image) {
@@ -298,7 +305,7 @@ public function uploadTempImagesTours(Request $request)
             }
         }
 
-        // Thêm timeline mới
+        // ADD timelines
         $timelines = $request->input('timeline');
         if ($timelines && is_array($timelines)) {
             foreach ($timelines as $timeline) {
@@ -311,11 +318,15 @@ public function uploadTempImagesTours(Request $request)
             }
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Sửa thành công!',
+        return response()->json(['success' => true, 'message' => 'Sửa thành công!']);
+    } catch (\Exception $e) {
+        \Log::error('updateTour error: '.$e->getMessage(), [
+            'input' => $request->all()
         ]);
+        return response()->json(['success' => false, 'message' => 'Lỗi server: '.$e->getMessage()], 500);
     }
+}
+
 
     /**
  * ✅ Xóa tour - Hiển thị thông tin và xác nhận

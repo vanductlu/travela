@@ -150,9 +150,14 @@
                                             <div id="timeline-container">
                                                 <!-- Timeline sẽ được append tại đây bằng JS -->
                                             </div>
+                                            <button type="button" class="btn btn-primary mt-3" id="add-timeline">
+                                                + Thêm ngày
+                                            </button>
                                         </form>
+                                        <div class="wizard_footer text-right mt-4">
+                                        <button class="btn btn-success buttonFinish">Hoàn tất</button>
                                     </div>
-
+                                    </div>
                                 </div>
                                 <!-- End SmartWizard -->
 

@@ -2213,58 +2213,54 @@ function init_daterangepicker_reservation() {
 
 /* SMART WIZARD */
 /**
- * DevDien modified for add tours
+ * add tours
  *
  */
 function init_SmartWizard() {
     if (typeof $.fn.smartWizard === "undefined") {
         return;
     }
+
     console.log("init_SmartWizard");
+
     let tourId;
-    let finishStep1 = false; // Check step 1
-    let finishStep2 = false; //Check step
+    let finishStep1 = false;
 
     $(".add-tours #wizard").smartWizard({
         onLeaveStep: function (obj, context) {
-            // context.fromStep là bước hiện tại, context.toStep là bước tiếp theo
-
+            
             var isValid = true;
 
-            if (finishStep2) {
+            // Nếu step 1 đã submit thành công → cho đi luôn
+            if (finishStep1) {
                 return true;
             }
-            // Kiểm tra các trường bắt buộc
-            $(
-                "#form-step1 input, #form-step1 select, #form-step1 textarea"
-            ).each(function () {
+
+            /* ==========================
+             * VALIDATE FORM STEP 1
+             * ========================== */
+            $("#form-step1 input, #form-step1 select, #form-step1 textarea").each(function () {
                 if ($(this).prop("required") && $(this).val().trim() === "") {
-                    isValid = false; // Đặt isValid thành false nếu có lỗi
-                    $(this).addClass("is-invalid"); // Thêm lớp lỗi
-                    toastr.error(
-                        "Vui lòng điền đầy đủ các trường bắt buộc!",
-                        "Lỗi!"
-                    );
+                    isValid = false;
+                    $(this).addClass("is-invalid");
+                    toastr.error("Vui lòng điền đầy đủ các trường bắt buộc!");
                 } else {
-                    $(this).removeClass("is-invalid"); // Xóa lớp lỗi nếu trường hợp hợp lệ
+                    $(this).removeClass("is-invalid");
                 }
             });
 
-            // Kiểm tra lựa chọn khu vực (select)
-            var domain = $("#domain").val();
-            if (!domain) {
+            if (!$("#domain").val()) {
                 isValid = false;
-                $("#domain").addClass("is-invalid"); // Thêm lớp lỗi nếu không chọn khu vực
-                toastr.error("Vui lòng chọn khu vực!", "Lỗi!");
-            } else {
-                $("#domain").removeClass("is-invalid");
+                $("#domain").addClass("is-invalid");
+                toastr.error("Vui lòng chọn khu vực!");
             }
 
-            // Kiểm tra ngày bắt đầu và ngày kết thúc
+            /* ==========================
+             * VALIDATE DATE
+             * ========================== */
             var startDate = $("#start_date").val();
             var endDate = $("#end_date").val();
 
-            // Chuyển đổi định dạng ngày từ DD/MM/YYYY sang YYYY-MM-DD
             function convertDateFormat(date) {
                 var parts = date.split("/");
                 return parts[2] + "-" + parts[1] + "-" + parts[0];
@@ -2274,50 +2270,46 @@ function init_SmartWizard() {
                 var startDateFormatted = new Date(convertDateFormat(startDate));
                 var endDateFormatted = new Date(convertDateFormat(endDate));
 
-                // Tính số ngày giữa start_date và end_date
                 var timeDifference = endDateFormatted - startDateFormatted;
-                var daysDifference = timeDifference / (1000 * 3600 * 24); // Chuyển đổi từ milliseconds sang ngày
+                var daysDifference = timeDifference / (1000 * 3600 * 24);
 
-                // Lấy ngày hôm nay
                 var today = new Date();
-                today.setHours(0, 0, 0, 0); // Đặt giờ về 00:00:00 để chỉ so sánh ngày, không xét thời gian
+                today.setHours(0, 0, 0, 0);
 
-                // Kiểm tra nếu "start_date" lớn hơn "end_date"
                 if (startDateFormatted > endDateFormatted) {
                     isValid = false;
-                    event.preventDefault();
-                    toastr.error(
-                        "Ngày khởi hành không thể lớn hơn ngày kết thúc."
-                    );
-                    $("#start_date").addClass("is-invalid");
-                    $("#end_date").addClass("is-invalid");
+                    toastr.error("Ngày khởi hành không thể lớn hơn ngày kết thúc.");
                 } else if (startDateFormatted < today) {
-                    // Kiểm tra nếu ngày bắt đầu nhỏ hơn ngày hôm nay
                     isValid = false;
-                    event.preventDefault();
-                    toastr.error(
-                        "Ngày bắt đầu không thể nhỏ hơn ngày hôm nay."
-                    );
-                    $("#start_date").addClass("is-invalid");
-                } else {
-                    $("#start_date").removeClass("is-invalid");
-                    $("#end_date").removeClass("is-invalid");
+                    toastr.error("Ngày bắt đầu không thể nhỏ hơn hôm nay.");
                 }
             }
-            var description = CKEDITOR.instances["description"].getData();
-            if (!description) {
+
+            /* ==========================
+             * LẤY MÔ TẢ CKEDITOR
+             * ========================== */
+            var description = "";
+            if (CKEDITOR.instances["description"]) {
+                description = CKEDITOR.instances["description"].getData();
+            }
+            if (!description || description.trim() === "") {
                 isValid = false;
                 toastr.error("Vui lòng điền mô tả!");
             }
 
-            // Nếu có lỗi, ngừng chuyển bước
-            if (!isValid || finishStep1) {
-                return false; // Trả về false để ngừng chuyển bước nếu form đã được gửi
+            /* ==========================
+             * STOP IF INVALID
+             * ========================== */
+            if (!isValid) {
+                return false;
             }
 
-            // Lấy URL từ thuộc tính action của form
-            var formActionUrl = $("#form-step1").attr("action");
-            // Tạo formData từ các trường trong form
+            /* ==========================
+             * ALWAYS STOP WIZARD!
+             * WAIT FOR AJAX
+             * ========================== */
+            let wizard = $(".add-tours #wizard").data("smartWizard");
+
             var formData = {
                 name: $("input[name='name']").val(),
                 destination: $("input[name='destination']").val(),
@@ -2331,95 +2323,49 @@ function init_SmartWizard() {
                 _token: $('input[name="_token"]').val(),
             };
 
+            var formActionUrl = $("#form-step1").attr("action");
+
             $.ajax({
                 type: "POST",
                 url: formActionUrl,
                 data: formData,
                 success: function (response) {
                     if (response.success) {
-                        isValid = true;
+                        finishStep1 = true;
                         tourId = response.tourId;
-                        finishStep1 = true; // Đánh dấu form đã được gửi
+
                         $(".hiddenTourId").val(tourId);
-                        // Thông báo cho file custom-js.js rằng giá trị đã được cập nhật
-                        $(document).trigger("dataUpdated", [daysDifference]);
-                        toastr.success("Hãy thêm hình ảnh cho tour vừa tạo!");
+
+                        // Tính số ngày tour
+                        let d1 = new Date(convertDateFormat(startDate));
+                        let d2 = new Date(convertDateFormat(endDate));
+                        let days = (d2 - d1) / (1000 * 3600 * 24);
+
+                        // Gửi qua custom-js
+                        $(document).trigger("dataUpdated", [days]);
+
+                        toastr.success("Hãy thêm hình ảnh cho tour!");
+
+                        // 👉 BÂY GIỜ MỚI CHO CHUYỂN BƯỚC
+                        wizard.goToStep(context.toStep);
                     } else {
                         toastr.error("Không thể thêm tour. Vui lòng thử lại.");
                     }
                 },
-                error: function (xhr, textStatus, errorThrown) {
-                    toastr.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
-                },
+                error: function () {
+                    toastr.error("Có lỗi server. Vui lòng thử lại.");
+                }
             });
 
-            if (isValid) {
-                return true; // Cho phép chuyển bước
-            }
-        },
-        onNextStep: function (obj, context) {
-            // Kiểm tra xem có sự kiện NextStep không
-            console.log("Đang chuyển sang bước tiếp theo...");
-        },
-    });
-    // Handle image upload for Step 2
-    Dropzone.autoDiscover = false; // Disable auto discover for dropzone
-    var myDropzone = null;
-    if ($("#myDropzone").length) {
-        // Khởi tạo Dropzone cho bước 2
-        myDropzone = new Dropzone("#myDropzone", {
-            url: "http://travela:8000/admin/add-images-tours",
-            paramName: "image",
-            maxFilesize: 5,
-            acceptedFiles: "image/*",
-            addRemoveLinks: true,
-            autoProcessQueue: false, // Không tự động upload
-            maxFiles: 10, // Giới hạn số file tối đa
-            parallelUploads: 5, // Số file được upload song song
-        });
-
-        // Xử lý khi bấm nút "Next"
-        $(".add-tours #wizard .buttonNext").on("click", function (event) {
-            let currentStep =
-                $(".add-tours #wizard").smartWizard("currentStep");
-            if (currentStep === 2) {
-                event.preventDefault(); // Ngăn hành vi mặc định
-    }
-        });
-
-        // Thêm tourid vào formData khi gửi tệp
-        myDropzone.on("sending", function (file, xhr, formData) {
-            formData.append("tourId", tourId); // Thêm tourid vào formData
-        });
-
-        // Xử lý khi từng tệp được tải lên thành công
-        myDropzone.on("success", function (file, response) {
-            console.log("File uploaded successfully:", response);
-        });
-        // Xử lý khi hàng đợi hoàn tất
-        myDropzone.on("queuecomplete", function () {
-            console.log("All files uploaded successfully.");
-
-            // Chuyển qua bước 3
-            finishStep2 = true;
-            toastr.success("Tất cả hình ảnh đã được tải lên thành công.");
-            toastr.success("Ấn tiếp theo để nhập lộ trình cho tours");
-        });
-        // Xử lý lỗi khi tải lên
-        myDropzone.on("error", function (file, errorMessage) {
-            console.error("Upload failed:", errorMessage);
-            toastr.error("Tải lên thất bại. Vui lòng thử lại.");
-        });
-    }
-
-    $(".add-tours #wizard_verticle").smartWizard({
-        transitionEffect: "slide",
+            return false; // ❗ CHẶN wizard cho đến khi AJAX xong
+        }
     });
 
     $(".buttonNext").addClass("btn btn-success");
     $(".buttonPrevious").addClass("btn btn-primary");
     $(".buttonFinish").addClass("btn btn-default");
 }
+
 
 /* VALIDATOR */
 

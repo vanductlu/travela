@@ -67,150 +67,102 @@
             </div>
         </div>
         <!-- /page content -->
-        <!-- Modal Edit Tour-->
-        <div class="modal fade" id="edit-tour-modal" tabindex="-1" role="dialog" aria-labelledby="edit-tour-Label"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="edit-tour-Label">Chỉnh sửa Tour</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+<!-- Modal Edit Tour -->
+<div class="modal fade" id="edit-tour-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Chỉnh sửa Tour</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="wizard" class="form_wizard wizard_horizontal">
+
+          <ul class="wizard_steps">
+            <li><a href="#step-1"><span class="step_no">1</span><span class="step_descr">Thông tin</span></a></li>
+            <li><a href="#step-2"><span class="step_no">2</span><span class="step_descr">Hình ảnh</span></a></li>
+            <li><a href="#step-3"><span class="step_no">3</span><span class="step_descr">Lộ trình</span></a></li>
+          </ul>
+
+          <!-- STEP 1 -->
+          <div id="step-1">
+            <form id="form-step1">
+              @csrf
+              <input type="hidden" class="hiddenTourId" name="tourId" value="">
+              <div class="form-group">
+                <label>Tên tour</label>
+                <input type="text" name="name" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Điểm đến</label>
+                <input type="text" name="destination" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Khu vực</label>
+                <select class="form-control" name="domain" id="domain">
+                  <option value="">Chọn khu vực</option>
+                  <option value="b">Miền Bắc</option>
+                  <option value="t">Miền Trung</option>
+                  <option value="n">Miền Nam</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Số lượng</label>
+                <input type="number" name="number" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Giá người lớn</label>
+                <input type="number" name="price_adult" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Giá trẻ em</label>
+                <input type="number" name="price_child" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Ngày khởi hành</label>
+                <input type="text" id="start_date" name="start_date" class="form-control datetimepicker" disabled>
+              </div>
+              <div class="form-group">
+                <label>Ngày kết thúc</label>
+                <input type="text" id="end_date" name="end_date" class="form-control datetimepicker" disabled>
+              </div>
+              <div class="form-group">
+                <label>Mô tả</label>
+                <textarea name="description" id="description" rows="6"></textarea>
+              </div>
+            </form>
+          </div>
+
+          <!-- STEP 2 -->
+          <div id="step-2">
+            <!-- Dropzone area -->
+            <form action="/admin/add-images-tours" class="dropzone" id="myDropzone-editTour">@csrf</form>
+            <p class="small text-muted mt-2">Bạn có thể xóa ảnh cũ hoặc upload thêm ảnh mới.</p>
+          </div>
+
+          <!-- STEP 3 -->
+          <div id="step-3"></div>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-info buttonFinishEdit">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+                        <form class="dropzone" id="myDropzone-editTour">@csrf</form>
                     </div>
-                    <div class="modal-body">
-                        <div id="wizard-edit" class="form_wizard wizard_horizontal wizard-edit-tour">
-                            <ul class="wizard_steps">
-                                <li>
-                                    <a href="#step-1">
-                                        <span class="step_no">1</span>
-                                        <span class="step_descr">
-                                            Bước 1<br />
-                                            <small>Bước 1 Nhập thông tin </small>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#step-2">
-                                        <span class="step_no">2</span>
-                                        <span class="step_descr">
-                                            Bước 2<br />
-                                            <small>Bước 2 Thêm hình ảnh</small>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#step-3">
-                                        <span class="step_no">3</span>
-                                        <span class="step_descr">
-                                            Bước 3<br />
-                                            <small>Bước 3 Lộ trình</small>
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div id="step-1">
-                                <form class="form-info-tour" method="POST"
-                                    id="form-step1">
-                                    @csrf
-                                    <div class="field item form-group">
-                                        <label class="col-form-label col-md-3 col-sm-3  label-align">Tên
-                                            <span>*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" name="name" placeholder="Nhập tên Tour"
-                                                required>
-                                        </div>
-                                    </div>
-                                    <div class="field item form-group">
-                                        <label class="col-form-label col-md-3 col-sm-3  label-align">Điểm đến
-                                            <span>*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" name="destination" placeholder="Điểm đến"
-                                                required>
-                                        </div>
-                                    </div>
-                                    <div class="field item form-group">
-                                        <label class="col-form-label col-md-3 col-sm-3  label-align">Khu
-                                            vực<span>*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <select class="form-control" name="domain" id="domain">
-                                                <option value="">Chọn khu vực</option>
-                                                <option value="b">Miền Bắc</option>
-                                                <option value="t">Miền Trung</option>
-                                                <option value="n">Miền Nam</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="field item form-group">
-                                        <label class="col-form-label col-md-3 col-sm-3  label-align">Số lượng
-                                            <span>*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="number" name="number" required>
-                                        </div>
-                                    </div>
-                                    <div class="field item form-group">
-                                        <label class="col-form-label col-md-3 col-sm-3  label-align">Giá người
-                                            lớn
-                                            <span>*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="number" name="price_adult" required>
-                                        </div>
-                                    </div>
-                                    <div class="field item form-group">
-                                        <label class="col-form-label col-md-3 col-sm-3  label-align">Giá trẻ em
-                                            <span>*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="number" name="price_child" required>
-                                        </div>
-                                    </div>
-                                    <div class="field item form-group">
-                                        <label class="col-form-label col-md-3 col-sm-3  label-align">Ngày khởi
-                                            hành<span>*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input type="text" class="form-control datetimepicker" id="start_date"
-                                                name="start_date" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="field item form-group">
-                                        <label class="col-form-label col-md-3 col-sm-3  label-align">Ngày kết
-                                            thúc<span>*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input type="text" class="form-control datetimepicker" id="end_date"
-                                                name="end_date" disabled>
-                                        </div>
-                                    </div>
 
-                                    <div class="field item form-group bad">
-                                        <label class="col-form-label col-md-3 col-sm-3  label-align">Mô
-                                            tả<span>*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <textarea name="description" id="description" rows="10" required></textarea>
-                                        </div>
-                                    </div>
-                                </form>
 
-                            </div>
-                            <div id="step-2">
-                                <h2 class="StepTitle">Thêm hình ảnh</h2>
-                                <form action="" class="dropzone dz-clickable"
-                                    id="myDropzone-listTour" enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="dz-default dz-message">
-                                        <span>Chọn hình ảnh về tours để upload</span>
-                                    </div>
-                                </form>
-                            </div>
-                            <form action="{{ route('admin.edit-tour') }}" id="timeline-form" method="POST">
-                                @csrf
-                                <input type="hidden" name="tourId" class="hiddenTourId">
-                                <div id="step-3">
-                                    <h2 class="StepTitle">Nhập lộ trình</h2>
-
-                                </div>
-
-                            </form>
-
-                        </div>
+                    <!-- STEP 3 -->
+                    <div id="step-3"></div>
+                    <div class="modal-footer mt-3">
+                        <button type="button" class="btn btn-info buttonFinishEdit">Lưu</button>
                     </div>
                 </div>
             </div>

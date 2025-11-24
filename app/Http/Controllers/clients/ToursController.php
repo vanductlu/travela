@@ -62,8 +62,8 @@ class ToursController extends Controller
         }
 
         // Handle duration filter
-        if ($req->filled('time')) {
-            $duration = $req->time;
+        if ($req->filled('duration')) {
+            $duration = $req->duration;
             $time = [
                 '3n2d' => '3 ngày 2 đêm',
                 '4n3d' => '4 ngày 3 đêm',

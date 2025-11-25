@@ -1,8 +1,17 @@
 @include('clients.blocks.header')
 @include('clients.blocks.banner')
 @include('clients.partials.chat')
+
 <section class="blog-list-page py-100 rel z-1">
     <div class="container">
+        <!-- Hiển thị từ khóa tìm kiếm -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h3>Kết quả tìm kiếm cho: <span class="text-primary">"{{ $query }}"</span></h3>
+                <p class="text-muted">Tìm thấy {{ $blogs->total() }} kết quả</p>
+            </div>
+        </div>
+
         <div class="row">
             <!-- Danh sách bài viết -->
             <div class="col-lg-8">
@@ -31,12 +40,12 @@
                     @endforeach
 
                     <div class="mt-4">
-                        {{ $blogs->links('pagination::bootstrap-4') }}
+                        {{ $blogs->appends(['q' => $query])->links('pagination::bootstrap-4') }}
                     </div>
                 @else
-                    <div class="alert alert-info">
-                        <h5>Không có bài viết nào!</h5>
-                        <p><a href="{{ route('blog') }}">Quay lại trang blog</a></p>
+                    <div class="alert alert-warning">
+                        <h5><i class="far fa-exclamation-triangle"></i> Không tìm thấy kết quả nào!</h5>
+                        <p>Vui lòng thử lại với từ khóa khác hoặc <a href="{{ route('blog') }}">quay lại trang blog</a>.</p>
                     </div>
                 @endif
             </div>
@@ -48,7 +57,7 @@
                     <!-- Form tìm kiếm -->
                     <div class="widget widget-search" data-aos="fade-up">
                         <form action="{{ route('blog.search') }}" method="GET" class="default-search-form">
-                            <input type="text" name="q" placeholder="Tìm kiếm..." required>
+                            <input type="text" name="q" value="{{ $query }}" placeholder="Tìm kiếm..." required>
                             <button type="submit" class="searchbutton far fa-search"></button>
                         </form>
                     </div>

@@ -14,9 +14,10 @@ class BlogController extends Controller
     {
         $blogs = Blog::orderBy('created_at', 'desc')->paginate(5);
         $recent = Blog::orderBy('created_at', 'desc')->take(3)->get();
+        $categories = Blog::select('category')->distinct()->pluck('category');
         $title = 'Bài viết du lịch';
 
-        return view('clients.blog', compact('blogs', 'recent', 'title'));
+        return view('clients.blog', compact('blogs', 'recent','categories', 'title'));
     }
 
     // Trang chi tiết bài viết
@@ -31,6 +32,44 @@ class BlogController extends Controller
         $title = $blog->title;
 
         return view('clients.blog-details', compact('blog', 'recent', 'title'));
+    }
+    // Tìm kiếm blog
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+        
+        if (empty($query)) {
+            return redirect()->route('blog');
+        }
+
+        // Tìm kiếm trong title, excerpt, content, category, author
+        $blogs = Blog::where('title', 'LIKE', "%{$query}%")
+                    ->orWhere('excerpt', 'LIKE', "%{$query}%")
+                    ->orWhere('content', 'LIKE', "%{$query}%")
+                    ->orWhere('category', 'LIKE', "%{$query}%")
+                    ->orWhere('author', 'LIKE', "%{$query}%")
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(5);
+
+        $recent = Blog::orderBy('created_at', 'desc')->take(3)->get();
+        $categories = Blog::select('category')->distinct()->pluck('category');
+        $title = 'Kết quả tìm kiếm: ' . $query;
+
+        return view('clients.blog-search', compact('blogs', 'recent', 'query', 'categories', 'title'));
+    }
+
+    // Lọc theo danh mục
+    public function category($category)
+    {
+        $blogs = Blog::where('category', $category)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(5);
+        
+        $recent = Blog::orderBy('created_at', 'desc')->take(3)->get();
+        $categories = Blog::select('category')->distinct()->pluck('category');
+        $title = 'Danh mục: ' . $category;
+
+        return view('clients.blog', compact('blogs', 'recent', 'categories', 'title'));
     }
     public function like($id)
     {

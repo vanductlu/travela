@@ -66,6 +66,8 @@ Route::post('/createBooking', [BookingController::class, 'store'])->name('create
 
 //Handle Blog
 Route::get('/blog', [BlogController::class, 'index'])->name('blog')->middleware('checkLoginClient');  
+Route::get('/blog/search', [BlogController::class, 'search'])->name('blog.search')->middleware('checkLoginClient');
+Route::get('/blog/category/{category}', [BlogController::class, 'category'])->name('blog.category')->middleware('checkLoginClient');
 Route::middleware(['web'])->group(function () {
     Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog-details');
 });

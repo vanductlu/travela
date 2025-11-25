@@ -18,7 +18,7 @@
                                     <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}"
                                         alt="Tour List">
                                 @else
-                                    <img src="{{ asset('clients/assets/images/no-image.jpg') }}" alt="No Image Available">
+                                    <img src="{{ asset('clients/assets/images/default.jfif') }}" alt="No Image Available">
                                 @endif
                             </div>
                             <div class="content equal-content-fix">

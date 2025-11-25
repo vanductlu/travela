@@ -29,14 +29,19 @@
                         @else
                             <div class="col-xl-3 col-md-6 item domain-{{ $tour->domain }}">
                     @endif
-                    <div class="destination-item style-two" data-aos-duration="1500" data-aos-offset="50">
-                        <div class="image" style="max-height: 250px">
+                    <div class="destination-item style-two" data-aos-duration="1500" data-aos-offset="50" style="overflow: hidden !important;">
+                        <div class="image" 
+                            style="width: 90% !important;">
                             <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-@if(isset($tour->images) && count($tour->images) > 0)
-    <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}" alt="Destination">
-@else
-    <img src="{{ asset('clients/assets/images/gallery-tours/bien-dao-3n2d-con-dao-3.jpg') }}" alt="Destination">
-@endif
+                        @if(isset($tour->images) && count($tour->images) > 0)
+                            <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}" 
+                            alt="Destination" 
+                            >
+                        @else
+                            <img src="{{ asset('clients/assets/images/gallery-tours/default.jfif') }}" 
+                            alt="Destination" 
+                            >
+                        @endif
                         </div>
                         <div class="content">
                             <h6 class="tour-title"><a

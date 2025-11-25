@@ -23,14 +23,14 @@
                 <div class="col-xxl-3 col-xl-4 col-md-6" style="margin-bottom: 30px">
                     <div class="destination-item block_tours" data-aos="fade-up" data-aos-duration="1500"
                         data-aos-offset="50">
-                        <div class="image">
+                        <div class="image" >
                             <div class="ratting"><i class="fas fa-star"></i> {{ number_format($tour->rating, 1) }}</div>
                             <a href="#" class="heart"><i class="fas fa-heart"></i></a>
                             @if(isset($tour->images) && count($tour->images) > 0)
-    <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}" alt="Destination">
-@else
-    <img src="{{ asset('clients/assets/images/gallery-tours/bien-dao-3n2d-con-dao-3.jpg') }}" alt="Destination">
-@endif
+                                <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}" alt="Destination">
+                            @else
+                                <img src="{{ asset('clients/assets/images/gallery-tours/default.jfif') }}" alt="Destination">
+                            @endif
                         </div>
                         <div class="content">
                             <span class="location"><i class="fal fa-map-marker-alt"></i>{{ $tour->destination }}</span>
@@ -143,10 +143,10 @@
                             <div class="image" style="max-height: 250px">
                                 <a href="#" class="heart"><i class="fas fa-heart"></i></a>
                                 @if(isset($tour->images) && count($tour->images) > 0)
-    <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}" alt="Destination">
-@else
-    <img src="{{ asset('clients/assets/images/gallery-tours/bien-dao-3n2d-con-dao-3.jpg') }}" alt="Destination">
-@endif
+                                    <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}" alt="Destination">
+                                @else
+                                    <img src="{{ asset('clients/assets/images/gallery-tours/default.jfif') }}" alt="Destination">
+                                @endif
                             </div>
                             <div class="content">
                                 <h6 class="tour-title"><a

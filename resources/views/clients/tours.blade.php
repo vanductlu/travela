@@ -148,11 +148,11 @@
                                 <div class="destination-item tour-grid style-three bgc-lighter">
                                     <div class="image">
                                         <span class="badge">10% Off</span>
-@if(isset($tour->images) && count($tour->images) > 0)
-    <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}" alt="Destination">
-@else
-    <img src="{{ asset('clients/assets/images/gallery-tours/bien-dao-3n2d-con-dao-3.jpg') }}" alt="Destination">
-@endif
+                            @if(isset($tour->images) && count($tour->images) > 0)
+                                <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}" alt="Destination">
+                            @else
+                                <img src="{{ asset('clients/assets/images/gallery-tours/default.jfif') }}" alt="Destination">
+                            @endif
                                     </div>
                                     <div class="content">
                                         <div class="destination-header">
@@ -171,23 +171,6 @@
                             @endforeach
                         </div>
                     @endif
-                </div>
-
-                <div class="widget widget-cta mt-30" data-aos="fade-up" data-aos-duration="1500"
-                    data-aos-offset="50">
-                    <div class="content text-white">
-                        <span class="h6">Khám Phá Việt Nam</span>
-                        <h3>Địa điểm du lịch tốt nhất</h3>
-                        <a href="{{ route('tours') }}" class="theme-btn style-two bgc-secondary">
-                            <span data-hover="Khám phá ngay">Khám phá ngay</span>
-                            <i class="fal fa-arrow-right"></i>
-                        </a>
-                    </div>
-                    <div class="image">
-                        <img src="{{ asset('clients/assets/images/widgets/cta-widget.png') }}" alt="CTA">
-                    </div>
-                    <div class="cta-shape"><img src="{{ asset('clients/assets/images/widgets/cta-shape2.png') }}"
-                            alt="Shape"></div>
                 </div>
             </div>
             <div class="col-lg-9">

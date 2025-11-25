@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Title -->
-    <title>Travela - {{ $title ?? Travela }}</title>
+    <title>Ravelo - {{ $title ?? Ravelo }}</title>
     <!-- Favicon Icon -->
     <link rel="shortcut icon" href="{{ asset('clients/assets/images/logos/favicon.png') }}" type="image/x-icon">
     <!-- Google Fonts -->

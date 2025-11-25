@@ -4523,11 +4523,15 @@ h6, .h6, blockquote {
   border: 1px solid rgba(255, 255, 255, 0.1); }
   .destination-item .image {
     margin: 10px;
+    height: 250px;
     overflow: hidden;
     position: relative;
     border-radius: 10px; }
     .destination-item .image img {
       width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
       -webkit-transition: 0.5s;
       -o-transition: 0.5s;
       transition: 0.5s; }

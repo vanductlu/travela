@@ -52,7 +52,7 @@ use App\Http\Controllers\admin\CommentManagementController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/booking', [BookingController::class, 'index'])->name('booking');
-Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact')->middleware('checkLoginClient');
 Route::post('/contact', [ContactController::class, 'store'])->name('create-contact');
 Route::get('/destination', [DestinationController::class, 'index'])->name('destination');
 Route::get('/my-tour', [MyTourController::class, 'index'])->name('my-tour');

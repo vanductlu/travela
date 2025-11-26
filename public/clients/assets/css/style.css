@@ -4102,19 +4102,19 @@ h6, .h6, blockquote {
       font-size: 35px; } }
 
 .main-hero-image {
-  height: 790px;
+  height: 500px;
   margin-top: -8%;
   position: relative;
   border-radius: 20px; }
   @media only screen and (max-width: 1399px) {
     .main-hero-image {
-      height: 555px; } }
+      height: 455px; } }
   @media only screen and (max-width: 991px) {
     .main-hero-image {
-      height: 450px; } }
+      height: 350px; } }
   @media only screen and (max-width: 575px) {
     .main-hero-image {
-      height: 400px; } }
+      height: 300px; } }
   .main-hero-image:before {
     position: absolute;
     left: 0;

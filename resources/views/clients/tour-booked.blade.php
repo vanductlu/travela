@@ -64,7 +64,6 @@
                 <img src="{{ asset('clients/assets/images/booking/thanh-toan-momo.jpg') }}" alt="MoMo">
                 Thanh toán bằng Momo
             </label>
-
         </div>
 
         <!-- Order Summary -->

@@ -153,13 +153,22 @@ class BookingController extends Controller
                 throw new \Exception('Không thể tạo booking');
             }
 
-            // Tạo checkout
+            $paymentStatus = 'n';
+            $transactionId = null;
+
+            if ($paymentMethod === 'momo-payment' && $req->has('transIdMomo')) {
+                $paymentStatus = 'y';
+                $transactionId = $req->input('transIdMomo');
+            }
+
             $dataCheckout = [
                 'bookingId' => $bookingId,
                 'paymentMethod' => $paymentMethod,
                 'amount' => $totalPrice,
-                'paymentStatus' => 'n',
+                'paymentStatus' => $paymentStatus,
+                'transactionId' => $transactionId,
             ];
+
             
             $checkout = $this->checkout->createCheckout($dataCheckout);
             
@@ -292,7 +301,10 @@ class BookingController extends Controller
         if ($resultCode == '0') {
             // Thanh toán thành công, tạo booking
             $req = new Request($bookingData);
-            $req->merge(['transIdMomo' => $transIdMomo]);
+            $req->merge([
+                'payment_hidden' => 'momo-payment',
+                'transIdMomo' => $transIdMomo
+            ]);
             
             session()->forget('momo_booking_data');
             

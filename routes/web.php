@@ -53,7 +53,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/booking', [BookingController::class, 'index'])->name('booking');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact')->middleware('checkLoginClient');
-Route::post('/contact', [ContactController::class, 'store'])->name('create-contact');
+Route::post('/contact', [ContactController::class, 'createContact'])->name('create-contact');
 Route::get('/destination', [DestinationController::class, 'index'])->name('destination');
 Route::get('/my-tour', [MyTourController::class, 'index'])->name('my-tour');
 Route::get('/search', [SearchController::class, 'index'])->name('search');
@@ -127,7 +127,7 @@ Route::post('/create-contact', [ContactController::class, 'createContact'])->nam
 
 //Payment with Momo
 Route::post('/create-momo-payment', [BookingController::class, 'createMomoPayment'])->name('createMomoPayment');
-Route::post('/booking/momo/callback', [BookingController::class, 'handlePaymentMomoCallback'])->name('booking.momo.callback');
+Route::get('/booking/momo/callback', [BookingController::class, 'handlePaymentMomoCallback'])->name('booking.momo.callback');
 //Search 
 Route::get('/search', [SearchController::class, 'index'])->name(name: 'search');
 Route::get('/search-voice-text', [SearchController::class, 'searchTours'])->name('search-voice-text');

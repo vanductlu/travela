@@ -697,47 +697,8 @@ $('input[name="payment"]').change(function () {
   const paymentMethod = $(this).val();
   $("#payment_hidden").val(paymentMethod);
 
-  const isOnline = (paymentMethod === "paypal-payment" || paymentMethod === "momo-payment");
+  const isOnline = (paymentMethod === "momo-payment");
   $(".btn-submit-booking").toggle(!isOnline);
-
-  if (paymentMethod === "paypal-payment") {
-    const totalPricePayment = (parseFloat($("#total_price").val()) || 0) / 25000.0;
-    $("#paypal-button-container").show().empty();
-
-    if (typeof paypal !== "undefined") {
-      paypal.Buttons({
-        createOrder: function (data, actions) {
-          return actions.order.create({
-            purchase_units: [{
-              amount: {
-                value: totalPricePayment.toFixed(2)
-              }
-            }]
-          });
-        },
-        onApprove: function (data, actions) {
-          return actions.order.capture().then(function (details) {
-            var hiddenInput = $("<input>", {
-              type: "hidden",
-              name: "transactionIdPaypal",
-              value: details.id
-            });
-            $('.booking-container').append(hiddenInput);
-            toastr.success("Thanh toán PayPal thành công!");
-            $('.booking-container').submit();
-          });
-        },
-        onError: function (err) {
-          console.error(err);
-          toastr.error("Có lỗi xảy ra trong quá trình thanh toán PayPal.");
-        }
-      }).render('#paypal-button-container');
-    } else {
-      toastr.error("PayPal chưa được nạp.");
-    }
-  } else {
-    $("#paypal-button-container").empty().hide();
-  }
 
   if (paymentMethod === "momo-payment") {
     $("#btn-momo-payment").show();
@@ -932,30 +893,71 @@ toggleButtonState();
     /****************************************
      *             PAGE CONTACT             *
      * ***************************************/
-
+    $(document).ready(function() {
+    // SQL injection pattern
+    var sqlInjectionPattern = /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|OR|AND)\b|--|\/\*|\*\/|;|'|"|<|>)/i;
 
     $('#contactForm').submit(function (event) {
-        event.preventDefault();
-
-        var name = $('#name').val();
-        var phoneNumber = $('#phone_number').val();
-        var message = $('#message').val();
-
+        // Xóa các lỗi cũ
         $('.error').remove();
+        
+        var name = $('#name').val().trim();
+        var phoneNumber = $('#phone_number').val().trim();
+        var email = $('#email').val().trim();
+        var message = $('#message').val().trim();
+        
+        var hasError = false;
 
-        if (sqlInjectionPattern.test(name)) {
-            $('#name').after('<span class="error" style="color: red;">Vui lòng nhập tên hợp lệ và không chứa ký tự đặc biệt.</span>');
+        // Validate name
+        if (name === '') {
+            $('#name').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Vui lòng nhập họ tên.</span>');
+            hasError = true;
+        } else if (sqlInjectionPattern.test(name)) {
+            $('#name').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Tên không hợp lệ. Vui lòng không nhập ký tự đặc biệt.</span>');
+            hasError = true;
+        }
+
+        // Validate phone
+        if (phoneNumber === '') {
+            $('#phone_number').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Vui lòng nhập số điện thoại.</span>');
+            hasError = true;
+        } else if (sqlInjectionPattern.test(phoneNumber)) {
+            $('#phone_number').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Số điện thoại không hợp lệ.</span>');
+            hasError = true;
+        } else if (!/^[0-9]{10,11}$/.test(phoneNumber)) {
+            $('#phone_number').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Số điện thoại phải có 10-11 chữ số.</span>');
+            hasError = true;
+        }
+
+        // Validate email
+        if (email === '') {
+            $('#email').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Vui lòng nhập email.</span>');
+            hasError = true;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            $('#email').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Email không đúng định dạng.</span>');
+            hasError = true;
+        }
+
+        // Validate message
+        if (message === '') {
+            $('#message').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Vui lòng nhập nội dung.</span>');
+            hasError = true;
+        } else if (sqlInjectionPattern.test(message)) {
+            $('#message').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Nội dung không hợp lệ.</span>');
+            hasError = true;
+        }
+
+        // Nếu có lỗi thì chặn submit
+        if (hasError) {
+            event.preventDefault();
             return false;
         }
 
-        if (sqlInjectionPattern.test(phoneNumber)) {
-            $('#phone_number').after('<span class="error" style="color: red;">Vui lòng nhập số điện thoại hợp lệ và không chứa ký tự đặc biệt.</span>');
-            return false;
-        }
-
-
-        this.submit();
+        // Nếu không có lỗi thì cho submit bình thường
+        // KHÔNG gọi event.preventDefault() và KHÔNG gọi this.submit()
+        return true;
     });
+});
     /****************************************
      *             HANDLE SEARCH            *
      * ***************************************/

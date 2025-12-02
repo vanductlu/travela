@@ -8,7 +8,7 @@
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
-                        <h3>Tạo mã giảm giá <small>mới</small></h3>
+                        <h3>Tạo mã giảm giá mới</h3>
                     </div>
                     <div class="title_right">
                         <div class="pull-right">

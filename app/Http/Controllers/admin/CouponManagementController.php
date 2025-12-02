@@ -14,12 +14,17 @@ class CouponManagementController extends Controller
         $title = 'Quản lý mã giảm giá';
         $coupons = CouponModel::orderBy("couponId", "desc")->get();
         
-        // Thống kê
+        // Thống kê - FIX: Đảm bảo tính toán đúng
+        $now = Carbon::now();
         $stats = [
             'total' => $coupons->count(),
-            'active' => $coupons->where('status', 'active')->count(),
-            'expired' => $coupons->filter(function($c) {
-                return Carbon::parse($c->end_date)->lt(Carbon::now());
+            'active' => $coupons->where('status', 'active')
+                              ->filter(function($c) use ($now) {
+                                  return Carbon::parse($c->end_date)->gte($now);
+                              })
+                              ->count(),
+            'expired' => $coupons->filter(function($c) use ($now) {
+                return Carbon::parse($c->end_date)->lt($now);
             })->count(),
             'used' => $coupons->sum('used_count')
         ];

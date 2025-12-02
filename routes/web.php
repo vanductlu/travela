@@ -213,6 +213,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/received-money', [BookingManagementController::class, 'receiviedMoney'])->name('admin.received');
 
     //Coupon management
+    Route::post('/coupon/{id}/toggle-status', [CouponManagementController::class, 'toggleStatus'])->name('admin.coupon.toggle-status');
     Route::get('/coupon', [CouponManagementController::class, 'index'])->name('admin.coupon.index');
     Route::get('/coupon/create', [CouponManagementController::class, 'create'])->name('admin.coupon.create');
     Route::post('/coupon', [CouponManagementController::class, 'store'])->name('admin.coupon.store');
@@ -220,7 +221,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/coupon/{id}/edit', [CouponManagementController::class, 'edit'])->name('admin.coupon.edit');
     Route::put('/coupon/{id}', [CouponManagementController::class, 'update'])->name('admin.coupon.update');
     Route::delete('/coupon/{id}', [CouponManagementController::class, 'destroy'])->name('admin.coupon.destroy');
-    Route::post('/coupon/{id}/toggle-status', [CouponManagementController::class, 'toggleStatus'])->name('admin.coupon.toggle-status');
+   
     //Send mail pdf
     Route::post('/send-pdf', [BookingManagementController::class, 'sendPdf'])->name('admin.send.pdf');
 

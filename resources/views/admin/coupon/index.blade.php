@@ -3,12 +3,11 @@
     <div class="main_container">
         @include('admin.blocks.sidebar')
 
-        <!-- page content -->
         <div class="right_col" role="main">
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
-                        <h3>{{ $title }} <small>Quản lý mã giảm giá</small></h3>
+                        <h3>{{ $title }}</h3>
                     </div>
                     <div class="title_right">
                         <div class="pull-right">
@@ -32,7 +31,7 @@
                                 <div class="row">
                                     <div class="col-xs-7">
                                         <span class="text-muted">Tổng số mã</span>
-                                        <h2 class="stat-number">{{ $stats['total'] }}</h2>
+                                        <h2 class="stat-number" data-count="{{ $stats['total'] ?? 0 }}">{{ $stats['total'] ?? 0 }}</h2>
                                     </div>
                                     <div class="col-xs-5 text-right">
                                         <i class="fa fa-ticket fa-3x" style="opacity: 0.3;"></i>
@@ -48,7 +47,7 @@
                                 <div class="row">
                                     <div class="col-xs-7">
                                         <span class="text-success">Đang hoạt động</span>
-                                        <h2 class="stat-number text-success">{{ $stats['active'] }}</h2>
+                                        <h2 class="stat-number text-success" data-count="{{ $stats['active'] ?? 0 }}">{{ $stats['active'] ?? 0 }}</h2>
                                     </div>
                                     <div class="col-xs-5 text-right">
                                         <i class="fa fa-check-circle fa-3x text-success" style="opacity: 0.3;"></i>
@@ -64,7 +63,7 @@
                                 <div class="row">
                                     <div class="col-xs-7">
                                         <span class="text-danger">Đã hết hạn</span>
-                                        <h2 class="stat-number text-danger">{{ $stats['expired'] }}</h2>
+                                        <h2 class="stat-number text-danger" data-count="{{ $stats['expired'] ?? 0 }}">{{ $stats['expired'] ?? 0 }}</h2>
                                     </div>
                                     <div class="col-xs-5 text-right">
                                         <i class="fa fa-calendar-times-o fa-3x text-danger" style="opacity: 0.3;"></i>
@@ -80,7 +79,7 @@
                                 <div class="row">
                                     <div class="col-xs-7">
                                         <span class="text-info">Lượt sử dụng</span>
-                                        <h2 class="stat-number text-info">{{ $stats['used'] }}</h2>
+                                        <h2 class="stat-number text-info" data-count="{{ $stats['used'] ?? 0 }}">{{ $stats['used'] ?? 0 }}</h2>
                                     </div>
                                     <div class="col-xs-5 text-right">
                                         <i class="fa fa-bar-chart fa-3x text-info" style="opacity: 0.3;"></i>
@@ -110,8 +109,8 @@
                                         <label>Lọc theo trạng thái</label>
                                         <select id="filter_status" class="form-control">
                                             <option value="">Tất cả</option>
-                                            <option value="Hoạt động">Hoạt động</option>
-                                            <option value="Không hoạt động">Không hoạt động</option>
+                                            <option value="active">Hoạt động</option>
+                                            <option value="inactive">Không hoạt động</option>
                                         </select>
                                     </div>
                                 </div>
@@ -186,7 +185,7 @@
                                                                 <i class="fa fa-calendar"></i> {{ \Carbon\Carbon::parse($coupon->end_date)->format('d/m/Y') }}
                                                             </small>
                                                         </td>
-                                                        <td class="text-center">
+                                                        <td class="text-center" data-status="{{ $coupon->status }}">
                                                             <button class="btn btn-xs btn-toggle-status {{ $coupon->status === 'active' ? 'btn-success' : 'btn-default' }}"
                                                                     data-id="{{ $coupon->couponId }}"
                                                                     title="Click để đổi trạng thái">
@@ -235,7 +234,6 @@
                 </div>
             </div>
         </div>
-        <!-- /page content -->
     </div>
 </div>
 @include('admin.blocks.footer')
@@ -261,6 +259,15 @@
 </style>
 
 <script>
+// Đợi jQuery và tất cả thư viện load xong
+window.addEventListener('load', function() {
+    
+// Kiểm tra jQuery đã load chưa
+if (typeof jQuery === 'undefined') {
+    console.error('jQuery chưa được load!');
+    return;
+}
+
 $(document).ready(function() {
     // Initialize DataTable
     var table = $('#datatable-coupon').DataTable({
@@ -273,51 +280,69 @@ $(document).ready(function() {
         ]
     });
 
-    // Filter by status
+    // FIX: Filter by status - Tìm theo giá trị status thực tế trong data-status
     $('#filter_status').on('change', function() {
         const status = $(this).val();
+        
+        // Clear all custom filters first
+        while($.fn.dataTable.ext.search.length > 0) {
+            $.fn.dataTable.ext.search.pop();
+        }
+        
+        // Add new filter if status is selected
         if (status) {
-            table.column(9).search(status).draw();
+            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                const rowNode = table.row(dataIndex).node();
+                const statusCell = $(rowNode).find('td[data-status]');
+                const rowStatus = statusCell.attr('data-status');
+                return rowStatus === status;
+            });
+        }
+        
+        table.draw();
+    });
+    $(document).on('click', '.btn-copy-code', function(e) {
+        e.preventDefault();
+        const code = $(this).data('code');
+        
+        // Modern clipboard API
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).then(function() {
+                showNotification('success', 'Thành công', 'Đã copy mã: ' + code);
+            }).catch(function() {
+                // Fallback method
+                copyToClipboardFallback(code);
+            });
         } else {
-            table.column(9).search('').draw();
+            copyToClipboardFallback(code);
         }
     });
-
-    // Statistics animation
-    $('.stat-number').each(function() {
-        const $this = $(this);
-        const countTo = parseInt($this.text());
-        
-        $({ countNum: 0 }).animate({
-            countNum: countTo
-        }, {
-            duration: 1000,
-            easing: 'swing',
-            step: function() {
-                $this.text(Math.floor(this.countNum));
-            },
-            complete: function() {
-                $this.text(countTo);
-            }
-        });
-    });
-
-    // Copy coupon code
-    $(document).on('click', '.btn-copy-code', function() {
-        const code = $(this).data('code');
+    
+    // Fallback copy method
+    function copyToClipboardFallback(text) {
         const tempInput = $('<input>');
         $('body').append(tempInput);
-        tempInput.val(code).select();
+        tempInput.val(text).select();
         document.execCommand('copy');
         tempInput.remove();
-        
-        new PNotify({
-            title: 'Thành công',
-            text: 'Đã copy mã: ' + code,
-            type: 'success',
-            styling: 'bootstrap3'
-        });
-    });
+        showNotification('success', 'Thành công', 'Đã copy mã: ' + text);
+    }
+    
+    // Notification helper
+    function showNotification(type, title, text) {
+        if (typeof PNotify !== 'undefined') {
+            new PNotify({
+                title: title,
+                text: text,
+                type: type,
+                styling: 'bootstrap3'
+            });
+        } else if (typeof toastr !== 'undefined') {
+            toastr[type](text, title);
+        } else {
+            alert(title + ': ' + text);
+        }
+    }
 
     // Delete coupon
     $(document).on('click', '.btn-delete-coupon', function(e) {
@@ -330,86 +355,116 @@ $(document).ready(function() {
         }
 
         $.ajax({
-            url: '/admin/coupon/' + couponId,
+            url: '{{ route("admin.coupon.index") }}/' + couponId,
             method: 'DELETE',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content')
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
                 if (response.success) {
-                    new PNotify({
-                        title: 'Thành công',
-                        text: response.message || 'Xóa mã giảm giá thành công',
-                        type: 'success',
-                        styling: 'bootstrap3'
-                    });
+                    showNotification('success', 'Thành công', response.message || 'Xóa mã giảm giá thành công');
                     setTimeout(() => location.reload(), 1000);
                 } else {
-                    new PNotify({
-                        title: 'Lỗi',
-                        text: response.message || 'Không thể xóa mã giảm giá',
-                        type: 'error',
-                        styling: 'bootstrap3'
-                    });
+                    showNotification('error', 'Lỗi', response.message || 'Không thể xóa mã giảm giá');
                 }
             },
             error: function(xhr) {
                 const errorMsg = xhr.responseJSON?.message || 'Có lỗi xảy ra khi xóa mã giảm giá';
-                new PNotify({
-                    title: 'Lỗi',
-                    text: errorMsg,
-                    type: 'error',
-                    styling: 'bootstrap3'
-                });
+                showNotification('error', 'Lỗi', errorMsg);
             }
         });
     });
 
-    // Toggle status
+    // Toggle status - VERSION ĐƠN GIẢN HÓA
     $(document).on('click', '.btn-toggle-status', function(e) {
         e.preventDefault();
+        e.stopPropagation();
+        
         const couponId = $(this).data('id');
         const $btn = $(this);
+        const $row = $btn.closest('tr');
+        const $statusCell = $btn.closest('td');
+        
+        console.log('=== TOGGLE START ===');
+        console.log('Coupon ID:', couponId);
+        console.log('Current button classes:', $btn.attr('class'));
+        console.log('Current status:', $statusCell.attr('data-status'));
+        
+        // Disable button
+        $btn.prop('disabled', true).css('opacity', '0.5');
         
         $.ajax({
             url: '/admin/coupon/' + couponId + '/toggle-status',
-            method: 'POST',
+            type: 'POST',
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content')
             },
+            dataType: 'json',
             success: function(response) {
+                console.log('=== RESPONSE SUCCESS ===');
+                console.log('Full response:', response);
+                console.log('New status:', response.status);
+                
                 if (response.success) {
-                    new PNotify({
-                        title: 'Thành công',
-                        text: response.message,
-                        type: 'success',
-                        styling: 'bootstrap3'
-                    });
+                    // Show notification
+                    showNotification('success', 'Thành công', response.message);
                     
-                    // Update button
-                    if (response.status === 'active') {
-                        $btn.removeClass('btn-default').addClass('btn-success')
-                            .html('<i class="fa fa-check"></i> Hoạt động');
+                    // Force update UI
+                    const newStatus = response.status;
+                    console.log('Updating to status:', newStatus);
+                    
+                    // Update data attribute
+                    $statusCell.attr('data-status', newStatus);
+                    
+                    // Remove all status classes first
+                    $btn.removeClass('btn-success btn-default btn-secondary');
+                    
+                    // Add correct class and text
+                    if (newStatus === 'active') {
+                        $btn.addClass('btn-success');
+                        $btn.html('<i class="fa fa-check"></i> Hoạt động');
+                        console.log('Set to ACTIVE');
                     } else {
-                        $btn.removeClass('btn-success').addClass('btn-default')
-                            .html('<i class="fa fa-times"></i> Không hoạt động');
+                        $btn.addClass('btn-default');
+                        $btn.html('<i class="fa fa-times"></i> Không hoạt động');
+                        console.log('Set to INACTIVE');
+                    }
+                    
+                    console.log('New button classes:', $btn.attr('class'));
+                    console.log('New button HTML:', $btn.html());
+                    
+                    // Redraw table
+                    if (table) {
+                        table.draw(false);
                     }
                 } else {
-                    new PNotify({
-                        title: 'Lỗi',
-                        text: response.message,
-                        type: 'error',
-                        styling: 'bootstrap3'
-                    });
+                    showNotification('error', 'Lỗi', response.message || 'Không thể cập nhật');
                 }
             },
-            error: function(xhr) {
-                new PNotify({
-                    title: 'Lỗi',
-                    text: 'Có lỗi xảy ra khi cập nhật trạng thái',
-                    type: 'error',
-                    styling: 'bootstrap3'
-                });
+            error: function(xhr, status, error) {
+                console.error('=== AJAX ERROR ===');
+                console.error('Status:', xhr.status);
+                console.error('Error:', error);
+                console.error('Response:', xhr.responseText);
+                
+                let errorMsg = 'Có lỗi xảy ra';
+                
+                if (xhr.status === 404) {
+                    errorMsg = 'Route không tồn tại (404)';
+                } else if (xhr.status === 419) {
+                    errorMsg = 'CSRF token hết hạn. Tải lại trang';
+                } else if (xhr.status === 500) {
+                    errorMsg = 'Lỗi server (500)';
+                } else if (xhr.responseJSON?.message) {
+                    errorMsg = xhr.responseJSON.message;
+                }
+                
+                showNotification('error', 'Lỗi', errorMsg);
+            },
+            complete: function() {
+                console.log('=== TOGGLE COMPLETE ===');
+                // Re-enable button
+                $btn.prop('disabled', false).css('opacity', '1');
             }
         });
     });
@@ -422,7 +477,6 @@ $(document).ready(function() {
         let csv = 'Mã,Loại,Giá trị,Đơn tối thiểu,Giảm tối đa,Giới hạn,Đã dùng,Bắt đầu,Kết thúc,Trạng thái\n';
         
         data.each(function(row) {
-            // Extract text from HTML
             const code = $(row[1]).find('strong').text();
             const type = $(row[2]).text();
             const value = $(row[3]).text();
@@ -446,12 +500,9 @@ $(document).ready(function() {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
         
-        new PNotify({
-            title: 'Thành công',
-            text: 'Xuất file thành công',
-            type: 'success',
-            styling: 'bootstrap3'
-        });
+        showNotification('success', 'Thành công', 'Xuất file thành công');
     });
 });
+
+}); // End window.load
 </script>

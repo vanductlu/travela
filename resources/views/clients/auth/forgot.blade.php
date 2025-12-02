@@ -2,7 +2,7 @@
 @include('clients.blocks.header')
 @section('title', 'Quên mật khẩu')
 
-<div class="login-template">
+<div class="login-template" style="margin-bottom: 50px; margin-top: 50px;">
 <div class="container mt-5">
     <h3>Quên mật khẩu</h3>
 

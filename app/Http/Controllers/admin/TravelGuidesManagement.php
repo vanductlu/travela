@@ -7,21 +7,16 @@ use Illuminate\Http\Request;
 use App\Models\admin\Team;
 class TravelGuidesManagement extends Controller
 {
-    // danh sách
     public function index()
     {
         $teams = Team::all();
         $title = 'Quản lý Hướng dẫn viên';
         return view('admin.travelguides', compact('teams','title'));
     }
-
-    // form thêm
     public function create()
     {
         return view('admin.travelguides');
     }
-
-    // lưu hướng dẫn viên mới
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -37,14 +32,10 @@ class TravelGuidesManagement extends Controller
         Team::create($data);
         return redirect()->route('admin.travelguides')->with('success', 'Hướng dẫn viên đã được thêm!');
     }
-
-    // form sửa
     public function edit(Team $team)
     {
         return view('admin.travelguides', compact('team'));
     }
-
-    // cập nhật
     public function update(Request $request, Team $team)
     {
         $data = $request->validate([
@@ -60,15 +51,11 @@ class TravelGuidesManagement extends Controller
         $team->update($data);
         return redirect()->route('admin.travelguides')->with('success', 'Hướng dẫn viên đã được cập nhật!');
     }
-
-    // xóa
     public function delete(Team $team)
     {
         $team->delete();
         return redirect()->route('admin.travelguides')->with('success', 'Hướng dẫn viên đã bị xóa!');
     }
-
-    // kích hoạt
     public function activate(Team $team)
     {
         $team->update(['status' => 'active']);

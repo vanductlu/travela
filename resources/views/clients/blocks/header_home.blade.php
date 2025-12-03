@@ -2,58 +2,38 @@
 <html lang="zxx">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- Title -->
     <title>Ravelo - {{ $title }}</title>
-    <!-- Favicon Icon -->
     <link rel="shortcut icon" href="{{ asset('clients/assets/images/logos/favicon.png') }}" type="image/x-icon">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&amp;display=swap"
         rel="stylesheet">
-    <!-- Flaticon -->
     <link rel="stylesheet" href="{{ asset('clients/assets/css/flaticon.min.css') }}">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('clients/assets/css/fontawesome-5.14.0.min.css') }}">
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="{{ asset('clients/assets/css/bootstrap.min.css') }}">
-    <!-- Magnific Popup -->
     <link rel="stylesheet" href="{{ asset('clients/assets/css/magnific-popup.min.css') }}">
-    <!-- Nice Select -->
     <link rel="stylesheet" href="{{ asset('clients/assets/css/nice-select.min.css') }}">
-    <!-- jQuery UI -->
     <link rel="stylesheet" href="{{ asset('clients/assets/css/jquery-ui.min.css') }}">
-    <!-- Animate -->
     <link rel="stylesheet" href="{{ asset('clients/assets/css/aos.css') }}">
-    <!-- Slick -->
     <link rel="stylesheet" href="{{ asset('clients/assets/css/slick.min.css') }}">
-    <!-- Main Style -->
     <link rel="stylesheet" href="{{ asset('clients/assets/css/style.css') }}">
-    {{-- date time picker  --}}
     <link rel="stylesheet" href="{{ asset('clients/assets/css/jquery.datetimepicker.min.css') }}" />
-    {{-- custom --}}
     <link rel="stylesheet" href="{{ asset('clients/assets/css/custom-css.css') }}" />
-    {{-- boxicons --}}
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <!-- Import CSS for Toastr -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 </head>
 
 <body>
     <div class="page-wrapper">
 
-        <!-- Preloader -->
         <div class="preloader">
             <div class="custom-loader"></div>
         </div>
 
-        <!-- main header -->
         <header class="main-header header-one white-menu menu-absolute">
-            <!--Header-Upper-->
             <div class="header-upper py-30 rpy-0">
                 <div class="container-fluid clearfix">
 
@@ -65,7 +45,6 @@
                         </div>
 
                         <div class="nav-outer mx-lg-auto ps-xxl-5 clearfix">
-                            <!-- Main Menu -->
                             <nav class="main-menu navbar-expand-lg">
                                 <div class="navbar-header">
                                     <div class="mobile-logo">
@@ -75,7 +54,6 @@
                                         </a>
                                     </div>
 
-                                    <!-- Toggle Button -->
                                     <button type="button" class="navbar-toggle" data-bs-toggle="collapse"
                                         data-bs-target=".navbar-collapse">
                                         <span class="icon-bar"></span>
@@ -113,36 +91,29 @@
                                 </div>
 
                             </nav>
-                            <!-- Main Menu End-->
                         </div>
 
-                        <!-- Nav Search -->
-<!-- Nav Search -->
-<div class="nav-search">
-    <button id="toggleSearchBtn" class="far fa-search"></button>
+                        <div class="nav-search">
+                            <button id="toggleSearchBtn" class="far fa-search"></button>
 
-    <form id="searchForm" action="{{ route('search-voice-text') }}" 
-          class="position-absolute hide" method="GET" autocomplete="off">
-        <div class="position-relative" style="width: 250px;">
-            <input type="text" id="searchInput" name="keyword"
-                placeholder="Tìm kiếm chuyến đi..."
-                class="searchbox form-control">
-            <ul id="suggestionList" class="list-group position-absolute w-100 mt-1"
-                style="z-index: 1000; display: none; max-height: 240px; overflow-y: auto;"></ul>
-        </div>
-        <i class="fa fa-microphone" aria-hidden="true" style="margin: 0 16px" id="voice-search"></i>
-        <button type="submit" class="searchbutton far fa-search"></button>
-    </form>
-</div>
-
-
-                        <!-- Menu Button -->
+                            <form id="searchForm" action="{{ route('search-voice-text') }}" 
+                                class="position-absolute hide" method="GET" autocomplete="off">
+                                <div class="position-relative" style="width: 250px;">
+                                    <input type="text" id="searchInput" name="keyword"
+                                        placeholder="Tìm kiếm chuyến đi..."
+                                        class="searchbox form-control">
+                                    <ul id="suggestionList" class="list-group position-absolute w-100 mt-1"
+                                        style="z-index: 1000; display: none; max-height: 240px; overflow-y: auto;"></ul>
+                                </div>
+                                <i class="fa fa-microphone" aria-hidden="true" style="margin: 0 16px" id="voice-search"></i>
+                                <button type="submit" class="searchbutton far fa-search"></button>
+                            </form>
+                        </div>
                         <div class="menu-btns py-10">
                             <a href="{{ route('tours') }}" class="theme-btn style-two bgc-secondary">
                                 <span data-hover="Đặt Ngay">Đặt Ngay</span>
                                 <i class="fal fa-arrow-right"></i>
                             </a>
-                            <!-- menu sidbar -->
                             <div class="menu-sidebar">
                                 <li class="drop-down">
                                     <button class="dropdown-toggle bg-transparent" id="userDropdown"
@@ -175,5 +146,4 @@
                     </div>
                 </div>
             </div>
-            <!--End Header Upper-->
         </header>

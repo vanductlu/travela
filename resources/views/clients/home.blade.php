@@ -1,10 +1,8 @@
 @include('clients.blocks.header_home')
 @include('clients.blocks.banner_home')
 
-<!--Form Back Drop-->
 <div class="form-back-drop"></div>
 
-<!-- Destinations Area start -->
 <section class="destinations-area bgc-black pt-100 pb-70 rel z-1">
     <div class="container-fluid">
         <div class="row justify-content-center">
@@ -51,10 +49,8 @@
         
     </div>
 </section>
-<!-- Destinations Area end -->
 @include('clients.partials.chat')
 
-<!-- About Us Area start -->
 <section class="about-us-area py-100 rpb-90 rel z-1">
     <div class="container">
         <div class="row align-items-center">
@@ -110,10 +106,8 @@
         </div>
     </div>
 </section>
-<!-- About Us Area end -->
 
 
-<!-- Popular Destinations Area start -->
 <section class="popular-destinations-area rel z-1">
     <div class="container-fluid">
         <div class="popular-destinations-wrap br-20 bgc-lighter pt-100 pb-70">
@@ -132,10 +126,8 @@
                     @php $count = 0; @endphp
                     @foreach ($toursPopular as $tour)
                         @if ($count == 2 || $count == 3)
-                            <!-- Cột thứ 3 và thứ 4 sẽ là col-md-6 -->
                             <div class="col-md-6 item ">
                             @else
-                                <!-- Các cột còn lại sẽ là col-xl-3 col-md-6 -->
                                 <div class="col-xl-3 col-md-6 item ">
                         @endif
 
@@ -158,7 +150,7 @@
                             </div>
                         </div>
 
-                </div> <!-- Đóng div col-md-6 hoặc col-xl-3 col-md-6 -->
+                </div> 
 
                 @php $count++; @endphp
                 @endforeach
@@ -167,10 +159,8 @@
     </div>
     </div>
 </section>
-<!-- Popular Destinations Area end -->
 
 
-<!-- Features Area start -->
 <section class="features-area pt-100 pb-45 rel z-1">
     <div class="container">
         <div class="row align-items-center">
@@ -242,6 +232,5 @@
         </div>
     </div>
 </section>
-<!-- Features Area end -->
 @include('clients.partials.ai-widget')
 @include('clients.blocks.footer_home')

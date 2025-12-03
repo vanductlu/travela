@@ -10,7 +10,6 @@ class Login extends Model
     use HasFactory;
 
     protected $table = 'tbl_users';
-    //Đăng ký người dùng mới
     public function registerAcount($data)
     {   
         $userId = DB::table($this->table)->insertGetId($data);
@@ -20,7 +19,6 @@ class Login extends Model
         }
         return null;
     }
-    // Kiểm tra người dùng tồn tại theo username hoặc email
     public function checkUserExist($username, $email)
     {
         $check = DB::table($this->table)
@@ -30,20 +28,17 @@ class Login extends Model
 
         return $check;
     }
-     // Kiểm tra người dùng tồn tại theo token kích hoạt
     public function getUserByToken($token)
     {
         return DB::table($this->table)->where('activation_token', $token)->first();
     }
 
-    // Cập nhật thông tin kích hoạt tài khoản
     public function activateUserAccount($token)
     {
         return DB::table($this->table)
             ->where('activation_token', $token)
             ->update(['activation_token' => null, 'isActive' => 'y']);
     }
-    //Đăng nhập
     public function login($account)
     {
         $getUser = DB::table($this->table)
@@ -53,7 +48,6 @@ class Login extends Model
 
         return $getUser;
     }
-        //Login with google
     public function checkUserExistGoogle($google_id)
     {
         $check = DB::table($this->table)

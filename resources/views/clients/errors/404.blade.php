@@ -1,6 +1,4 @@
 @include('clients.blocks.header')
-
-<!-- 404 Error Area start -->
 <section class="error-area pt-70 pb-100 rel z-1">
     <div class="container">
         <div class="row align-items-center justify-content-between">
@@ -38,6 +36,4 @@
         </div>
     </div>
 </section>
-<!-- 404 Error Area end -->
-
 @include('clients.blocks.footer')

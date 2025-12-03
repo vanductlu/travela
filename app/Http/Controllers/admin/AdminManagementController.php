@@ -59,14 +59,10 @@ class AdminManagementController extends Controller
 
     public function updateAvatar(Request $req)
     {
-        // dd($req->all());
         $avatar = $req->file('avatarAdmin');
 
-        // Tạo tên mới cho tệp ảnh
-        $filename = 'avt_admin.jpg'; // Tên tệp mới
+        $filename = 'avt_admin.jpg';
         unlink(public_path('admin/assets/images/user-profile/avt_admin.jpg'));
-
-        // Di chuyển ảnh vào thư mục public/admin/assets/images/user-profile/
         $update = $avatar->move(public_path('admin/assets/images/user-profile'), $filename);
 
         if (!$update) {

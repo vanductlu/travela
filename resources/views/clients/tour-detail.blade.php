@@ -18,7 +18,6 @@
         </div>
     </div>
 </section>
-<!-- Tour Gallery start -->
 <div class="tour-gallery">
     <div class="container-fluid">
         <div class="row gap-10 justify-content-center rel">
@@ -51,10 +50,8 @@
         </div>
     </div>
 </div>
-<!-- Tour Gallery End -->
 
 
-<!-- Tour Header Area start -->
 <section class="tour-header-area pt-70 rel z-1">
     <div class="container">
         <div class="row justify-content-between">
@@ -89,10 +86,8 @@
         <hr class="mt-50 mb-70">
     </div>
 </section>
-<!-- Tour Header Area end -->
 
 
-<!-- Tour Details Area start -->
 <section class="tour-details-page pb-100">
     <div class="container">
         <div class="row">
@@ -265,7 +260,6 @@
                             @foreach ($tourRecommendations as $tour)
                                 <div class="destination-item tour-grid style-three bgc-lighter">
                                     <div class="image">
-                                        {{-- <span class="badge">10% Off</span> --}}
                                         <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}"
                                             alt="Tour" style="max-height: 137px">
                                     </div>
@@ -292,7 +286,6 @@
         </div>
     </div>
 </section>
-<!-- Tour Details Area end -->
 
 @include('clients.blocks.new_letter')
 @include('clients.blocks.footer')

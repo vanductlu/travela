@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 class BlogController extends Controller
 {
-     // Trang danh sách bài viết
     public function index()
     {
         $blogs = Blog::orderBy('created_at', 'desc')->paginate(5);
@@ -20,12 +19,10 @@ class BlogController extends Controller
         return view('clients.blog', compact('blogs', 'recent','categories', 'title'));
     }
 
-    // Trang chi tiết bài viết
     public function show($slug)
     {
         $blog = Blog::where('slug', $slug)->firstOrFail();
 
-        // Tăng lượt xem
         $blog->increment('views');
 
         $recent = Blog::orderBy('created_at', 'desc')->take(3)->get();
@@ -33,7 +30,6 @@ class BlogController extends Controller
 
         return view('clients.blog-details', compact('blog', 'recent', 'title'));
     }
-    // Tìm kiếm blog
     public function search(Request $request)
     {
         $query = $request->input('q');
@@ -41,8 +37,6 @@ class BlogController extends Controller
         if (empty($query)) {
             return redirect()->route('blog');
         }
-
-        // Tìm kiếm trong title, excerpt, content, category, author
         $blogs = Blog::where('title', 'LIKE', "%{$query}%")
                     ->orWhere('excerpt', 'LIKE', "%{$query}%")
                     ->orWhere('content', 'LIKE', "%{$query}%")
@@ -58,7 +52,6 @@ class BlogController extends Controller
         return view('clients.blog-search', compact('blogs', 'recent', 'query', 'categories', 'title'));
     }
 
-    // Lọc theo danh mục
     public function category($category)
     {
         $blogs = Blog::where('category', $category)
@@ -80,9 +73,7 @@ class BlogController extends Controller
 
     public function comment(Request $request, $id)
     {
-    // Kiểm tra user trong session
     if (!$request->session()->has('username')) {
-        // Chuyển hướng đến trang login và lưu lại URL hiện tại để redirect sau khi đăng nhập
         return redirect()->route('login', ['redirect' => url()->previous()])
                          ->with('error', 'Vui lòng đăng nhập để bình luận.');
     }
@@ -94,7 +85,7 @@ class BlogController extends Controller
         'blog_id' => $id,
         'name' => session('username'),
         'content' => $request->content,
-        'parent_id' => $request->parent_id, // nếu có parent_id
+        'parent_id' => $request->parent_id,
         'created_at' => now(),
     ]);
 

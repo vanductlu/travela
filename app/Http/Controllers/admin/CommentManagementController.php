@@ -25,8 +25,6 @@ class CommentManagementController extends Controller
         DB::table('tbl_comments')->where('id', $id)->delete();
         return redirect()->route('admin.comments')->with('success', 'Đã xóa bình luận thành công!');
     }
-
-    // Xóa toàn bộ bình luận theo bài viết
     public function deleteByBlog($blogId)
     {
         DB::table('tbl_comments')->where('blog_id', $blogId)->delete();

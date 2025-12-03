@@ -1,11 +1,6 @@
 .hide {
     display: none;
 }
-/********************************************
-* TOURS MANAGEMENT                          *
-********************************************/
-/* hide button previous  */
-
 #wizard .actionBar .buttonPrevious {
     display: none;
 }
@@ -14,9 +9,6 @@
     height: 80% !important;
 }
 
-/********************************************
-* ADD TOURS                                 *
-********************************************/
 .timeline-entry {
     margin-bottom: 20px;
     padding: 10px;
@@ -24,9 +16,6 @@
     border-radius: 5px;
 }
 
-/********************************************
-*  TOURS MANAGEMENT                       *
-********************************************/
 .btn-action-listTours {
     border: none;
     background: none;
@@ -35,9 +24,7 @@
 #edit-tour-modal .modal-dialog {
     min-width: 60%;
 }
-/********************************************
-*  BOOKING MANAGEMENT                       *
-********************************************/
+
 
 .icon_payment{
     width: 55px;
@@ -48,23 +35,18 @@
 }
 
 
-/********************************************
-* CONTACT MANAGEMENT                       *
-********************************************/
 .text-contact-truncate{
-    display: -webkit-box; /* Sử dụng flexbox để giới hạn hiển thị */
-    -webkit-line-clamp: 3; /* Giới hạn số dòng hiển thị là 3 */
+    display: -webkit-box; 
+    -webkit-line-clamp: 3; 
     -webkit-box-orient: vertical;
-    overflow: hidden; /* Ẩn nội dung vượt quá */
-    text-overflow: ellipsis; /* Thêm dấu '...' cho nội dung bị cắt */
-    word-break: break-word; /* Đảm bảo từ không bị tràn dòng */
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    word-break: break-word; 
 }
 .mail_view{
     display: none;
 }
-/********************************************
-* PROFILE ADMIN                    *
-********************************************/
+
 .profile-container {
     background: #f8f9fa;
     padding: 30px;
@@ -120,9 +102,7 @@
         margin-bottom: 20px;
     }
 }
-/********************************************
-* USERS MANAGEMENT                       *
-********************************************/
+
 .user-card {
     border-radius: 12px;
     transition: all 0.3s ease;
@@ -169,12 +149,12 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 .user-card .badge.bg-success {
-    background-color: #28a745 !important; /* nền xanh */
-    color: #ffffff !important; /* chữ trắng */
+    background-color: #28a745 !important; 
+    color: #ffffff !important; 
 }
 .user-card .badge.bg-warning {
-    background-color: #ffc107 !important; /* nền vàng */
-    color: #000000 !important; /* chữ đen */
+    background-color: #ffc107 !important; 
+    color: #000000 !important; 
 }
 
 /* RESPONSIVE */

@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($this->isHttpException($exception)) {
-            // Kiểm tra URL có chứa /admin hay không để quyết định hiển thị trang lỗi cho admin
+
             if ($exception->getStatusCode() == 404) {
                 if ($request->is('admin/*')) {
                     return response()->view('admin.errors.404', [], 404);

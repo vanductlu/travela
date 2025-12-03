@@ -13,12 +13,11 @@ CORS(app, resources={
     }
 })
 
-# ✅ CẤU HÌNH DATABASE - THAY ĐỔI THEO DATABASE CỦA BẠN
 DB_CONFIG = {
     'host': '127.0.0.1',
-    'user': 'root',          # Thay bằng username MySQL của bạn
-    'password': '',          # Thay bằng password MySQL của bạn
-    'database': 'travela',   # Thay bằng tên database của bạn
+    'user': 'root',          
+    'password': '',          
+    'database': 'travela',   
     'port': 3306
 }
 
@@ -53,7 +52,6 @@ def search_suggestions():
     try:
         cursor = connection.cursor(dictionary=True)
         
-        # Query tìm kiếm trong database
         query = """
             SELECT DISTINCT title, destination 
             FROM tbl_tours 
@@ -68,23 +66,18 @@ def search_suggestions():
         
         print(f"Tìm thấy {len(tours)} tours cho keyword: {keyword}")
         
-        # Tạo danh sách gợi ý
         suggestions = []
         seen = set()
         
         for tour in tours:
-            # Thêm title nếu match
             if keyword.lower() in tour['title'].lower() and tour['title'] not in seen:
                 suggestions.append(tour['title'])
                 seen.add(tour['title'])
-            
-            # Thêm destination nếu match
             dest_suggestion = f"Tour {tour['destination']}"
             if keyword.lower() in tour['destination'].lower() and dest_suggestion not in seen:
                 suggestions.append(dest_suggestion)
                 seen.add(dest_suggestion)
         
-        # Giới hạn số lượng gợi ý
         suggestions = suggestions[:6]
         
         cursor.close()
@@ -167,14 +160,12 @@ def test_db():
         })
 
 if __name__ == '__main__':
-    # Test kết nối khi khởi động
     print("Đang test kết nối database...")
     conn = get_db_connection()
     if conn:
-        print("✅ Kết nối database thành công!")
+        print("Kết nối database thành công!")
         conn.close()
     else:
-        print("❌ Không thể kết nối database. Kiểm tra cấu hình!")
+        print("Không thể kết nối database. Kiểm tra cấu hình!")
     
-    # Chạy Flask server
     app.run(host='127.0.0.1', port=5555, debug=True)

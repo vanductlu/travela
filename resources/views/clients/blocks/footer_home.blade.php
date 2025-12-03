@@ -1,4 +1,3 @@
-<!-- footer area start -->
 <footer class="main-footer bgs-cover overlay rel z-1 pb-25"
     style="background-image: url({{ asset('clients/assets/images/backgrounds/footer.jpg') }});">
     <div class="container">
@@ -102,10 +101,9 @@
                         <ul class="list-style-one">
                             <li><i class="fal fa-map-marked-alt"></i> 173 Khâm Thiên, Quận Đống Đa, Hà Nội</li>
                             <li><i class="fal fa-envelope"></i> <a
-                                    href="mailto:minhdien">ducgmail.com</a></li>
+                                    href="mailto:duc">nvd2k3@gmail.com</a></li>
                             <li><i class="fal fa-clock"></i> Thứ 2 - Thứ 6, 08am - 05pm</li>
-                            <li><i class="fal fa-phone-volume"></i> <a href="callto:+88012334588">+880 (123)
-                                    345 88</a></li>
+                            <li><i class="fal fa-phone-volume"></i> <a href="callto:+364869849">+364869849</a></li>
                         </ul>
                     </div>
                 </div>
@@ -129,56 +127,34 @@
                     </ul>
                 </div>
             </div>
-            <!-- Scroll Top Button -->
             <button class="scroll-top scroll-to-target" data-target="html"><img
                     src="{{ asset('clients/assets/images/icons/scroll-up.png') }}" alt="Scroll  Up"></button>
         </div>
     </div>
 </footer>
-<!-- footer area end -->
 
 </div>
-<!--End pagewrapper-->
-
 @if (session('error'))
     <script>
         alert("{{ session('error') }}");
     </script>
 @endif
-<!-- Jquery -->
 <script src="{{ asset('clients/assets/js/jquery-3.6.0.min.js') }}"></script>
-<!-- Bootstrap -->
 <script src="{{ asset('clients/assets/js/bootstrap.min.js') }}"></script>
-<!-- Appear Js -->
 <script src="{{ asset('clients/assets/js/appear.min.js') }}"></script>
-<!-- Slick -->
 <script src="{{ asset('clients/assets/js/slick.min.js') }}"></script>
-<!-- Magnific Popup -->
 <script src="{{ asset('clients/assets/js/jquery.magnific-popup.min.js') }}"></script>
-<!-- Nice Select -->
 <script src="{{ asset('clients/assets/js/jquery.nice-select.min.js') }}"></script>
-<!-- Image Loader -->
 <script src="{{ asset('clients/assets/js/imagesloaded.pkgd.min.js') }}"></script>
-<!-- Skillbar -->
 <script src="{{ asset('clients/assets/js/skill.bars.jquery.min.js') }}"></script>
-<!-- Jquery UI -->
 <script src="{{ asset('clients/assets/js/jquery-ui.min.js') }}"></script>
-<!-- Isotope -->
 <script src="{{ asset('clients/assets/js/isotope.pkgd.min.js') }}"></script>
-<!--  AOS Animation -->
 <script src="{{ asset('clients/assets/js/aos.js') }}"></script>
-<!-- Custom script -->
 <script src="{{ asset('clients/assets/js/script.js') }}"></script>
-{{-- jquery-toast  --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-{{-- paypal-payment  --}}
-{{-- <script src="https://www.paypal.com/sdk/js?client-id={{ env('PAYPAL_SANDBOX_CLIENT_ID') }}"></script> --}}
-<!-- Custom script-->
 <script src="{{ asset('clients/assets/js/custom-js.js') }}"></script>
 <script src="{{ asset('clients/assets/js/search-autocomplete.js') }}"></script>
 <script src="{{ asset('clients/assets/js/jquery.datetimepicker.full.min.js') }}"></script>
-
 </body>
-
 </html>

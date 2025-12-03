@@ -5,11 +5,11 @@
             <div class="image">
                 <span class="badge bgc-pink">Featured</span>
                 <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-@if(isset($tour->images) && count($tour->images) > 0)
-    <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}" alt="Destination">
-@else
-    <img src="{{ asset('clients/assets/images/gallery-tours/bien-dao-3n2d-con-dao-3.jpg') }}" alt="Destination">
-@endif
+            @if(isset($tour->images) && count($tour->images) > 0)
+                <img src="{{ asset('clients/assets/images/gallery-tours/' . $tour->images[0]) }}" alt="Destination">
+            @else
+                <img src="{{ asset('clients/assets/images/gallery-tours/default.jfif') }}" alt="Destination">
+            @endif
             </div>
             <div class="content equal-content-fix">
                 <div class="destination-header">
@@ -47,7 +47,6 @@
 <div class="col-lg-12">
     <ul class="pagination justify-content-center pt-15 flex-wrap pagination-tours" data-aos="fade-up"
         data-aos-duration="1500" data-aos-offset="50">
-        <!-- Previous Page Link -->
         @if ($tours->onFirstPage())
             <li class="page-item disabled">
                 <span class="page-link"><i class="far fa-chevron-left"></i></span>
@@ -58,14 +57,12 @@
             </li>
         @endif
 
-        <!-- Page Numbers -->
         @for ($i = 1; $i <= $tours->lastPage(); $i++)
             <li class="page-item @if ($i == $tours->currentPage()) active @endif">
                 <a class="page-link" href="{{ $tours->url($i) }}">{{ $i }}</a>
             </li>
         @endfor
 
-        <!-- Next Page Link -->
         @if ($tours->hasMorePages())
             <li class="page-item">
                 <a class="page-link" href="{{ $tours->nextPageUrl() }}"><i class="far fa-chevron-right"></i></a>

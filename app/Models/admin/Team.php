@@ -9,7 +9,7 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $table = 'tbl_team'; // bảng team
+    protected $table = 'tbl_team'; 
     protected $fillable = [
         'name',
         'designation',

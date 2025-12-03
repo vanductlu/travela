@@ -15,34 +15,34 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2>🔔 Thông báo liên hệ mới</h2>
+            <h2>Thông báo liên hệ mới</h2>
         </div>
         <div class="content">
             <p>Bạn có một liên hệ mới từ website Travela:</p>
             
             <div class="info-row">
-                <span class="label">👤 Họ và tên:</span> {{ $contactData['fullName'] }}
+                <span class="label">Họ và tên:</span> {{ $contactData['fullName'] }}
             </div>
             
             <div class="info-row">
-                <span class="label">📧 Email:</span> 
+                <span class="label">Email:</span> 
                 <a href="mailto:{{ $contactData['email'] }}">{{ $contactData['email'] }}</a>
             </div>
             
             <div class="info-row">
-                <span class="label">📞 Số điện thoại:</span> 
+                <span class="label">Số điện thoại:</span> 
                 <a href="tel:{{ $contactData['phoneNumber'] }}">{{ $contactData['phoneNumber'] }}</a>
             </div>
             
             <div class="info-row">
-                <span class="label">💬 Nội dung:</span><br>
+                <span class="label">Nội dung:</span><br>
                 <div style="margin-top: 10px; padding: 10px; background: #f0f0f0; border-left: 3px solid #4CAF50;">
                     {{ $contactData['message'] }}
                 </div>
             </div>
             
             <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-left: 3px solid #ffc107;">
-                <strong>⚠️ Lưu ý:</strong> Vui lòng phản hồi khách hàng trong vòng 24 giờ!
+                <strong>Lưu ý:</strong> Vui lòng phản hồi khách hàng trong vòng 24 giờ!
             </div>
         </div>
         <div class="footer">

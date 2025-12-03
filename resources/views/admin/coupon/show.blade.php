@@ -3,7 +3,6 @@
     <div class="main_container">
         @include('admin.blocks.sidebar')
 
-        <!-- page content -->
         <div class="right_col" role="main">
             <div class="">
                 <div class="page-title">
@@ -24,7 +23,6 @@
 
                 <div class="clearfix"></div>
 
-                <!-- Status Alert -->
                 @if(\Carbon\Carbon::now()->gt($coupon->end_date))
                 <div class="row">
                     <div class="col-md-12">
@@ -68,7 +66,6 @@
                 @endif
 
                 <div class="row">
-                    <!-- Thông tin chính -->
                     <div class="col-md-6 col-sm-12">
                         <div class="x_panel">
                             <div class="x_title">
@@ -196,7 +193,6 @@
                         </div>
                     </div>
 
-                    <!-- Thống kê sử dụng -->
                     <div class="col-md-6 col-sm-12">
                         <div class="x_panel">
                             <div class="x_title">
@@ -264,7 +260,6 @@
                     </div>
                 </div>
 
-                <!-- Ví dụ áp dụng -->
                 <div class="row">
                     <div class="col-md-12">
                         <div class="x_panel">
@@ -352,7 +347,6 @@
                 </div>
             </div>
         </div>
-        <!-- /page content -->
     </div>
 </div>
 @include('admin.blocks.footer')

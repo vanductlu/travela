@@ -1863,7 +1863,6 @@ h3.degrees {
 .weather .row {
   margin-bottom: 0; }
 
-/* *********  tables styling  ******************************* */
 .bulk-actions {
   display: none; }
 
@@ -3071,9 +3070,6 @@ textarea:focus {
   .bs-glyphicons li {
     width: 12.5%;
     font-size: 12px; } }
-
-/* *********  /glyphicons  **************************** */
-/* *********  form tags input  **************************** */
 .tagsinput {
   border: 1px solid #CCC;
   background: #FFF;
@@ -3128,8 +3124,7 @@ span.tag a {
   background: #FBD8DB !important;
   color: #90111A !important; }
 
-/* *********  /form tags input  **************************** */
-/** Tabs **/
+
 ul.bar_tabs {
   overflow: visible;
   background: #F5F7FA;

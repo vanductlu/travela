@@ -4,9 +4,7 @@
     <div class="main_container">
         @include('admin.blocks.sidebar')
 
-        <!-- page content -->
         <div class="right_col" role="main">
-            <!-- top tiles -->
             <div class="row" style="display: inline-block;width: 100%">
                 <div class="tile_count">
                     <div class="col-md-3 col-sm-4  tile_stats_count">
@@ -230,7 +228,6 @@
                 </div>
             </div>
         </div>
-        <!-- /page content -->
     </div>
 </div>
 

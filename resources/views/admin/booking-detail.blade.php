@@ -2,7 +2,6 @@
 <div class="container body">
     <div class="main_container">
         @include('admin.blocks.sidebar')
-        <!-- page content -->
         <div class="right_col" role="main">
             <div class="">
                 <div class="page-title">
@@ -29,7 +28,6 @@
                                 </div>
                                 <div class="x_content">
                                     <section class="content invoice">
-                                        <!-- title row -->
                                         <div class="row">
                                             <div class="  invoice-header">
                                                 <h3>
@@ -40,9 +38,7 @@
                                                         {{ date('d-m-Y', strtotime($invoice_booking->bookingDate)) }}</small>
                                                 </h3>
                                             </div>
-                                            <!-- /.col -->
                                         </div>
-                                        <!-- info row -->
                                         <div class="row invoice-info">
                                             <div class="col-sm-4 invoice-col">
                                                 Từ
@@ -53,7 +49,6 @@
                                                     <br>Email:{{ $invoice_booking->email }}
                                                 </address>
                                             </div>
-                                            <!-- /.col -->
                                             <div class="col-sm-4 invoice-col">
                                                 Đến
                                                 <address>
@@ -64,7 +59,6 @@
                                                     <br>Email: minhdien.dev@gmail.com
                                                 </address>
                                             </div>
-                                            <!-- /.col -->
                                             <div class="col-sm-4 invoice-col">
                                                 <b>Mã hóa đơn #{{ $invoice_booking->checkoutId }}</b>
                                                 <br>
@@ -75,11 +69,8 @@
                                                 <br>
                                                 <b>Tài khoản:</b> {{ $invoice_booking->userId }}
                                             </div>
-                                            <!-- /.col -->
                                         </div>
-                                        <!-- /.row -->
 
-                                        <!-- Table row -->
                                         <div class="row">
                                             <div class="  table">
                                                 <table class="table table-striped">
@@ -114,12 +105,9 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <!-- /.col -->
                                         </div>
-                                        <!-- /.row -->
 
                                         <div class="row">
-                                            <!-- accepted payments column -->
                                             <div class="col-md-6">
                                                 <p class="lead">Phương thức thanh toán:</p>
                                                 @if ($invoice_booking->paymentMethod == 'momo-payment')
@@ -138,7 +126,6 @@
                                                     tôi nếu cần hỗ trợ.
                                                 </p>
                                             </div>
-                                            <!-- /.col -->
                                             <div class="col-md-6">
                                                 <p class="lead">Số tiền phải trả trước
                                                     {{ date('d-m-Y', strtotime($invoice_booking->startDate)) }}</p>
@@ -167,15 +154,11 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                            <!-- /.col -->
                                         </div>
-                                        <!-- /.row -->
-
 
                                     </section>
                                 </div>
                             </div>
-                            <!-- this row will not appear when printing -->
                             <div class="row no-print">
                                 <div class=" ">
                                     <button class="btn btn-default" onclick="window.print();"><i
@@ -202,7 +185,6 @@
                 </div>
             </div>
         </div>
-        <!-- /page content -->
     </div>
 </div>
 @include('admin.blocks.footer')

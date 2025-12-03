@@ -10,11 +10,10 @@ class TravelGuidesController extends Controller
     public function index()
     {
         $title = 'Hướng dẫn viên';
-        $guides = Team::all(); // lấy tất cả hướng dẫn viên
+        $guides = Team::all();
         return view('clients.travel-guides', compact('title','guides'));
     }
 
-    // Lưu hướng dẫn viên mới
     public function store(Request $request)
     {
         $data = $request->validate([

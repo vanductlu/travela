@@ -3,7 +3,6 @@
     <div class="main_container">
         @include('admin.blocks.sidebar')
 
-        <!-- page content -->
         <div class="right_col" role="main">
             <div class="">
 
@@ -54,9 +53,7 @@
                                             </a>
                                         @endforeach
                                     </div>
-                                    <!-- /MAIL LIST -->
 
-                                    <!-- CONTENT MAIL -->
                                     <div class="col-sm-9 mail_view">
                                         <div class="inbox-body">
                                             <div class="sender-info" style="border-bottom: 1px solid #ddd">
@@ -83,7 +80,6 @@
                                             </div>
 
                                         </div>
-                                        <!-- /CONTENT MAIL -->
                                     </div>
                                 </div>
                             </div>
@@ -91,11 +87,9 @@
                     </div>
                 </div>
             </div>
-            <!-- /page content -->
         </div>
     </div>
 
-    <!-- compose -->
     <div class="compose col-md-6  ">
         <div class="compose-header">
             Phản hồi liên hệ
@@ -113,6 +107,5 @@
                 data-url="{{ route('admin.reply-contact') }}">Gửi</button>
         </div>
     </div>
-    <!-- /compose -->
 
     @include('admin.blocks.footer')

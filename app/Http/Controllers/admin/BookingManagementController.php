@@ -24,8 +24,6 @@ class BookingManagementController extends Controller
         $list_booking = $this->booking->getBooking();
         $list_booking = $this->updateHideBooking($list_booking);
 
-        // dd($list_booking);
-
         return view('admin.booking', compact('title', 'list_booking'));
     }
 
@@ -59,7 +57,6 @@ class BookingManagementController extends Controller
         $title = 'Chi tiết đơn đặt';
 
         $invoice_booking = $this->booking->getInvoiceBooking($bookingId);
-        // dd($invoice_booking);
         $hide='hide';
         if ($invoice_booking->transactionId == null) {
             $invoice_booking->transactionId = 'Thanh toán tại công ty Travela';
@@ -152,18 +149,14 @@ class BookingManagementController extends Controller
 
     private function updateHideBooking($list_booking)
     {
-        // Lấy ngày hiện tại
         $currentDate = date('Y-m-d');
 
         foreach ($list_booking as $booking) {
-            // So sánh endDate của booking với ngày hiện tại
             if ($booking->endDate < $currentDate) {
                 $hide = '';
             } else {
                 $hide = 'hide';
             }
-
-            // Gán giá trị $hide vào mỗi booking
             $booking->hide = $hide;
         }
 

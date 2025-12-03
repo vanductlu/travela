@@ -3,7 +3,6 @@
     <div class="main_container">
         @include('admin.blocks.sidebar')
 
-        <!-- page content -->
         <div class="right_col" role="main">
             <div class="">
                 <div class="page-title">
@@ -24,12 +23,10 @@
 
                             <div class="x_content add-tours">
 
-                                <!-- Smart Wizard -->
                                 <p>Thêm thông tin chi tiết để tạo một tour mới và bắt đầu thu hút khách hàng!</p>
 
                                 <div id="wizard" class="form_wizard wizard_horizontal">
 
-                                    <!-- ========== WIZARD STEPS ========== -->
                                     <ul class="wizard_steps">
                                         <li>
                                             <a href="#step-1">
@@ -51,7 +48,6 @@
                                         </li>
                                     </ul>
 
-                                    <!-- ========== STEP 1 ========== -->
                                     <div id="step-1">
                                         <form id="form-step1" method="POST" action="{{ route('admin.add-tours') }}">
                                             @csrf
@@ -127,7 +123,6 @@
                                         </form>
                                     </div>
 
-                                    <!-- ========== STEP 2 ========== -->
                                     <div id="step-2">
                                         <h2 class="StepTitle">Thêm hình ảnh</h2>
 
@@ -139,7 +134,6 @@
                                         </form>
                                     </div>
 
-                                    <!-- ========== STEP 3 ========== -->
                                     <div id="step-3">
                                         <h2 class="StepTitle">Nhập lộ trình</h2>
 
@@ -148,7 +142,6 @@
                                             <input type="hidden" name="tourId" class="hiddenTourId">
 
                                             <div id="timeline-container">
-                                                <!-- Timeline sẽ được append tại đây bằng JS -->
                                             </div>
                                             <button type="button" class="btn btn-primary mt-3" id="add-timeline">
                                                 + Thêm ngày
@@ -159,7 +152,6 @@
                                     </div>
                                     </div>
                                 </div>
-                                <!-- End SmartWizard -->
 
                             </div>
                         </div>

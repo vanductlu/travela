@@ -16,7 +16,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>✅ Cảm ơn bạn đã liên hệ!</h1>
+            <h1>Cảm ơn bạn đã liên hệ!</h1>
         </div>
         <div class="content">
             <p>Xin chào <strong>{{ $customerName }}</strong>,</p>
@@ -24,24 +24,23 @@
             <p>Cảm ơn bạn đã gửi thông tin liên hệ đến <strong>Travela</strong>. Chúng tôi đã nhận được yêu cầu của bạn và sẽ phản hồi trong thời gian sớm nhất.</p>
             
             <div class="highlight">
-                <strong>📋 Thông tin của bạn đã được ghi nhận</strong><br>
+                <strong>Thông tin của bạn đã được ghi nhận</strong><br>
                 Đội ngũ hỗ trợ của chúng tôi sẽ liên hệ lại với bạn trong vòng <strong>24 giờ</strong>.
             </div>
             
             <p>Trong thời gian chờ đợi, bạn có thể:</p>
             <ul>
-                <li>🌍 Khám phá các <strong>tour du lịch hot</strong> trên website</li>
-                <li>📱 Theo dõi chúng tôi trên mạng xã hội</li>
-                <li>📞 Gọi hotline: <strong>0364869849</strong> nếu cần hỗ trợ khẩn cấp</li>
+                <li>Khám phá các <strong>tour du lịch hot</strong> trên website</li>
+                <li>Theo dõi chúng tôi trên mạng xã hội</li>
+                <li>Gọi hotline: <strong>0364869849</strong> nếu cần hỗ trợ khẩn cấp</li>
             </ul>
             
             <div class="contact-info">
-                <h3 style="color: #4CAF50; margin-top: 0;">📞 Thông tin liên hệ</h3>
+                <h3 style="color: #4CAF50; margin-top: 0;">Thông tin liên hệ</h3>
                 <p><strong>Email:</strong> nvd2k3@gmail.com</p>
                 <p><strong>Hotline:</strong> 0364869849</p>
                 <p><strong>Địa chỉ:</strong> 173 Khâm Thiên, Quận Đống Đa, Hà Nội</p>
             </div>
-            
             <center>
                 <a href="http://127.0.0.1:8000" class="btn">Về trang chủ Travela</a>
             </center>

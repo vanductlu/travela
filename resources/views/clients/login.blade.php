@@ -2,7 +2,6 @@
 
 <div class="login-template">
     <div class="main">
-        <!-- Sign in  Form -->
         <section class="sign-in show">
             <div class="container">
                 <div class="signin-content">
@@ -47,7 +46,6 @@
                 </div>
             </div>
         </section>
-        <!-- Sign up form -->
         <section class="signup">
             <div class="container">
                 <div class="signup-content">

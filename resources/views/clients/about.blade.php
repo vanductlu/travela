@@ -2,7 +2,6 @@
 @include('clients.blocks.banner')
 @include('clients.partials.chat')
 
-<!-- About Area start -->
 <section class="about-area-two py-100 rel z-1">
     <div class="container">
         <div class="row justify-content-between">
@@ -47,10 +46,8 @@
         </div>
     </div>
 </section>
-<!-- About Area end -->
 
 
-<!-- Features Area start -->
 <section class="about-features-area">
     <div class="container">
         <div class="row align-items-center">
@@ -92,10 +89,8 @@
         </div>
     </div>
 </section>
-<!-- Features Area end -->
 
 
-<!-- About Us Area start -->
 <section class="about-us-area pt-70 pb-100 rel z-1">
     <div class="container">
         <div class="row align-items-center">
@@ -135,69 +130,70 @@
         </div>
     </div>
 </section>
-<!-- About Us Area end -->
 
 
-<!-- Features Area start -->
 <section class="about-feature-two bgc-black pt-100 pb-45 rel z-1">
     <div class="container">
         <div class="section-title text-center text-white counter-text-wrap mb-50" data-aos="fade-up"
             data-aos-duration="1500" data-aos-offset="50">
-            <h2>Làm thế nào để hưởng lợi từ các chuyến du lịch của chúng tôi</h2>
-            <p>Website <span class="count-text plus" data-speed="3000" data-stop="34500">0</span> phổ biến nhất
-                kinh nghiệm bạn sẽ nhớ</p>
+            <h2>Mã Giảm Giá Hiện Đang Áp Dụng</h2>
+            <p>Còn <span class="count-text plus" data-speed="3000" data-stop="{{ $activeCoupons->count() }}">0</span> mã giảm giá khả dụng</p>
         </div>
+
         <div class="row">
-            <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="1500"
-                data-aos-offset="50">
-                <div class="feature-item style-two">
-                    <div class="icon"><i class="flaticon-save-money"></i></div>
-                    <div class="content">
-                        <h5><a href="{{ route('tours') }}">Đảm bảo giá tốt nhất</a></h5>
-                        <p>Cam kết giá ưu đãi nhất, giúp bạn tiết kiệm tối đa chi phí du lịch.</p>
+            @foreach($activeCoupons->take(4) as $index => $coupon)
+                <div class="col-xl-3 col-lg-4 col-md-6"
+                    data-aos="fade-up"
+                    data-aos-duration="1500"
+                    data-aos-offset="50"
+                    data-aos-delay="{{ $index * 50 }}">
+
+                    <div class="feature-item style-two">
+                        <div class="icon">
+                            <i class="flaticon-save-money"></i>
+                        </div>
+
+                        <div class="content">
+                            <h5>
+                                <a href="#">
+                                    {{ $coupon->code }}
+                                </a>
+                            </h5>
+
+                            <p>
+                                {!! $coupon->description ?? 'Không có mô tả cho mã giảm giá này.' !!}
+                            </p>
+
+                            <p class="text-warning mt-2">
+                                <strong>Giảm:</strong>
+                                @if($coupon->discount_type === 'percent')
+                                    {{ $coupon->discount_value }}%
+                                    @if($coupon->max_discount)
+                                        (tối đa {{ number_format($coupon->max_discount) }}₫)
+                                    @endif
+                                @else
+                                    {{ number_format($coupon->discount_value) }}₫
+                                @endif
+                            </p>
+
+                            <p class="text-info">
+                                <strong>Đơn tối thiểu:</strong> {{ number_format($coupon->min_order_value) }}₫
+                            </p>
+
+                        </div>
                     </div>
+
                 </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500"
-                data-aos-offset="50">
-                <div class="feature-item style-two">
-                    <div class="icon"><i class="flaticon-travel-1"></i></div>
-                    <div class="content">
-                        <h5><a href="{{ route('tours') }}">Điểm đến đa dạng</a></h5>
-                        <p>Hàng nghìn điểm đến hấp dẫn, phù hợp mọi sở thích và phong cách du lịch.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100" data-aos-duration="1500"
-                data-aos-offset="50">
-                <div class="feature-item style-two">
-                    <div class="icon"><i class="flaticon-booking"></i></div>
-                    <div class="content">
-                        <h5><a href="{{ route('tours') }}">Đặt chỗ nhanh</a></h5>
-                        <p>Quy trình đặt chỗ đơn giản, nhanh chóng, đảm bảo chuyến đi suôn sẻ.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="150" data-aos-duration="1500"
-                data-aos-offset="50">
-                <div class="feature-item style-two">
-                    <div class="icon"><i class="flaticon-guidepost"></i></div>
-                    <div class="content">
-                        <h5><a href="{{ route('tours') }}">Hướng dẫn du lịch tốt</a></h5>
-                        <p>Đội ngũ hướng dẫn tận tâm, giàu kinh nghiệm, đồng hành cùng bạn mọi hành trình.</p>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
+
     <div class="shape">
         <img src="{{ asset('clients/assets/images/video/shape1.png') }}" alt="shape">
     </div>
 </section>
-<!-- Features Area end -->
 
-<!-- Client Logo Area start -->
+
 <div class="client-logo-area mb-100">
     <div class="container">
         <div class="client-logo-wrap pt-60 pb-55">
@@ -233,7 +229,6 @@
         </div>
     </div>
 </div>
-<!-- Client Logo Area end -->
 
 
 

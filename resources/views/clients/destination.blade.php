@@ -1,7 +1,6 @@
 @include('clients.blocks.header')
 @include('clients.blocks.banner')
 @include('clients.partials.chat')
-<!-- Popular Destinations Area start -->
 <section class="popular-destinations-area pt-100 pb-90 rel z-1">
     <div class="container">
         <div class="row justify-content-center">
@@ -60,7 +59,6 @@
     </div>
     </div>
 </section>
-<!-- Popular Destinations Area end -->
 
 @include('clients.blocks.new_letter')
 @include('clients.blocks.footer')

@@ -1,4 +1,3 @@
-{{-- AI Translate Popup --}}
 <div id="aiTranslatePopup" style="
     position: absolute;
     z-index: 2147483647;
@@ -28,7 +27,7 @@
         <button id="aiCloseBtn" type="button" style="border:none; background:none; color:#dc3545; font-size:18px; cursor:pointer;">×</button>
     </div>
     <div id="aiTranslateResult" style="padding:10px; font-size:15px; line-height:1.5; color:#333;">
-        ⏳ Dịch tự động...
+        Dịch tự động...
     </div>
 </div>
 <script src="{{ asset('clients/assets/js/ai-widget.js') }}"></script>

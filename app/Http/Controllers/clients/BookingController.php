@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 use App\Models\clients\Coupon;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookingSuccessMail;
 class BookingController extends Controller
 {
     private $tour;
@@ -113,24 +114,19 @@ class BookingController extends Controller
             $discount = 0;
             $originalPrice = $req->input('originalPrice') ?? $totalPrice;
 
-            // Xử lý coupon nếu có
             if (!empty($couponCode)) {
                 $coupon = $this->coupon->getCouponByCode($couponCode);
                 
                 if ($coupon && $this->coupon->isValidCoupon($coupon)) {
                     $discount = $this->coupon->calculateDiscount($coupon, $originalPrice);
                     $totalPrice = max(0, $originalPrice - $discount);
-                    
-                    // Tăng số lần sử dụng coupon
                     $this->coupon->incrementUsage($coupon->couponId);
                 } else {
-                    // Coupon không hợp lệ, đặt lại về null
                     $couponCode = null;
                     $discount = 0;
                 }
             }
 
-            // Tạo booking
             $dataBooking = [
                 'tourId' => $tourId,
                 'userId' => $userId,
@@ -176,7 +172,6 @@ class BookingController extends Controller
                 throw new \Exception('Không thể tạo checkout');
             }
             
-            // Cập nhật số lượng tour
             $tour = $this->tour->getTourDetail($tourId);
             $newQuantity = $tour->quantity - ($numAdults + $numChildren);
             
@@ -192,7 +187,9 @@ class BookingController extends Controller
             }
             
             DB::commit();
-            
+            $bookingInfo = $this->booking->getBookingWithTourDetails($bookingId);
+
+            Mail::to($email)->send(new BookingSuccessMail($bookingInfo));
             toastr()->success('Đặt tour thành công!');
             return redirect()->route('tour-booked', [
                 'bookingId' => $bookingId,
@@ -209,7 +206,6 @@ class BookingController extends Controller
     
     public function createMomoPayment(Request $request)
     {
-        // Lưu toàn bộ thông tin booking vào session
         session()->put('momo_booking_data', [
             'tourId' => $request->tourId,
             'fullName' => $request->fullName,
@@ -299,7 +295,6 @@ class BookingController extends Controller
         }
         
         if ($resultCode == '0') {
-            // Thanh toán thành công, tạo booking
             $req = new Request($bookingData);
             $req->merge([
                 'payment_hidden' => 'momo-payment',
@@ -310,7 +305,6 @@ class BookingController extends Controller
             
             return $this->createBooking($req);
         } else {
-            // Thanh toán thất bại
             session()->forget('momo_booking_data');
             
             $tourId = $bookingData['tourId'];

@@ -1,4 +1,3 @@
-<!-- Hero Area Start -->
 <section class="hero-area bgc-black pt-200 rpt-120 rel z-2">
     <div class="container-fluid">
         <h1 class="hero-title" data-aos="flip-up" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">
@@ -56,4 +55,3 @@
     </form>
 
 </section>
-<!-- Hero Area End -->

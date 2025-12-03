@@ -1,8 +1,6 @@
 Dropzone.autoDiscover = false;
 $(document).ready(function () {
-    /********************************************
-     * USER MANAGEMENT                          *
-     ********************************************/
+
     $("#btn-active").click(function () {
         var button = $(this);
         let dataAttr = button.data("attr");
@@ -70,9 +68,6 @@ $(document).ready(function () {
         });
     });
 
-    /********************************************
-     * ✅ XÓA TOUR                              *
-     ********************************************/
     $(document).on("click", ".delete-tour", function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -108,7 +103,7 @@ $(document).ready(function () {
                 let message = `Bạn chắc chắn muốn xóa tour "${tourName}"?\n\n`;
                 
                 if (warnings.length > 0) {
-                    message += `⚠️ CẢNH BÁO: Dữ liệu sau sẽ bị xóa:\n`;
+                    message += `CẢNH BÁO: Dữ liệu sau sẽ bị xóa:\n`;
                     message += warnings.join('\n') + '\n\n';
                 }
                 
@@ -171,23 +166,16 @@ window.init_SmartWizard = function() {
     console.log("SmartWizard default init is disabled on Add Tour page!");
 };
     
-/********************************************
- * THÊM TOUR - HOÀN CHỈNH
- ********************************************/
 let timelineCounter = 1;
 let maxTimelineDays = null;
 var myDropzone = null;
 
-/* -----------------------------------
- * CKEDITOR INIT SAFE
- * -----------------------------------*/
 function initCK(id) {
     if (!document.getElementById(id)) {
         console.warn("CKEDITOR: element not found", id);
         return;
     }
 
-    // Xóa instance cũ nếu tồn tại
     if (CKEDITOR.instances[id]) {
         CKEDITOR.instances[id].destroy(true);
     }
@@ -196,9 +184,6 @@ function initCK(id) {
 
 if ($("#description").length) initCK("description");
 
-/* -----------------------------------
- * DATE PICKER
- * -----------------------------------*/
 $('#start_date, #end_date').datetimepicker({
     format: 'd/m/Y',
     timepicker: false,
@@ -206,20 +191,15 @@ $('#start_date, #end_date').datetimepicker({
 $(document).on('dataUpdated', function (event, days) {
     maxTimelineDays = parseInt(days);
 
-    // Reset timeline
     timelineCounter = 1;
     $("#timeline-container").html("");
 
-    // Tạo timeline ngày 1 mặc định
     addTimelineEntry();
 
     console.log("Số ngày tour:", maxTimelineDays);
 });
 
 
-/* -------------------------
- * TẠO GIAO DIỆN TIMELINE CARD
- * -------------------------*/
 function createTimelineCard(id) {
     return `
         <div class="timeline-entry card border rounded p-3 mt-3 shadow-sm" id="timeline-entry-${id}">
@@ -236,9 +216,7 @@ function createTimelineCard(id) {
         </div>
     `;
 }
-/* -----------------------------------
- * ADD TIMELINE ENTRY
- * -----------------------------------*/
+
 function addTimelineEntry() {
 
      if (maxTimelineDays && timelineCounter > maxTimelineDays) {
@@ -248,7 +226,7 @@ function addTimelineEntry() {
 
     $('#timeline-container').append(createTimelineCard(timelineCounter));
 
-let currentId = timelineCounter; // Lưu lại ID đúng
+let currentId = timelineCounter; 
 
 setTimeout(() => {
     initCK(`itinerary-${currentId}`);
@@ -257,16 +235,10 @@ setTimeout(() => {
     console.log("CK instances:", CKEDITOR.instances);
 }
 
-/* -------------------------
- * NÚT + THÊM NGÀY
- * -------------------------*/
 $(document).on("click", "#add-timeline", function () {
     addTimelineEntry();
 });
 
-/* -------------------------
- * XÓA NGÀY
- * -------------------------*/
 $(document).on('click', '.remove-btn', function () {
     let id = $(this).data('id');
 
@@ -278,9 +250,6 @@ $(document).on('click', '.remove-btn', function () {
     $(`#timeline-entry-${id}`).remove();
 });
 
-/* -----------------------------------
- * DROPZONE INIT 
- * -----------------------------------*/
 if ($('#myDropzone').length) {
     try {
         if (Dropzone.forElement('#myDropzone')) Dropzone.forElement('#myDropzone').destroy();
@@ -309,14 +278,9 @@ if ($('#myDropzone').length) {
         }
     });
 }
-/* -----------------------------------
- * FINISH BUTTON
- * -----------------------------------*/
+
 $(document).on('click', '.buttonFinish', function (e) {
     e.preventDefault();
-    // ============================
-    // CẬP NHẬT TẤT CẢ CKEDITOR
-    // ============================
     for (let key in CKEDITOR.instances) {
         CKEDITOR.instances[key].updateElement();
     }
@@ -378,21 +342,16 @@ $(document).on('click', '.buttonFinish', function (e) {
 
 
 
-/********************************************
- * EDIT TOUR - single-file complete
- ********************************************/
-
 let timelineCounter_edit = 1;
 let formDataEdit = {};
 let tourIdSendingImage = null;
 let wizardInitialized = false;
 
-let dropzoneOldImages = null;   // Dropzone instance
-let existingImages = [];        // filenames của ảnh cũ giữ lại
-let newImages = [];             // filenames mới được upload (server trả về)
-let removedImages = [];         // filenames bị xóa
+let dropzoneOldImages = null;   
+let existingImages = [];        
+let newImages = [];             
+let removedImages = [];         
 
-// HELPER: lấy mime-type từ extension (không cố định jpeg)
 function getFileTypeFromURL(url) {
     if (!url || typeof url !== 'string') return 'application/octet-stream';
     const ext = url.split('.').pop().toLowerCase();
@@ -410,20 +369,16 @@ function getFileTypeFromURL(url) {
     return map[ext] || "image/*";
 }
 
-/* ===========================
-   CLICK EDIT (bắt đầu)
-   =========================== */
 $(document).on("click", ".edit-tour", function () {
-    console.log("🟩 [EDIT CLICK] Bắt đầu mở Modal Edit Tour");
+    console.log("[EDIT CLICK] Bắt đầu mở Modal Edit Tour");
 
     const tourId = $(this).data("tourid");
     const urlEdit = $(this).data("urledit");
-    console.log("🔍 tourId:", tourId, " urlEdit:", urlEdit);
+    console.log("tourId:", tourId, " urlEdit:", urlEdit);
 
     tourIdSendingImage = tourId;
     $(".hiddenTourId").val(tourId);
 
-    // reset timeline zone
     $("#step-3").empty();
     timelineCounter_edit = 1;
     existingImages = [];
@@ -440,7 +395,7 @@ $(document).on("click", ".edit-tour", function () {
         method: "GET",
         data: { tourId },
         success: function (res) {
-            console.log("📥 [AJAX EDIT] Response:", res);
+            console.log("[AJAX EDIT] Response:", res);
             if (!res.success) {
                 toastr.error(res.message || "Lỗi tải dữ liệu");
                 return;
@@ -448,7 +403,6 @@ $(document).on("click", ".edit-tour", function () {
 
             fillStep1Data(res.tour);
             loadTimeline(res.timeline || []);
-            // load images into dropzone
             setTimeout(() => loadOldImages(res.images || []), 200);
         },
         error: function (xhr) {
@@ -458,11 +412,8 @@ $(document).on("click", ".edit-tour", function () {
     });
 });
 
-/* ===========================
-   FILL STEP1 DATA
-   =========================== */
 function fillStep1Data(tour) {
-    console.log("🟦 [STEP1] Load dữ liệu:", tour);
+    console.log("[STEP1] Load dữ liệu:", tour);
     $("#edit-tour-modal input[name='name']").val(tour.title || "");
     $("#edit-tour-modal input[name='destination']").val(tour.destination || "");
     $("#domain").val(tour.domain || "");
@@ -472,10 +423,9 @@ function fillStep1Data(tour) {
     $("#start_date").val(moment(tour.startDate).format("DD/MM/YYYY") || "");
     $("#end_date").val(moment(tour.endDate).format("DD/MM/YYYY") || "");
 
-    // CKEDITOR safe set
     setTimeout(() => {
         if (CKEDITOR.instances.description) {
-            console.log("📝 CKEDITOR - SetData");
+            console.log("CKEDITOR - SetData");
             CKEDITOR.instances.description.setData(tour.description || "");
         } else {
             CKEDITOR.replace("description");
@@ -486,23 +436,20 @@ function fillStep1Data(tour) {
     }, 100);
 }
 
-/* ===========================
-   SMART WIZARD INIT (1 lần)
-   =========================== */
 let step2Visited = false;
 
 function init_SmartWizard_Edit_Tour() {
-    console.log("🟦 [INIT WIZARD] chạy 1 lần");
+    console.log("[INIT WIZARD] chạy 1 lần");
 
     if (!CKEDITOR.instances.description) {
-        console.log("📝 CKEDITOR khởi tạo");
+        console.log("CKEDITOR khởi tạo");
         CKEDITOR.replace("description");
     }
 
     $("#wizard").smartWizard({
         transitionEffect: "fade",
         onLeaveStep: function (obj, ctx) {
-            console.log("🔄 [CHANGE STEP] From:", ctx.fromStep, "To:", ctx.toStep);
+            console.log("[CHANGE STEP] From:", ctx.fromStep, "To:", ctx.toStep);
             if (ctx.toStep === 2) step2Visited = true;
             if (ctx.fromStep === 1) return validateStep1();
             if (ctx.fromStep === 2 && ctx.toStep === 3) return validateStep2();
@@ -511,9 +458,6 @@ function init_SmartWizard_Edit_Tour() {
     });
 }
 
-/* ===========================
-   VALIDATE STEP1
-   =========================== */
 function validateStep1() {
     let ok = true;
     $("#form-step1 input, #form-step1 select").each(function () {
@@ -523,7 +467,6 @@ function validateStep1() {
         }
     });
 
-    // CKEditor getData
     const desc = CKEDITOR.instances.description ? CKEDITOR.instances.description.getData().trim() : "";
     if (!desc) {
         ok = false;
@@ -548,18 +491,14 @@ function validateStep1() {
     return ok;
 }
 
-/* ===========================
-   DROPZONE - load old images + allow new uploads
-   =========================== */
 Dropzone.autoDiscover = false;
 
 function loadOldImages(images) {
-    console.log("🟨 [LOAD OLD IMAGES] images =", images);
+    console.log("[LOAD OLD IMAGES] images =", images);
 
-    // ensure any existing Dropzone instance destroyed
     try {
         if (dropzoneOldImages && dropzoneOldImages.destroy) {
-            console.log("🟧 Destroying old dropzone instance");
+            console.log("Destroying old dropzone instance");
             dropzoneOldImages.destroy();
         }
     } catch (err) {
@@ -570,9 +509,8 @@ function loadOldImages(images) {
     newImages = [];
     removedImages = [];
 
-    // create Dropzone instance
     dropzoneOldImages = new Dropzone("#myDropzone-editTour", {
-        url: "/admin/add-images-tours", // your controller route
+        url: "/admin/add-images-tours", 
         method: "POST",
         paramName: "image",
         acceptedFiles: "image/*",
@@ -581,18 +519,16 @@ function loadOldImages(images) {
         parallelUploads: 2,
         maxFiles: 20,
         params: {
-            tourId: tourIdSendingImage   // 💥 GỬI TOUR ID Ở ĐÂY
+            tourId: tourIdSendingImage 
         },
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
         },
         init: function () {
             const dz = this;
-            console.log("🟦 Dropzone INIT thành công (edit) - instance:", dz);
+            console.log("Dropzone INIT thành công (edit) - instance:", dz);
 
-            // Load old server images as mock files
             images.forEach((img, idx) => {
-                // img may have field imageUrl or imageURL or be raw string
                 const filename = img.imageUrl || img.imageURL || img.image || img;
                 if (!filename) return;
 
@@ -602,27 +538,23 @@ function loadOldImages(images) {
                     type: getFileTypeFromURL(filename),
                     accepted: true,
                     status: Dropzone.SUCCESS,
-                    isOld: true // mark as old file
+                    isOld: true 
                 };
                 dz.emit("addedfile", mockFile);
                 dz.emit("thumbnail", mockFile, "/clients/assets/images/gallery-tours/" + filename);
                 dz.emit("complete", mockFile);
                 dz.files.push(mockFile);
                 existingImages.push(filename);
-                console.log(`🖼 Load old image #${idx}:`, filename);
+                console.log(`Load old image #${idx}:`, filename);
             });
-
-            // On successful new upload -> server must return { success:true, data:{ filename: '...' } } or { filename: '...' }
             dz.on("success", function (file, response) {
-                console.log("🟩 Dropzone success response:", response);
-                // try both possible response shapes
+                console.log("Dropzone success response:", response);
                 const filename = (response && (response.data && response.data.filename)) || response.filename || response.file || response.fileName || response.file || null;
                 if (filename) {
                     file.isOld = false;
-                    // store server filename in file.uploadedFilename so we can reference later
                     file.uploadedFilename = filename;
                     newImages.push(filename);
-                    console.log("➕ New image added:", filename);
+                    console.log("New image added:", filename);
                 } else {
                     console.warn("Dropzone uploaded but server did not return filename:", response);
                 }
@@ -634,29 +566,23 @@ function loadOldImages(images) {
             });
 
             dz.on("removedfile", function (file) {
-                console.log("🗑️ Dropzone removedfile event:", file);
-                // file.isOld -> remove from existingImages
+                console.log("Dropzone removedfile event:", file);
                 if (file.isOld) {
                     removedImages.push(file.name);
                     existingImages = existingImages.filter(f => f !== file.name);
-                    console.log("➖ Removed existing image:", file.name);
+                    console.log("Removed existing image:", file.name);
                 } else {
-                    // new uploaded file (server filename stored in uploadedFilename)
                     const fn = file.uploadedFilename || file.name;
                     newImages = newImages.filter(f => f !== fn);
-                    // Also try to notify server to delete physical file if needed (optional)
-                    console.log("➖ Removed new image (not saved):", fn);
+                    console.log("Removed new image (not saved):", fn);
                 }
             });
 
-            console.log("📁 Dropzone ready. existingImages:", existingImages);
+            console.log("Dropzone ready. existingImages:", existingImages);
         }
     });
 }
 
-/* ===========================
-   VALIDATE STEP2 (images)
-   =========================== */
 function validateStep2() {
     if (!step2Visited) {
         console.log("[validateStep2] step2 not visited - skip");
@@ -664,23 +590,19 @@ function validateStep2() {
     }
 
     const total = existingImages.length + newImages.length;
-    console.log("🔎 validateStep2 -> existing:", existingImages.length, "new:", newImages.length, "removed:", removedImages.length);
+    console.log("validateStep2 -> existing:", existingImages.length, "new:", newImages.length, "removed:", removedImages.length);
     if (total === 0) {
         toastr.error("Cần ít nhất 1 ảnh!");
         return false;
     }
 
-    // For "A" option: we send combined filenames (existing + new)
     formDataEdit.images = existingImages.concat(newImages);
     console.log("formDataEdit.images prepared:", formDataEdit.images);
     return true;
 }
 
-/* ===========================
-   TIMELINE
-   =========================== */
 function loadTimeline(list) {
-    console.log("📅 loadTimeline:", list);
+    console.log("loadTimeline:", list);
     list.forEach(item => addTimeline(item));
 }
 
@@ -699,7 +621,7 @@ function addTimeline(item) {
     $("#step-3").append(html);
 
     setTimeout(() => {
-        // ensure not double-init
+
         if (CKEDITOR.instances[editorId]) {
             CKEDITOR.instances[editorId].destroy(true);
         }
@@ -710,27 +632,22 @@ function addTimeline(item) {
     timelineCounter_edit++;
 }
 
-/* small helper to escape double quotes/newlines */
 function escapeHtml(str) {
     if (str === null || str === undefined) return "";
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-/* ===========================
-   FINISH - SAVE EDIT
-   =========================== */
+
 $(".buttonFinishEdit").on("click", function (e) {
     e.preventDefault();
-    console.log("🔘 [SAVE CLICK] Bắt đầu lưu");
+    console.log("[SAVE CLICK] Bắt đầu lưu");
 
-    // update CKEDITOR instances to textarea values (not necessary for our ajax but safe)
     for (let k in CKEDITOR.instances) {
         if (CKEDITOR.instances.hasOwnProperty(k)) {
             try { CKEDITOR.instances[k].updateElement(); } catch (err) {}
         }
     }
 
-    // rebuild timeline
     formDataEdit.timeline = [];
     $(".timeline-entry").each(function () {
         const title = $(this).find("input").val();
@@ -739,7 +656,6 @@ $(".buttonFinishEdit").on("click", function (e) {
         formDataEdit.timeline.push({ title, itinerary: content });
     });
 
-    // ensure we have the latest step1 data
     formDataEdit.tourId = tourIdSendingImage;
     formDataEdit.name = $("#edit-tour-modal input[name='name']").val();
     formDataEdit.destination = $("#edit-tour-modal input[name='destination']").val();
@@ -749,10 +665,9 @@ $(".buttonFinishEdit").on("click", function (e) {
     formDataEdit.price_child = $("#edit-tour-modal input[name='price_child']").val();
     formDataEdit.description = CKEDITOR.instances.description ? CKEDITOR.instances.description.getData() : "";
 
-    // If user didn't visit step2, still prepare images as existingImages (unchanged)
     formDataEdit.images = existingImages.concat(newImages);
 
-    console.log("📤 DATA GỬI LÊN:", formDataEdit);
+    console.log("DATA GỬI LÊN:", formDataEdit);
 
     $.ajax({
         url: "/admin/edit-tour",
@@ -763,7 +678,7 @@ $(".buttonFinishEdit").on("click", function (e) {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
         },
         success: function (res) {
-            console.log("📥 Response update:", res);
+            console.log("Response update:", res);
             if (res.success) {
                 toastr.success(res.message || "Cập nhật thành công!");
                 $("#edit-tour-modal").modal("hide");
@@ -782,9 +697,6 @@ $(".buttonFinishEdit").on("click", function (e) {
 
 
 
-    /********************************************
-     * BOOKING MANAGEMENT                       *
-     ********************************************/
     $(document).on("click", ".confirm-booking", function (e) {
         e.preventDefault();
         const bookingId = $(this).data("bookingid");
@@ -894,9 +806,6 @@ $(".buttonFinishEdit").on("click", function (e) {
         });
     });
 
-    /********************************************
-     * CONTACT MANAGEMENT                       *
-     ********************************************/
     $(".contact-item").click(function (e) {
         e.preventDefault();
         $(".mail_view").show();
@@ -956,9 +865,6 @@ $(".buttonFinishEdit").on("click", function (e) {
         });
     });
 
-    /********************************************
-     * LOGIN ADMIN                              *
-     ********************************************/
     $("#formLoginAdmin").on("submit", function (e) {
         const username = $("#username").val();
         const password = $("#password").val();
@@ -983,9 +889,6 @@ $(".buttonFinishEdit").on("click", function (e) {
         }
     });
 
-    /********************************************
-     * ADMIN MANAGEMENT                         *
-     ********************************************/
     $("#formProfileAdmin").on("submit", function (e) {
         e.preventDefault();
 

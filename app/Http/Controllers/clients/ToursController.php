@@ -23,7 +23,6 @@ class ToursController extends Controller
             'mien_trung' => optional($domain->firstWhere('domain', 't'))->count,
             'mien_nam' => optional($domain->firstWhere('domain', 'n'))->count,
         ];
-         // Kiểm tra nếu yêu cầu là AJAX
         if ($request->ajax()) {
             return response()->json([
                 'tours' => view('clients.partials.filter-tours', compact('tours'))->render(),
@@ -34,14 +33,12 @@ class ToursController extends Controller
         return view('clients.tours', compact('title', 'tours', 'domainsCount','toursPopular'));
     }
 
-    //Xử lý filter tours
     public function filterTours(Request $req)
     {
 
         $conditions = [];
         $sorting = [];
 
-        // Handle price filter
         if ($req->filled('minPrice') && $req->filled('maxPrice')) {
             $minPrice = $req->minPrice;
             $maxPrice = $req->maxPrice;
@@ -49,19 +46,16 @@ class ToursController extends Controller
             $conditions[] = ['priceAdult', '<=', $maxPrice];
         }
 
-        // Handle domain filter
         if ($req->filled('domain')) {
             $domain = $req->domain;
             $conditions[] = ['domain', '=', $domain];
         }
 
-        // Handle star rating filter
         if ($req->filled('filter_star')) {
             $star = (int) $req->filter_star;
             $conditions[] = ['averageRating', '>=', $star];
         }
 
-        // Handle duration filter
         if ($req->filled('duration')) {
             $duration = $req->duration;
             $time = [
@@ -72,33 +66,28 @@ class ToursController extends Controller
             $conditions[] = ['time', '=', $time[$duration]];
         }
 
-        // Handle orderby filter
         if ($req->filled('sorting')) {
-            $sortingOption = trim($req->sorting); // Remove any whitespace
+            $sortingOption = trim($req->sorting);
 
-            // Handle sorting options
             if ($sortingOption == 'new') {
-                $sorting = ['tourId', 'DESC']; // Sort by creation date, newest first
+                $sorting = ['tourId', 'DESC'];
             } elseif ($sortingOption == 'old') {
-                $sorting = ['tourId', 'ASC']; // Sort by creation date, oldest first
+                $sorting = ['tourId', 'ASC'];
             } elseif ($sortingOption == "hight-to-low") {
-                $sorting = ['priceAdult', 'DESC']; // Sort by price in descending order
+                $sorting = ['priceAdult', 'DESC'];
             } elseif ($sortingOption == "low-to-high") {
-                $sorting = ['priceAdult', 'ASC']; // Sort by price in ascending order
+                $sorting = ['priceAdult', 'ASC'];
             }
         }
 
-        // // dd($conditions);
         $tours = $this->tours->filterTours($conditions, $sorting);
-        // If not paginated, simulate pagination
         if (!$tours instanceof \Illuminate\Pagination\LengthAwarePaginator) {
-            // Create a fake paginator (pagination for non-paginated collection)
             $tours = new \Illuminate\Pagination\LengthAwarePaginator(
-                $tours, // Collection
-                count($tours), // Total items
-                9, // Per page
-                1, // Current page
-                ['path' => url()->current()] // Path for pagination
+                $tours, 
+                count($tours), 
+                9, 
+                1, 
+                ['path' => url()->current()] 
             );
         }
 

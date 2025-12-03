@@ -1,14 +1,5 @@
-/**
- * Resize function without multiple trigger
- *
- * Usage:
- * $(window).smartresize(function(){
- *     // code here
- * });
- */
+
 (function ($, sr) {
-    // debouncing function from John Hann
-    // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
     var debounce = function (func, threshold, execAsap) {
         var timeout;
 
@@ -27,16 +18,10 @@
         };
     };
 
-    // smartresize
     jQuery.fn[sr] = function (fn) {
         return fn ? this.bind("resize", debounce(fn)) : this.trigger(sr);
     };
 })(jQuery, "smartresize");
-/**
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 var CURRENT_URL = window.location.href.split("#")[0].split("?")[0],
     $BODY = $("body"),
@@ -48,11 +33,9 @@ var CURRENT_URL = window.location.href.split("#")[0].split("?")[0],
     $NAV_MENU = $(".nav_menu"),
     $FOOTER = $("footer");
 
-// Sidebar
+
 function init_sidebar() {
-    // TODO: This is some kind of easy fix, maybe we can improve this
     var setContentHeight = function () {
-        // reset height
         $RIGHT_COL.css("min-height", $(window).height());
 
         var bodyHeight = $BODY.outerHeight(),
@@ -63,7 +46,6 @@ function init_sidebar() {
             contentHeight =
                 bodyHeight < leftColHeight ? leftColHeight : bodyHeight;
 
-        // normalize content
         contentHeight -= $NAV_MENU.height() + footerHeight;
 
         $RIGHT_COL.css("min-height", contentHeight);
@@ -83,7 +65,6 @@ function init_sidebar() {
                 setContentHeight();
             });
         } else {
-            // prevent closing menu if we are on child menu
             if (!$li.parent().is(".child_menu")) {
                 openUpMenu();
             } else {
@@ -102,7 +83,6 @@ function init_sidebar() {
         }
     });
 
-    // toggle small or large menu
     $MENU_TOGGLE.on("click", function () {
         if ($BODY.hasClass("nav-md")) {
             $SIDEBAR_MENU.find("li.active ul").hide();
@@ -127,7 +107,6 @@ function init_sidebar() {
         });
     });
 
-    // check active menu
     $SIDEBAR_MENU
         .find('a[href="' + CURRENT_URL + '"]')
         .parent("li")
@@ -147,14 +126,12 @@ function init_sidebar() {
         .parent()
         .addClass("active");
 
-    // recompute content when resizing
     $(window).smartresize(function () {
         setContentHeight();
     });
 
     setContentHeight();
 
-    // fixed sidebar
     if ($.fn.mCustomScrollbar) {
         $(".menu_fixed").mCustomScrollbar({
             autoHideScrollbar: true,
@@ -163,16 +140,13 @@ function init_sidebar() {
         });
     }
 }
-// /Sidebar
 
-// Panel toolbox
 $(document).ready(function () {
     $(".collapse-link").on("click", function () {
         var $BOX_PANEL = $(this).closest(".x_panel"),
             $ICON = $(this).find("i"),
             $BOX_CONTENT = $BOX_PANEL.find(".x_content");
 
-        // fix for some div with hardcoded fix class
         if ($BOX_PANEL.attr("style")) {
             $BOX_CONTENT.slideToggle(200, function () {
                 $BOX_PANEL.removeAttr("style");
@@ -191,25 +165,19 @@ $(document).ready(function () {
         $BOX_PANEL.remove();
     });
 });
-// /Panel toolbox
 
-// Tooltip
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip({
         container: "body",
     });
 });
-// /Tooltip
 
-// Progressbar
 $(document).ready(function () {
     if ($(".progress .progress-bar")[0]) {
         $(".progress .progress-bar").progressbar();
     }
 });
-// /Progressbar
 
-// Switchery
 $(document).ready(function () {
     if ($(".js-switch")[0]) {
         var elems = Array.prototype.slice.call(
@@ -222,9 +190,7 @@ $(document).ready(function () {
         });
     }
 });
-// /Switchery
 
-// iCheck
 $(document).ready(function () {
     if ($("input.flat")[0]) {
         $(document).ready(function () {
@@ -235,9 +201,7 @@ $(document).ready(function () {
         });
     }
 });
-// /iCheck
 
-// Table
 $("table input").on("ifChecked", function () {
     checkState = "";
     $(this).parent().parent().parent().addClass("selected");
@@ -292,7 +256,6 @@ function countChecked() {
     }
 }
 
-// Accordion
 $(document).ready(function () {
     $(".expand").on("click", function () {
         $(this).next().slideToggle(200);
@@ -306,7 +269,6 @@ $(document).ready(function () {
     });
 });
 
-// NProgress
 if (typeof NProgress != "undefined") {
     $(document).ready(function () {
         NProgress.start();
@@ -317,7 +279,6 @@ if (typeof NProgress != "undefined") {
     });
 }
 
-//hover and retain popover when on popover content
 var originalLeave = $.fn.popover.Constructor.prototype.leave;
 $.fn.popover.Constructor.prototype.leave = function (obj) {
     var self =
@@ -334,9 +295,7 @@ $.fn.popover.Constructor.prototype.leave = function (obj) {
         container = $(obj.currentTarget).siblings(".popover");
         timeout = self.timeout;
         container.one("mouseenter", function () {
-            //We entered the actual popover – call off the dogs
             clearTimeout(timeout);
-            //Let's monitor popover content instead
             container.one("mouseleave", function () {
                 $.fn.popover.Constructor.prototype.leave.call(self, self);
             });
@@ -467,7 +426,6 @@ function init_flot_chart() {
             tickColor: "rgba(51, 51, 51, 0.06)",
             mode: "time",
             tickSize: [1, "day"],
-            //tickLength: 10,
             axisLabel: "Date",
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
@@ -629,7 +587,6 @@ function init_flot_chart() {
     }
 }
 
-/* STARRR */
 
 function init_starrr() {
     if (typeof starrr === "undefined") {
@@ -653,7 +610,6 @@ function init_starrr() {
 }
 
 function init_JQVmap() {
-    //console.log('check init_JQVmap [' + typeof (VectorCanvas) + '][' + typeof (jQuery.fn.vectorMap) + ']' );
 
     if (typeof jQuery.fn.vectorMap === "undefined") {
         return;
@@ -820,7 +776,6 @@ function init_gauge() {
     }
 }
 
-/* SPARKLINES */
 
 function init_sparklines() {
     if (typeof jQuery.fn.sparkline === "undefined") {
@@ -953,7 +908,6 @@ function init_sparklines() {
     );
 }
 
-/* AUTOCOMPLETE */
 
 function init_autocomplete() {
     if (typeof $.fn.autocomplete === "undefined") {
@@ -1236,13 +1190,12 @@ function init_autocomplete() {
         };
     });
 
-    // initialize autocomplete with custom appendTo
     $("#autocomplete-custom-append").autocomplete({
         lookup: countriesArray,
     });
 }
 
-/* AUTOSIZE */
+
 
 function init_autosize() {
     if (typeof $.fn.autosize !== "undefined") {
@@ -1250,7 +1203,7 @@ function init_autosize() {
     }
 }
 
-/* PARSLEY */
+
 
 function init_parsley() {
     if (typeof parsley === "undefined") {
@@ -1258,7 +1211,7 @@ function init_parsley() {
     }
     console.log("init_parsley");
 
-    $(/*.listen*/ "parsley:field:validate", function () {
+    $( "parsley:field:validate", function () {
         validateFront();
     });
     $("#demo-form .btn").on("click", function () {
@@ -1275,7 +1228,7 @@ function init_parsley() {
         }
     };
 
-    $(/*.listen*/ "parsley:field:validate", function () {
+    $( "parsley:field:validate", function () {
         validateFront();
     });
     $("#demo-form2 .btn").on("click", function () {
@@ -1297,7 +1250,7 @@ function init_parsley() {
     } catch (err) {}
 }
 
-/* INPUTS */
+
 
 function onAddTag(tag) {
     alert("Added a tag: " + tag);
@@ -1311,7 +1264,7 @@ function onChangeTag(input, tag) {
     alert("Changed a tag: " + tag);
 }
 
-//tags input
+
 function init_TagsInput() {
     if (typeof $.fn.tagsInput !== "undefined") {
         $("#tags_1").tagsInput({
@@ -1320,7 +1273,7 @@ function init_TagsInput() {
     }
 }
 
-/* SELECT2 */
+
 
 function init_select2() {
     if (typeof select2 === "undefined") {
@@ -1340,7 +1293,7 @@ function init_select2() {
     });
 }
 
-/* WYSIWYG EDITOR */
+
 
 function init_wysiwyg() {
     if (typeof $.fn.wysiwyg === "undefined") {
@@ -1439,7 +1392,7 @@ function init_wysiwyg() {
     }
 
     $(".editor-wrapper").each(function () {
-        var id = $(this).attr("id"); //editor-one
+        var id = $(this).attr("id"); 
 
         $(this).wysiwyg({
             toolbarSelector: '[data-target="#' + id + '"]',
@@ -1451,7 +1404,7 @@ function init_wysiwyg() {
     prettyPrint();
 }
 
-/* CROPPER */
+
 
 function init_cropper() {
     if (typeof $.fn.cropper === "undefined") {
@@ -1482,10 +1435,10 @@ function init_cropper() {
         },
     };
 
-    // Tooltip
+
     $('[data-toggle="tooltip"]').tooltip();
 
-    // Cropper
+
     $image
         .on({
             "build.cropper": function (e) {
@@ -1521,7 +1474,7 @@ function init_cropper() {
         })
         .cropper(options);
 
-    // Buttons
+
     if (!$.isFunction(document.createElement("canvas").getContext)) {
         $('button[data-method="getCroppedCanvas"]').prop("disabled", true);
     }
@@ -1534,12 +1487,12 @@ function init_cropper() {
         $('button[data-method="scale"]').prop("disabled", true);
     }
 
-    // Download
+
     if (typeof $download[0].download === "undefined") {
         $download.addClass("disabled");
     }
 
-    // Options
+
     $(".docs-toggles").on("change", "input", function () {
         var $this = $(this);
         var name = $this.attr("name");
@@ -1567,7 +1520,7 @@ function init_cropper() {
         $image.cropper("destroy").cropper(options);
     });
 
-    // Methods
+
     $(".docs-buttons").on("click", "[data-method]", function () {
         var $this = $(this);
         var data = $this.data();
@@ -1579,7 +1532,7 @@ function init_cropper() {
         }
 
         if ($image.data("cropper") && data.method) {
-            data = $.extend({}, data); // Clone a new one
+            data = $.extend({}, data); 
 
             if (typeof data.target !== "undefined") {
                 $target = $(data.target);
@@ -1607,7 +1560,7 @@ function init_cropper() {
 
                 case "getCroppedCanvas":
                     if (result) {
-                        // Bootstrap's Modal
+      
                         $("#getCroppedCanvasModal")
                             .modal()
                             .find(".modal-body")
@@ -1631,7 +1584,7 @@ function init_cropper() {
         }
     });
 
-    // Keyboard
+
     $(document.body).on("keydown", function (e) {
         if (!$image.data("cropper") || this.scrollTop > 300) {
             return;
@@ -1660,7 +1613,7 @@ function init_cropper() {
         }
     });
 
-    // Import image
+
     var $inputImage = $("#inputImage");
     var URL = window.URL || window.webkitURL;
     var blobURL;
@@ -1681,7 +1634,6 @@ function init_cropper() {
                     blobURL = URL.createObjectURL(file);
                     $image
                         .one("built.cropper", function () {
-                            // Revoke when load complete
                             URL.revokeObjectURL(blobURL);
                         })
                         .cropper("reset")
@@ -1697,9 +1649,7 @@ function init_cropper() {
     }
 }
 
-/* CROPPER --- end */
 
-/* KNOB */
 
 function init_knob() {
     if (typeof $.fn.knob === "undefined") {
@@ -1709,25 +1659,20 @@ function init_knob() {
 
     $(".knob").knob({
         change: function (value) {
-            //console.log("change : " + value);
         },
         release: function (value) {
-            //console.log(this.$.attr('value'));
             console.log("release : " + value);
         },
         cancel: function () {
             console.log("cancel : ", this);
         },
-        /*format : function (value) {
-         return value + '%';
-         },*/
         draw: function () {
-            // "tron" case
+
             if (this.$.data("skin") == "tron") {
                 this.cursorExt = 0.3;
 
-                var a = this.arc(this.cv), // Arc
-                    pa, // Previous arc
+                var a = this.arc(this.cv), 
+                    pa, 
                     r = 1;
 
                 this.g.lineWidth = this.lineWidth;
@@ -1777,7 +1722,6 @@ function init_knob() {
         },
     });
 
-    // Example of infinite knob, iPod click wheel
     var v,
         up = 0,
         down = 0,
@@ -1823,7 +1767,7 @@ function init_knob() {
     });
 }
 
-/* INPUT MASK */
+
 
 function init_InputMask() {
     if (typeof $.fn.inputmask === "undefined") {
@@ -1834,7 +1778,7 @@ function init_InputMask() {
     $(":input").inputmask();
 }
 
-/* COLOR PICKER */
+
 
 function init_ColorPicker() {
     if (typeof $.fn.colorpicker === "undefined") {
@@ -1857,7 +1801,7 @@ function init_ColorPicker() {
     $(".demo-auto").colorpicker();
 }
 
-/* ION RANGE SLIDER */
+
 
 function init_IonRangeSlider() {
     if (typeof $.fn.ionRangeSlider === "undefined") {
@@ -1927,7 +1871,6 @@ function init_IonRangeSlider() {
     });
 }
 
-/* DATERANGEPICKER */
 
 function init_daterangepicker() {
     if (typeof $.fn.daterangepicker === "undefined") {
@@ -2211,11 +2154,6 @@ function init_daterangepicker_reservation() {
     });
 }
 
-/* SMART WIZARD */
-/**
- * add tours
- *
- */
 function init_SmartWizard() {
     if (typeof $.fn.smartWizard === "undefined") {
         return;
@@ -2231,14 +2169,10 @@ function init_SmartWizard() {
             
             var isValid = true;
 
-            // Nếu step 1 đã submit thành công → cho đi luôn
             if (finishStep1) {
                 return true;
             }
 
-            /* ==========================
-             * VALIDATE FORM STEP 1
-             * ========================== */
             $("#form-step1 input, #form-step1 select, #form-step1 textarea").each(function () {
                 if ($(this).prop("required") && $(this).val().trim() === "") {
                     isValid = false;
@@ -2255,9 +2189,6 @@ function init_SmartWizard() {
                 toastr.error("Vui lòng chọn khu vực!");
             }
 
-            /* ==========================
-             * VALIDATE DATE
-             * ========================== */
             var startDate = $("#start_date").val();
             var endDate = $("#end_date").val();
 
@@ -2285,9 +2216,6 @@ function init_SmartWizard() {
                 }
             }
 
-            /* ==========================
-             * LẤY MÔ TẢ CKEDITOR
-             * ========================== */
             var description = "";
             if (CKEDITOR.instances["description"]) {
                 description = CKEDITOR.instances["description"].getData();
@@ -2296,18 +2224,9 @@ function init_SmartWizard() {
                 isValid = false;
                 toastr.error("Vui lòng điền mô tả!");
             }
-
-            /* ==========================
-             * STOP IF INVALID
-             * ========================== */
             if (!isValid) {
                 return false;
             }
-
-            /* ==========================
-             * ALWAYS STOP WIZARD!
-             * WAIT FOR AJAX
-             * ========================== */
             let wizard = $(".add-tours #wizard").data("smartWizard");
 
             var formData = {
@@ -2336,17 +2255,15 @@ function init_SmartWizard() {
 
                         $(".hiddenTourId").val(tourId);
 
-                        // Tính số ngày tour
                         let d1 = new Date(convertDateFormat(startDate));
                         let d2 = new Date(convertDateFormat(endDate));
                         let days = (d2 - d1) / (1000 * 3600 * 24);
 
-                        // Gửi qua custom-js
                         $(document).trigger("dataUpdated", [days]);
 
                         toastr.success("Hãy thêm hình ảnh cho tour!");
 
-                        // 👉 BÂY GIỜ MỚI CHO CHUYỂN BƯỚC
+
                         wizard.goToStep(context.toStep);
                     } else {
                         toastr.error("Không thể thêm tour. Vui lòng thử lại.");
@@ -2357,7 +2274,7 @@ function init_SmartWizard() {
                 }
             });
 
-            return false; // ❗ CHẶN wizard cho đến khi AJAX xong
+            return false; 
         }
     });
 
@@ -2367,7 +2284,6 @@ function init_SmartWizard() {
 }
 
 
-/* VALIDATOR */
 
 function init_validator() {
     if (typeof validator === "undefined") {
@@ -2375,10 +2291,9 @@ function init_validator() {
     }
     console.log("init_validator");
 
-    // initialize the validator function
+
     validator.message.date = "not a real date";
 
-    // validate a field on "blur" event, a 'select' on 'change' event & a '.reuired' classed multifield on 'keyup':
     $("form")
         .on(
             "blur",
@@ -2396,7 +2311,6 @@ function init_validator() {
         e.preventDefault();
         var submit = true;
 
-        // evaluate the form using generic validaing
         if (!validator.checkAll($(this))) {
             submit = false;
         }
@@ -2407,7 +2321,7 @@ function init_validator() {
     });
 }
 
-/* PNotify */
+
 
 function init_PNotify() {
     if (typeof PNotify === "undefined") {
@@ -2416,7 +2330,7 @@ function init_PNotify() {
     console.log("init_PNotify");
 }
 
-/* CUSTOM NOTIFICATION */
+
 
 function init_CustomNotification() {
     console.log("run_customtabs");
@@ -2495,7 +2409,7 @@ function init_CustomNotification() {
     });
 }
 
-/* EASYPIECHART */
+
 
 function init_EasyPieChart() {
     if (typeof $.fn.easyPieChart === "undefined") {
@@ -2521,7 +2435,6 @@ function init_EasyPieChart() {
         chart.update(Math.random() * 200 - 100);
     });
 
-    //hover and retain popover when on popover content
     var originalLeave = $.fn.popover.Constructor.prototype.leave;
     $.fn.popover.Constructor.prototype.leave = function (obj) {
         var self =
@@ -2538,9 +2451,8 @@ function init_EasyPieChart() {
             container = $(obj.currentTarget).siblings(".popover");
             timeout = self.timeout;
             container.one("mouseenter", function () {
-                //We entered the actual popover – call off the dogs
+
                 clearTimeout(timeout);
-                //Let's monitor popover content instead
                 container.one("mouseleave", function () {
                     $.fn.popover.Constructor.prototype.leave.call(self, self);
                 });
@@ -2788,7 +2700,7 @@ function init_charts() {
         );
     }
 
-    // Line chart
+
 
     if ($("#lineChart").length) {
         var ctx = document.getElementById("lineChart");
@@ -2819,7 +2731,7 @@ function init_charts() {
         });
     }
 
-    // Bar chart
+
 
     if ($("#mybarChart").length) {
         var ctx = document.getElementById("mybarChart");
@@ -2863,7 +2775,7 @@ function init_charts() {
         });
     }
 
-    // Doughnut chart
+
 
     if ($("#canvasDoughnut").length) {
         var ctx = document.getElementById("canvasDoughnut");
@@ -2903,7 +2815,7 @@ function init_charts() {
         });
     }
 
-    // Radar chart
+
 
     if ($("#canvasRadar").length) {
         var ctx = document.getElementById("canvasRadar");
@@ -2947,7 +2859,7 @@ function init_charts() {
         });
     }
 
-    // Pie chart
+
     if ($("#pieChart").length) {
         var ctx = document.getElementById("pieChart");
         var data = {
@@ -2961,7 +2873,7 @@ function init_charts() {
                         "#26B99A",
                         "#3498DB",
                     ],
-                    label: "My dataset", // for legend
+                    label: "My dataset", 
                 },
             ],
             labels: ["Dark Gray", "Purple", "Gray", "Green", "Blue"],
@@ -2976,7 +2888,7 @@ function init_charts() {
         });
     }
 
-    // PolarArea chart
+
 
     if ($("#polarArea").length) {
         var ctx = document.getElementById("polarArea");
@@ -3011,7 +2923,7 @@ function init_charts() {
     }
 }
 
-/* COMPOSE */
+
 
 function init_compose() {
     if (typeof $.fn.slideToggle === "undefined") {
@@ -3024,7 +2936,7 @@ function init_compose() {
     });
 }
 
-/* CALENDAR */
+
 
 function init_calendar() {
     if (typeof $.fn.fullCalendar === "undefined") {
@@ -3070,7 +2982,7 @@ function init_calendar() {
                             end: end,
                             allDay: allDay,
                         },
-                        true // make the event "stick"
+                        true 
                     );
                 }
 
@@ -3136,7 +3048,7 @@ function init_calendar() {
     });
 }
 
-/* DATA TABLES */
+
 
 function init_DataTables() {
     console.log("run_datatables");
@@ -3222,7 +3134,7 @@ function init_DataTables() {
     TableManageButtons.init();
 }
 
-/* CHART - MORRIS  */
+
 
 function init_morris_charts() {
     if (typeof Morris === "undefined") {
@@ -3367,7 +3279,6 @@ function init_morris_charts() {
     }
 }
 
-/* ECHRTS */
 
 function init_echarts() {
     if (typeof echarts === "undefined") {
@@ -3597,7 +3508,7 @@ function init_echarts() {
         },
     };
 
-    //echart Bar
+
 
     if ($("#mainb").length) {
         var echartBar = echarts.init(document.getElementById("mainb"), theme);
@@ -3706,7 +3617,7 @@ function init_echarts() {
         });
     }
 
-    //echart Radar
+
 
     if ($("#echart_sonar").length) {
         var echartRadar = echarts.init(
@@ -3791,7 +3702,7 @@ function init_echarts() {
         });
     }
 
-    //echart Funnel
+
 
     if ($("#echart_pyramid").length) {
         var echartFunnel = echarts.init(
@@ -3866,7 +3777,7 @@ function init_echarts() {
         });
     }
 
-    //echart Gauge
+
 
     if ($("#echart_gauge").length) {
         var echartGauge = echarts.init(
@@ -3991,7 +3902,7 @@ function init_echarts() {
         });
     }
 
-    //echart Line
+
 
     if ($("#echart_line").length) {
         var echartLine = echarts.init(
@@ -4092,7 +4003,7 @@ function init_echarts() {
         });
     }
 
-    //echart Scatter
+   
 
     if ($("#echart_scatter").length) {
         var echartScatter = echarts.init(
@@ -4758,7 +4669,6 @@ function init_echarts() {
         });
     }
 
-    //echart Bar Horizontal
 
     if ($("#echart_bar_horizontal").length) {
         var echartBar = echarts.init(
@@ -4815,7 +4725,6 @@ function init_echarts() {
         });
     }
 
-    //echart Pie Collapse
 
     if ($("#echart_pie2").length) {
         var echartPieCollapse = echarts.init(
@@ -4892,7 +4801,6 @@ function init_echarts() {
         });
     }
 
-    //echart Donut
 
     if ($("#echart_donut").length) {
         var echartDonut = echarts.init(document.getElementById("echart_donut"), theme);
@@ -4911,7 +4819,7 @@ function init_echarts() {
             "office-payment": "#FFA500",
         };
     
-        // Chuẩn bị dữ liệu cho biểu đồ ECharts
+
         var chartData = paymentData.map(function(item) {
             return {
                 value: item.count, 
@@ -4922,9 +4830,7 @@ function init_echarts() {
             };
         });
     
-        console.log(chartData);  // Kiểm tra dữ liệu chuẩn bị cho biểu đồ
-    
-        // Thiết lập biểu đồ ECharts
+        console.log(chartData);  
         echartDonut.setOption({
             tooltip: {
                 trigger: "item",
@@ -4935,7 +4841,7 @@ function init_echarts() {
                 x: "center",
                 y: "bottom",
                 data: paymentData.map(function(item) {
-                    return paymentMethodNames[item.paymentMethod] || item.paymentMethod;  // Tên phương thức thanh toán trong legend
+                    return paymentMethodNames[item.paymentMethod] || item.paymentMethod;  
                 }),
             },
             toolbox: {
@@ -4975,15 +4881,15 @@ function init_echarts() {
                     itemStyle: {
                         normal: {
                             label: {
-                                show: true, // Hiển thị nhãn
+                                show: true, 
                             },
                             labelLine: {
-                                show: true,  // Hiển thị đường nối từ nhãn
+                                show: true,  
                             },
                         },
                         emphasis: {
                             label: {
-                                show: true,  // Hiển thị nhãn khi di chuột
+                                show: true,  
                                 position: "center",
                                 textStyle: {
                                     fontSize: "14",
@@ -4998,7 +4904,7 @@ function init_echarts() {
     }
     
 
-    //echart Pie
+
 
     if ($("#echart_pie").length) {
         var echartPie = echarts.init(
@@ -5107,7 +5013,7 @@ function init_echarts() {
         };
     }
 
-    //echart Mini Pie
+
 
     if ($("#echart_mini_pie").length) {
         var echartMiniPie = echarts.init(
@@ -5222,7 +5128,7 @@ function init_echarts() {
         });
     }
 
-    //echart Map
+   
 
     if ($("#echart_world_map").length) {
         var echartMap = echarts.init(

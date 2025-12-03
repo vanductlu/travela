@@ -33,8 +33,6 @@ class UserManagementController extends Controller
             else
                 $user->isActive = 'Chưa kích hoạt';
         }
-        // dd($users);
-
         return view('admin.users', compact('title', 'users'));
     }
 
@@ -53,7 +51,7 @@ class UserManagementController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Có lỗi xảy ra khi kích hoạt người dùng!'
-            ], 500); // Trả về mã lỗi HTTP 500 nếu có lỗi
+            ], 500);
         }
     }
 
@@ -79,7 +77,7 @@ class UserManagementController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => "Có lỗi xảy ra khi cập nhật trạng thái người dùng!"
-            ], 500); // Trả về mã lỗi HTTP 500 nếu có lỗi
+            ], 500);
         }
     }
 

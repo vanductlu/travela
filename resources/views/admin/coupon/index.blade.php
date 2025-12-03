@@ -23,7 +23,6 @@
 
                 <div class="clearfix"></div>
 
-                <!-- Statistics Cards -->
                 <div class="row">
                     <div class="col-md-3 col-sm-6">
                         <div class="x_panel tile">
@@ -90,7 +89,6 @@
                     </div>
                 </div>
 
-                <!-- Main Content -->
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         <div class="x_panel">
@@ -103,7 +101,6 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <!-- Filters -->
                                 <div class="row mb-3">
                                     <div class="col-md-4">
                                         <label>Lọc theo trạng thái</label>
@@ -259,17 +256,14 @@
 </style>
 
 <script>
-// Đợi jQuery và tất cả thư viện load xong
 window.addEventListener('load', function() {
     
-// Kiểm tra jQuery đã load chưa
 if (typeof jQuery === 'undefined') {
     console.error('jQuery chưa được load!');
     return;
 }
 
 $(document).ready(function() {
-    // Initialize DataTable
     var table = $('#datatable-coupon').DataTable({
         language: {
             url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/vi.json'
@@ -280,16 +274,13 @@ $(document).ready(function() {
         ]
     });
 
-    // FIX: Filter by status - Tìm theo giá trị status thực tế trong data-status
     $('#filter_status').on('change', function() {
         const status = $(this).val();
         
-        // Clear all custom filters first
         while($.fn.dataTable.ext.search.length > 0) {
             $.fn.dataTable.ext.search.pop();
         }
         
-        // Add new filter if status is selected
         if (status) {
             $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                 const rowNode = table.row(dataIndex).node();
@@ -305,12 +296,10 @@ $(document).ready(function() {
         e.preventDefault();
         const code = $(this).data('code');
         
-        // Modern clipboard API
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(code).then(function() {
                 showNotification('success', 'Thành công', 'Đã copy mã: ' + code);
             }).catch(function() {
-                // Fallback method
                 copyToClipboardFallback(code);
             });
         } else {
@@ -318,7 +307,6 @@ $(document).ready(function() {
         }
     });
     
-    // Fallback copy method
     function copyToClipboardFallback(text) {
         const tempInput = $('<input>');
         $('body').append(tempInput);
@@ -328,7 +316,6 @@ $(document).ready(function() {
         showNotification('success', 'Thành công', 'Đã copy mã: ' + text);
     }
     
-    // Notification helper
     function showNotification(type, title, text) {
         if (typeof PNotify !== 'undefined') {
             new PNotify({
@@ -344,7 +331,6 @@ $(document).ready(function() {
         }
     }
 
-    // Delete coupon
     $(document).on('click', '.btn-delete-coupon', function(e) {
         e.preventDefault();
         const couponId = $(this).data('id');
@@ -375,7 +361,6 @@ $(document).ready(function() {
         });
     });
 
-    // Toggle status - VERSION ĐƠN GIẢN HÓA
     $(document).on('click', '.btn-toggle-status', function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -390,7 +375,6 @@ $(document).ready(function() {
         console.log('Current button classes:', $btn.attr('class'));
         console.log('Current status:', $statusCell.attr('data-status'));
         
-        // Disable button
         $btn.prop('disabled', true).css('opacity', '0.5');
         
         $.ajax({
@@ -406,20 +390,15 @@ $(document).ready(function() {
                 console.log('New status:', response.status);
                 
                 if (response.success) {
-                    // Show notification
                     showNotification('success', 'Thành công', response.message);
                     
-                    // Force update UI
                     const newStatus = response.status;
                     console.log('Updating to status:', newStatus);
                     
-                    // Update data attribute
                     $statusCell.attr('data-status', newStatus);
                     
-                    // Remove all status classes first
                     $btn.removeClass('btn-success btn-default btn-secondary');
                     
-                    // Add correct class and text
                     if (newStatus === 'active') {
                         $btn.addClass('btn-success');
                         $btn.html('<i class="fa fa-check"></i> Hoạt động');
@@ -433,7 +412,6 @@ $(document).ready(function() {
                     console.log('New button classes:', $btn.attr('class'));
                     console.log('New button HTML:', $btn.html());
                     
-                    // Redraw table
                     if (table) {
                         table.draw(false);
                     }
@@ -463,13 +441,11 @@ $(document).ready(function() {
             },
             complete: function() {
                 console.log('=== TOGGLE COMPLETE ===');
-                // Re-enable button
                 $btn.prop('disabled', false).css('opacity', '1');
             }
         });
     });
 
-    // Export Excel
     $('#btn-export-coupons').on('click', function() {
         const table = $('#datatable-coupon').DataTable();
         const data = table.rows({ search: 'applied' }).data();
@@ -504,5 +480,5 @@ $(document).ready(function() {
     });
 });
 
-}); // End window.load
+}); 
 </script>

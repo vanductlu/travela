@@ -41,14 +41,10 @@ class TourDetailController extends Controller
         ->pluck('tourId')
         ->toArray();
         $tourRecommendations = $this->tours->toursRecommendation($relatedTours);
-        // dd($tourRecommendations);    
-        // dd($avgStar);
-
          return view('clients.tour-detail', compact('title', 'tourDetail', 'getReviews', 'avgStar', 'countReview', 'checkDisplay','tourRecommendations'));
     }
     public function reviews(Request $req)
     {
-        // dd($req);
         $userId = $this->getUserId();
         $tourId = $req->tourId;
         $message = $req->message;
@@ -73,8 +69,6 @@ class TourDetailController extends Controller
 
         $avgStar = round($reviewStats->averageRating);
         $countReview = $reviewStats->reviewCount;
-
-        // Trả về phản hồi thành công
         return response()->json([
             'success' => true,
             'message' => 'Đánh giá của bạn đã được gửi thành công!',

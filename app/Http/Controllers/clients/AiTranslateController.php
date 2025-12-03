@@ -10,19 +10,15 @@ class AiTranslateController extends Controller
      public function translate(Request $request)
     {
         try {
-            // Lấy dữ liệu từ request
             $text = $request->input('text');
             $src = $request->input('src', 'en');
             $tgt = $request->input('tgt', 'vi');
             
-            // Gọi Flask API
             $response = Http::timeout(30)->post('http://127.0.0.1:5556/api/translate', [
                 'text' => $text,
                 'src' => $src,
                 'tgt' => $tgt
             ]);
-            
-            // Trả về kết quả
             if ($response->successful()) {
                 return response()->json($response->json());
             } else {

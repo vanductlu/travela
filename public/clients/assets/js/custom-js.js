@@ -2,10 +2,6 @@ $(document).ready(function () {
 
     var sqlInjectionPattern = /[<>'"%;()&+]/;
 
-    /****************************************
-     *              PAGE LOGIN              *
-     * ***************************************/
-    //Handle click switch tab
     $("#sign-up").click(function () {
         $(".sign-in").hide();
         $(".signup").show();
@@ -15,27 +11,21 @@ $(document).ready(function () {
         $(".sign-in").show();
     });
 
-    // Handle form submission for signin
     $("#login-form").on("submit", function (e) {
         e.preventDefault();
         var userName = $("#username_login").val().trim();
         var password = $("#password_login").val().trim();
-
-        // Đặt lại nội dung thông báo lỗi và ẩn chúng
         $("#validate_username").hide().text("");
         $("#validate_password").hide().text("");
 
         var isValid = true;
 
-        // Kiểm tra độ dài mật khẩu
         if (password.length < 6) {
             isValid = false;
             $("#validate_password")
                 .show()
                 .text("Mật khẩu phải có ít nhất 6 ký tự.");
         }
-
-        // Kiểm tra tên đăng nhập và mật khẩu không chứa ký tự đặc biệt (SQL injection)
         
         if (sqlInjectionPattern.test(userName)) {
             isValid = false;
@@ -77,28 +67,23 @@ $(document).ready(function () {
         }
     });
 
-    // Handle form submission for signup
     $("#register-form").on("submit", function (e) {
         e.preventDefault();
         $(".loader").show();
         $("#register-form").addClass("hidden-content");
 
-        // Lấy giá trị của các trường nhập liệu
         var userName = $("#username_register").val().trim();
         var email = $("#email_register").val().trim();
         var password = $("#password_register").val().trim();
         var rePass = $("#re_pass").val().trim();
 
-        // Đặt lại nội dung thông báo lỗi và ẩn chúng
         $("#validate_username_regis").hide().text("");
         $("#validate_email_regis").hide().text("");
         $("#validate_password_regis").hide().text("");
         $("#validate_repass").hide().text("");
 
-        // Kiểm tra lỗi
         var isValid = true;
 
-        // Kiểm tra tên đăng nhập không chứa ký tự SQL injection
         if (sqlInjectionPattern.test(userName)) {
             isValid = false;
             $("#validate_username_regis")
@@ -126,7 +111,6 @@ $(document).ready(function () {
                 .text("Mật khẩu không được chứa ký tự đặc biệt.");
         }
 
-        // Kiểm tra nhập lại mật khẩu
         if (password !== rePass) {
             isValid = false;
             $("#validate_repass").show().text("Mật khẩu nhập lại không khớp.");
@@ -163,25 +147,16 @@ $(document).ready(function () {
         }
     });
 
-    /****************************************
-     *              HOME PAGE             *
-     * ***************************************/
     $("#start_date, #end_date").datetimepicker({
         format: "d/m/Y",
         timepicker: false,
     });
     
-    /****************************************
-     *              HEADER                  *
-     * ***************************************/
+
     $("#userDropdown").click(function () {
-        $("#dropdownMenu").toggle(); // Toggle dropdown menu when user clicks
+        $("#dropdownMenu").toggle(); 
     });
 
-    /****************************************
-     *              PAGE TOURS              *
-     * ***************************************/
-    // Kiểm tra nếu thanh trượt đã tồn tại
     if ($(".price-slider-range").length) {
         $(".price-slider-range").on("slide", function (event, ui) {
             filterTours(ui.values[0], ui.values[1]);
@@ -244,7 +219,6 @@ $(document).ready(function () {
             type: "GET",
             dataType: "json",
             success: function (response) {
-                // Cập nhật toàn bộ nội dung (tours và phân trang)
                 $("#tours-container")
                     .html(response.tours)
                     .removeClass("hidden-content");
@@ -258,15 +232,12 @@ $(document).ready(function () {
         });
     });
 
-    // Hàm để clear các filter đã chọn
     $(".clear_filter a").on("click", function (e) {
         e.preventDefault();
         $(".loader").show();
         $("#tours-container").addClass("hidden-content");
-        // Reset slider giá về giá trị mặc định (ví dụ: 0 đến 20000000)
         $(".price-slider-range").slider("values", [0, 20000000]);
 
-        // Bỏ chọn radio và checkbox
         $('input[name="domain"]').prop("checked", false);
         $('input[name="filter_star"]').prop("checked", false);
         $('input[name="duration"]').prop("checked", false);
@@ -279,10 +250,9 @@ $(document).ready(function () {
             type: "GET",
             dataType: "json",
             headers: {
-            'X-Requested-With': 'XMLHttpRequest'  // ✔ báo cho Laravel đây là AJAX
+            'X-Requested-With': 'XMLHttpRequest'  
           },
             success: function (response) {
-                // Cập nhật toàn bộ nội dung (tours và phân trang)
                 $("#tours-container")
                     .html(response.tours)
                     .removeClass("hidden-content");
@@ -296,9 +266,6 @@ $(document).ready(function () {
         });
     });
 
-    /****************************************
-     *             PAGE USER-PROFILE        *
-     * ***************************************/
     $(".updateUser").on("submit", function (e) {
         e.preventDefault();
         var fullName = $("#inputFullName").val();
@@ -345,7 +312,6 @@ $(document).ready(function () {
         var newPass = $("#inputNewPass").val();
         var isValid = true;
 
-        // Kiểm tra độ dài mật khẩu
         if (oldPass.length < 6 || newPass.length < 6) {
             isValid = false;
             $("#validate_password")
@@ -392,12 +358,10 @@ $(document).ready(function () {
         }
     });
 
-    //Update avatar
     $("#avatar").on("change", function () {
         const file = event.target.files[0];
 
         if (file) {
-            // Hiển thị ảnh vừa chọn trước khi gửi lên server
             const reader = new FileReader();
             reader.onload = function (e) {
                 $("#avatarPreview").attr("src", e.target.result);
@@ -412,13 +376,10 @@ $(document).ready(function () {
                 .closest(".card-body")
                 .find("input.label_avatar")
                 .val();
-            // Tạo FormData để gửi file qua AJAX
             const formData = new FormData();
             formData.append("avatar", file);
 
             console.log(url_avatar);
-
-            // // Gửi AJAX đến server
             $.ajax({
                 url: url_avatar,
                 type: "POST",
@@ -442,9 +403,6 @@ $(document).ready(function () {
         }
     });
 
-/****************************************
- *             PAGE BOOKING             *
- * ***************************************/
 let discount = 0;
 let totalPrice = 0;
 let appliedCoupon = null;
@@ -482,7 +440,6 @@ function updateSummary() {
   $(".summary-item:nth-child(3) .total-price").text(discount.toLocaleString() + " VNĐ");
   $(".summary-item.total-price span:last").text(totalPrice.toLocaleString() + " VNĐ");
 
-  // Cập nhật hidden inputs
   updateHiddenInput('original_price', 'originalPrice', subtotal);
   updateHiddenInput('total_price', 'totalPrice', totalPrice);
 
@@ -715,7 +672,6 @@ $("#btn-momo-payment").click(function (e) {
   var urlMomo = $(this).data("urlmomo");
   const token = $('input[name="_token"]').val() || $('meta[name="csrf-token"]').attr('content');
 
-  // Thu thập tất cả dữ liệu booking bao gồm cả coupon
   var bookingData = {
     fullName: $("#username").val(),
     email: $("#email").val(),
@@ -749,7 +705,6 @@ $("#btn-momo-payment").click(function (e) {
   });
 });
 
-// Khôi phục dữ liệu từ localStorage (cho trường hợp quay lại từ Momo)
 const savedData = localStorage.getItem("bookingData");
 if (savedData) {
   try {
@@ -761,9 +716,8 @@ if (savedData) {
     $("#numAdults").val(bookingData.numAdults);
     $("#numChildren").val(bookingData.numChildren);
     $("input[name='payment'][value='" + bookingData.payment + "']").prop("checked", true);
-    $("#payment_hidden").val(bookingData.payment_hidden);
+    $("#payment_hidden").val(bookingData.payment);
     $("#agree").prop("checked", true);
-    $('input[name="payment"]').prop("disabled", true);
   } catch (e) {
     console.error('Error parsing booking data:', e);
   }
@@ -771,17 +725,9 @@ if (savedData) {
   updateSummary();
 }
 
-// Khởi tạo
 updateSummary();
 toggleButtonState();
 
-    /****************************************
-     *             PAGE BOOKED              *
-     * ***************************************/
-
-    /****************************************
-     *             PAGE TOURDETAIL          *
-     * ***************************************/
 
     let currentRating = 0;
 
@@ -802,7 +748,6 @@ toggleButtonState();
         }
     });
 
-    // Hàm tô màu các sao được chọn
     function highlightStars(rating) {
         $("#rating-stars i").each(function () {
             if ($(this).data("value") <= rating) {
@@ -813,7 +758,6 @@ toggleButtonState();
         });
     }
 
-    // Hàm đặt lại tất cả sao về trạng thái chưa chọn
     function resetStars() {
         $("#rating-stars i").each(function () {
             $(this).removeClass("fas active").addClass("far");
@@ -828,7 +772,6 @@ toggleButtonState();
 
         let message = $("#message").val().trim();
 
-        // Kiểm tra số sao và nội dung
         if (currentRating === 0) {
             toastr.warning("Vui lòng chọn số sao để đánh giá.");
             return;
@@ -853,9 +796,8 @@ toggleButtonState();
                         _token: $('input[name="_token"]').val(),
                     };
 
-                    // Gửi AJAX request
                     $.ajax({
-                        url: urlSubmitReview, // Lấy URL từ action của form
+                        url: urlSubmitReview, 
                         method: "POST",
                         data: formReviews,
                         success: function (response) {
@@ -865,7 +807,6 @@ toggleButtonState();
                                 $("#partials_reviews .comment-body").addClass(
                                     "aos-animate"
                                 );
-                                // Xử lý reset form hoặc thông báo
                                 $("#message").val("");
                                 $('#comment-form').hide();
                                 resetStars();
@@ -890,15 +831,10 @@ toggleButtonState();
         });
     });
 
-    /****************************************
-     *             PAGE CONTACT             *
-     * ***************************************/
     $(document).ready(function() {
-    // SQL injection pattern
     var sqlInjectionPattern = /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|OR|AND)\b|--|\/\*|\*\/|;|'|"|<|>)/i;
 
     $('#contactForm').submit(function (event) {
-        // Xóa các lỗi cũ
         $('.error').remove();
         
         var name = $('#name').val().trim();
@@ -908,7 +844,6 @@ toggleButtonState();
         
         var hasError = false;
 
-        // Validate name
         if (name === '') {
             $('#name').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Vui lòng nhập họ tên.</span>');
             hasError = true;
@@ -917,7 +852,6 @@ toggleButtonState();
             hasError = true;
         }
 
-        // Validate phone
         if (phoneNumber === '') {
             $('#phone_number').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Vui lòng nhập số điện thoại.</span>');
             hasError = true;
@@ -929,7 +863,6 @@ toggleButtonState();
             hasError = true;
         }
 
-        // Validate email
         if (email === '') {
             $('#email').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Vui lòng nhập email.</span>');
             hasError = true;
@@ -938,7 +871,6 @@ toggleButtonState();
             hasError = true;
         }
 
-        // Validate message
         if (message === '') {
             $('#message').after('<span class="error" style="color: red; font-size: 13px; display: block; margin-top: 5px;">Vui lòng nhập nội dung.</span>');
             hasError = true;
@@ -947,30 +879,23 @@ toggleButtonState();
             hasError = true;
         }
 
-        // Nếu có lỗi thì chặn submit
         if (hasError) {
             event.preventDefault();
             return false;
         }
 
-        // Nếu không có lỗi thì cho submit bình thường
-        // KHÔNG gọi event.preventDefault() và KHÔNG gọi this.submit()
         return true;
     });
 });
-    /****************************************
-     *             HANDLE SEARCH            *
-     * ***************************************/
+
 
 $('#search_form').on('submit', function(event) {
     var destination = $('#destination').val().trim();
     var startDate = $('#start_date').val().trim();
     var endDate = $('#end_date').val().trim();
 
-    // Xóa lỗi cũ
     $('.error').remove();
 
-    // Kiểm tra nếu bỏ trống
     if (destination === "") {
         event.preventDefault();
         $('#destination').after('<span class="error" style="color:red;">Vui lòng nhập điểm đến.</span>');
@@ -983,7 +908,6 @@ $('#search_form').on('submit', function(event) {
         return false;
     }
 
-    // Kiểm tra ngày bắt đầu nhỏ hơn ngày kết thúc
     if (startDate && endDate) {
         const start = new Date(startDate.split("/").reverse().join("-"));
         const end = new Date(endDate.split("/").reverse().join("-"));
@@ -997,43 +921,35 @@ $('#search_form').on('submit', function(event) {
 
 
 
-    /****************************************
-     *  HANDLE SEARCH Speech Recognition    *
-     * ***************************************/
-
-     // Kiểm tra nếu trình duyệt hỗ trợ Speech Recognition
      if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
         var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'vi-VN'; // Cài đặt ngôn ngữ nhận diện
-        recognition.continuous = true; // Tiếp tục nhận diện khi đang nói
-        recognition.interimResults = true; // Hiển thị kết quả tạm thời khi nhận diện
+        recognition.lang = 'vi-VN'; 
+        recognition.continuous = true; 
+        recognition.interimResults = true; 
     
-        // Biến để theo dõi trạng thái nhận diện
         var isRecognizing = false;
     
         $('#voice-search').on('click', function() {
             if (isRecognizing) {
-                recognition.stop(); // Dừng nhận diện nếu đang nhận diện
-                $(this).removeClass('fa-microphone-slash').addClass('fa-microphone'); // Đổi icon về micro
+                recognition.stop(); 
+                $(this).removeClass('fa-microphone-slash').addClass('fa-microphone'); 
             } else {
-                recognition.start(); // Bắt đầu nhận diện giọng nói
-                $(this).removeClass('fa-microphone').addClass('fa-microphone-slash'); // Đổi icon thành micro gạch
+                recognition.start(); 
+                $(this).removeClass('fa-microphone').addClass('fa-microphone-slash'); 
             }
         });
     
         recognition.onstart = function() {
             console.log('Speech recognition started');
-            isRecognizing = true; // Đánh dấu trạng thái nhận diện
-            $('#voice-search').removeClass('fa-microphone').addClass('fa-microphone-slash'); // Đổi icon thành micro gạch
+            isRecognizing = true; 
+            $('#voice-search').removeClass('fa-microphone').addClass('fa-microphone-slash'); 
         };
     
         recognition.onresult = function(event) {
-            var transcript = event.results[0][0].transcript; // Lấy kết quả nhận diện
+            var transcript = event.results[0][0].transcript; 
             if (event.results[0].isFinal) {
-                // Kết quả cuối cùng, điền vào ô tìm kiếm
                 $('input[name="keyword"]').val(transcript);
             } else {
-                // Kết quả tạm thời, có thể cập nhật ô tìm kiếm
                 $('input[name="keyword"]').val(transcript);
             }
         };
@@ -1045,8 +961,8 @@ $('#search_form').on('submit', function(event) {
     
         recognition.onend = function() {
             console.log('Speech recognition ended');
-            $('#voice-search').removeClass('fa-microphone-slash').addClass('fa-microphone'); // Đổi icon về micro
-            isRecognizing = false; // Đánh dấu trạng thái nhận diện kết thúc
+            $('#voice-search').removeClass('fa-microphone-slash').addClass('fa-microphone'); 
+            isRecognizing = false; 
         };
     } else {
         console.log('Speech recognition not supported in this browser.');

@@ -25,7 +25,7 @@
     async function translate(text) {
         if (!text || isTranslating) return;
         isTranslating = true;
-        result.textContent = '⏳ Đang dịch...';
+        result.textContent = 'Đang dịch...';
         try {
             const response = await fetch('http://127.0.0.1:5556/api/translate', {
                 method: 'POST',
@@ -37,11 +37,11 @@
                 })
             });
             const data = await response.json();
-            const translated = data.translation || '⚠️ Không thể dịch';
+            const translated = data.translation || 'Không thể dịch';
             result.textContent = translated;
-            lastTranslation = (translated === '⚠️ Không thể dịch') ? '' : translated;
+            lastTranslation = (translated === 'Không thể dịch') ? '' : translated;
         } catch (err) {
-            result.textContent = '❌ Lỗi: ' + err.message;
+            result.textContent = 'Lỗi: ' + err.message;
             lastTranslation = '';
         } finally {
             isTranslating = false;
@@ -72,7 +72,6 @@
         swapBtn.addEventListener('click', swapLanguages);
         closeBtn.addEventListener('click', hidePopup);
 
-        // Dịch khi bấm "Dịch ngay"
         translateNowBtn.addEventListener('click', () => {
             translate(originalText);
         });
@@ -80,14 +79,12 @@
         srcSelect.addEventListener('change', () => {
             if (suppressSelectEvents) return;
             suppressSelectEvents = true;
-            // Tự động đổi tgt
             tgtSelect.value = (srcSelect.value === 'vi') ? 'en' : 'vi';
             suppressSelectEvents = false;
         });
 
         tgtSelect.addEventListener('change', () => {
             if (suppressSelectEvents) return;
-            // Khi đổi tgt, vẫn không thay src để tránh vòng lặp
         });
 
         document.addEventListener('mouseup', (e) => {

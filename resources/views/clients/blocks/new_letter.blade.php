@@ -1,6 +1,3 @@
-
-
-<!-- Newsletter Area start -->
 <section class="newsletter-three bgc-primary py-100 rel z-1"
     style="background-image: url({{ asset('clients/assets/images/newsletter/newsletter-bg-lines.png') }});">
     <div class="container container-1500">
@@ -35,4 +32,3 @@
         </div>
     </div>
 </section>
-<!-- Newsletter Area end -->

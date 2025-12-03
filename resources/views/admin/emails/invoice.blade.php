@@ -8,7 +8,6 @@
     </div>
     <div class="x_content" style="font-family: Arial, sans-serif; color: #333;">
         <section class="content invoice">
-            <!-- title row -->
             <div class="row" style="margin-bottom: 20px;">
                 <div class="invoice-header">
                     <h3 style="font-size: 20px; font-weight: bold;">
@@ -19,7 +18,6 @@
                 </div>
             </div>
 
-            <!-- info row -->
             <div class="row invoice-info" style="margin-bottom: 20px;">
                 <div class="col-sm-4 invoice-col" style="font-size: 14px;">
                     Từ
@@ -49,7 +47,6 @@
                 </div>
             </div>
 
-            <!-- Table row -->
             <div class="row">
                 <div class="table" style="width: 100%; margin-bottom: 20px;">
                     <table class="table table-striped" style="width: 100%; border-collapse: collapse;">
@@ -82,7 +79,6 @@
                 </div>
             </div>
 
-            <!-- payment method row -->
             <div class="row" style="margin-bottom: 20px;">
                 <div class="col-md-6">
                     <p style="font-size: 16px; font-weight: bold;">Phương thức thanh toán:</p>

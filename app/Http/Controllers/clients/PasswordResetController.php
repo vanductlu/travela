@@ -12,15 +12,12 @@ use Illuminate\Support\Facades\Hash;
 class PasswordResetController extends Controller
 {
     protected $table = 'tbl_users';
-
-    // Hiển thị form nhập email
     public function showForgotForm()
     {
         $title = "Quên mật khẩu";
         return view('clients.auth.forgot', compact('title'));
     }
 
-    // Gửi email reset
     public function sendResetLink(Request $request)
     {
         $request->validate([
@@ -44,8 +41,6 @@ class PasswordResetController extends Controller
             ]);
 
         $reset_link = route('password.reset.form', ['token' => $token]);
-
-        // Gửi mail
         Mail::send(
             'clients.mail.reset_password',
             ['link' => $reset_link],
@@ -58,12 +53,10 @@ class PasswordResetController extends Controller
         return back()->with('message', 'Đã gửi email đặt lại mật khẩu!');
     }
 
- // Form đặt lại mật khẩu
     public function showResetForm($token)
     {   
         $title = "Đặt lại mật khẩu";
-        
-        // Kiểm tra token có hợp lệ không
+    
         $check = DB::table($this->table)
             ->where('reset_token', $token)
             ->where('reset_token_expire', '>', Carbon::now())
@@ -75,11 +68,8 @@ class PasswordResetController extends Controller
 
         return view('clients.auth.reset', compact('token', 'title'));
     }
-
-    // Lưu mật khẩu mới
     public function resetPassword(Request $request)
     {
-        // Validate dữ liệu
         $request->validate([
             'token' => 'required',
             'username' => 'required',
@@ -91,7 +81,6 @@ class PasswordResetController extends Controller
             'password.confirmed' => 'Mật khẩu xác nhận không khớp',
         ]);
 
-        // Kiểm tra token có hợp lệ không
         $tokenCheck = DB::table($this->table)
             ->where('reset_token', $request->token)
             ->where('reset_token_expire', '>', Carbon::now())
@@ -100,8 +89,6 @@ class PasswordResetController extends Controller
         if (!$tokenCheck) {
             return redirect('/forgot-password')->with('error', 'Token không hợp lệ hoặc đã hết hạn!');
         }
-
-        // Kiểm tra username có khớp với token không
         $user = DB::table($this->table)
             ->where('reset_token', $request->token)
             ->where('username', $request->username)
@@ -112,7 +99,6 @@ class PasswordResetController extends Controller
                         ->withInput();
         }
 
-        // Cập nhật mật khẩu mới
         DB::table($this->table)
             ->where('userId', $user->userId)
             ->update([

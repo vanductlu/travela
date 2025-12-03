@@ -3,7 +3,6 @@
     <div class="main_container">
         @include('admin.blocks.sidebar')
 
-        <!-- page content -->
         <div class="right_col" role="main">
             <div class="page-title d-flex justify-content-between align-items-center mb-3">
                 <h3>Quản lý người dùng</h3>
@@ -69,7 +68,6 @@
             </div>
 
         </div>
-        <!-- /page content -->
     </div>
 </div>
 @include('admin.blocks.footer')

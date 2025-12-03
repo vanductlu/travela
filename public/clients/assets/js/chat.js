@@ -1,4 +1,3 @@
-// Lấy các elements
 const chatbotToggler = document.querySelector("#chatbot-toggler");
 const closeChatbot = document.querySelector("#close-chatbot");
 const chatbox = document.querySelector(".chat-body");
@@ -7,21 +6,21 @@ const sendChatBtn = document.querySelector("#send-message");
 const chatForm = document.querySelector(".chat-form");
 
 let userMessage = null;
-let isProcessing = false; // Cờ để chặn gửi nhiều tin nhắn cùng lúc
+let isProcessing = false; 
 
-// Lấy CSRF token
+
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-// Kiểm tra CSRF token
+
 if (!csrfToken) {
-    console.error('❌ CSRF token not found!');
+    console.error('CSRF token not found!');
 }
 
-console.log('✅ CSRF Token:', csrfToken);
-console.log('✅ Current domain:', window.location.hostname);
-console.log('✅ Cookies:', document.cookie);
+console.log('CSRF Token:', csrfToken);
+console.log('Current domain:', window.location.hostname);
+console.log('Cookies:', document.cookie);
 
-// Tạo tin nhắn chat
+
 const createChatLi = (message, className) => {
     const chatLi = document.createElement("div");
     chatLi.classList.add("message", className);
@@ -38,13 +37,11 @@ const createChatLi = (message, className) => {
     return chatLi;
 }
 
-// Gửi tin nhắn tới server
 const generateResponse = (chatElement) => {
     const messageElement = chatElement.querySelector(".message-text");
     
-    console.log('📤 Sending message:', userMessage);
+    console.log('Sending message:', userMessage);
     
-    // Kiểm tra CSRF token trước khi gửi
     if (!csrfToken) {
         messageElement.textContent = 'Lỗi: Không tìm thấy CSRF token. Vui lòng tải lại trang.';
         messageElement.classList.add("error");
@@ -57,7 +54,7 @@ const generateResponse = (chatElement) => {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': csrfToken,
             'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest' // Thêm header này
+            'X-Requested-With': 'XMLHttpRequest' 
         },
         credentials: 'same-origin',
         body: JSON.stringify({
@@ -65,20 +62,17 @@ const generateResponse = (chatElement) => {
         })
     })
     .then(response => {
-        console.log('📥 Response status:', response.status);
-        console.log('📥 Response ok:', response.ok);
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
         
-        // Log headers để debug
         response.headers.forEach((value, key) => {
             console.log(`Header ${key}: ${value}`);
         });
         
-        // Xử lý lỗi 401
         if (response.status === 401) {
-            messageElement.textContent = '⚠️ Bạn chưa đăng nhập. Vui lòng đăng nhập để sử dụng chatbot.';
+            messageElement.textContent = 'Bạn chưa đăng nhập. Vui lòng đăng nhập để sử dụng chatbot.';
             messageElement.classList.add("error");
             
-            // Hiển thị confirm dialog sau 1 giây
             setTimeout(() => {
                 if (confirm('Bạn chưa đăng nhập. Chuyển đến trang đăng nhập?')) {
                     window.location.href = '/login';
@@ -88,7 +82,6 @@ const generateResponse = (chatElement) => {
             throw new Error('Unauthorized');
         }
         
-        // Xử lý các lỗi HTTP khác
         if (!response.ok) {
             return response.json().then(data => {
                 throw new Error(data.message || 'Có lỗi xảy ra');
@@ -100,7 +93,7 @@ const generateResponse = (chatElement) => {
         return response.json();
     })
     .then(data => {
-        console.log('📥 Response data:', data);
+        console.log('Response data:', data);
         
         if (data.success) {
             messageElement.textContent = data.reply;
@@ -111,9 +104,8 @@ const generateResponse = (chatElement) => {
         }
     })
     .catch(error => {
-        console.error('❌ Error:', error);
+        console.error('Error:', error);
         
-        // Không ghi đè message nếu đã có error message
         if (!messageElement.classList.contains("error")) {
             messageElement.textContent = error.message || 'Có lỗi xảy ra. Vui lòng thử lại.';
             messageElement.classList.add("error");
@@ -122,41 +114,34 @@ const generateResponse = (chatElement) => {
     .finally(() => {
         chatbox.scrollTo(0, chatbox.scrollHeight);
         
-        // Mở khóa input sau khi hoàn thành
         isProcessing = false;
         chatInput.disabled = false;
         sendChatBtn.disabled = false;
-        chatInput.focus(); // Focus lại vào input
+        chatInput.focus(); 
     });
 }
 
-// Xử lý chat
 const handleChat = () => {
     userMessage = chatInput.value.trim();
     if (!userMessage) return;
     
-    // Chặn nếu đang xử lý request khác
     if (isProcessing) {
         console.warn('Đang xử lý tin nhắn trước, vui lòng đợi...');
         return;
     }
 
-    isProcessing = true; // Đánh dấu đang xử lý
+    isProcessing = true; 
     
-    // Disable input khi đang gửi
     chatInput.disabled = true;
     sendChatBtn.disabled = true;
 
-    // Xóa input
     chatInput.value = "";
     chatInput.style.height = "auto";
 
-    // Thêm tin nhắn user vào chatbox
     chatbox.appendChild(createChatLi(userMessage, "user-message"));
     chatbox.scrollTo(0, chatbox.scrollHeight);
 
     setTimeout(() => {
-        // Hiển thị "Đang suy nghĩ..."
         const incomingChatLi = createChatLi("Đang suy nghĩ...", "bot-message");
         chatbox.appendChild(incomingChatLi);
         chatbox.scrollTo(0, chatbox.scrollHeight);
@@ -164,13 +149,11 @@ const handleChat = () => {
     }, 600);
 }
 
-// Tự động resize textarea
 chatInput.addEventListener("input", () => {
     chatInput.style.height = "auto";
     chatInput.style.height = `${chatInput.scrollHeight}px`;
 });
 
-// Gửi tin nhắn khi nhấn Enter (không shift)
 chatInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
@@ -178,13 +161,11 @@ chatInput.addEventListener("keydown", (e) => {
     }
 });
 
-// Submit form
 chatForm.addEventListener("submit", (e) => {
     e.preventDefault();
     handleChat();
 });
 
-// Toggle chatbot
 chatbotToggler.addEventListener("click", () => {
     document.body.classList.toggle("show-chatbot");
 });
@@ -193,5 +174,4 @@ closeChatbot.addEventListener("click", () => {
     document.body.classList.remove("show-chatbot");
 });
 
-// Không test auth ngay khi load, sẽ test khi gửi message
-console.log('✅ Chatbot loaded successfully');
+console.log('Chatbot loaded successfully');

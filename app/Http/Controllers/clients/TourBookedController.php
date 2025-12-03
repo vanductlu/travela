@@ -53,30 +53,22 @@ class TourBookedController extends Controller
             $tourId = $req->tourId;
             $bookingId = $req->bookingId;
             $returnQuantity = $req->quantity__adults + $req->quantity__children;
-
-            // Lấy thông tin booking
             $booking = $this->booking->getBookingById($bookingId);
             
             if (!$booking) {
                 throw new \Exception('Không tìm thấy booking!');
             }
 
-            // Kiểm tra trạng thái booking
             if ($booking->bookingStatus === 'c') {
                 throw new \Exception('Booking đã được hủy trước đó!');
             }
-
-            // Lấy thông tin tour
             $tour = $this->tour->getTourDetail($tourId);
             
             if (!$tour) {
                 throw new \Exception('Không tìm thấy tour!');
             }
 
-            // Hoàn lại số lượng
             $newQuantity = $tour->quantity + $returnQuantity;
-
-            // Hoàn lại lượt sử dụng coupon nếu có
             if (!empty($booking->couponCode) && $booking->discount > 0) {
                 $coupon = $this->coupon->getCouponByCode($booking->couponCode);
                 
@@ -84,15 +76,11 @@ class TourBookedController extends Controller
                     $this->coupon->decrementUsage($coupon->couponId);
                 }
             }
-
-            // Cập nhật tour
             $updateTour = $this->tour->updateTours($tourId, ['quantity' => $newQuantity]);
             
             if (!$updateTour) {
                 throw new \Exception('Không thể cập nhật số lượng tour!');
             }
-
-            // Hủy booking
             $cancelResult = $this->booking->cancelBooking($bookingId);
             
             if (!$cancelResult) {

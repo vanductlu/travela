@@ -22,9 +22,6 @@ class Booking extends Model
         ->where('bookingId', $bookingId)
         ->update(['bookingStatus' => 'c']);
     }
-    /**
-     * Lấy booking theo ID
-     */
     public function getBookingById($bookingId)
     {
         return DB::table($this->table)
@@ -37,11 +34,8 @@ class Booking extends Model
         ->where('tourId', $tourId)
         ->where('userId', $userId)
         ->where('bookingStatus', 'f')
-        ->exists(); // Trả về true nếu bản ghi tồn tại, false nếu không tồn tại
+        ->exists(); 
     }
-    /**
-     * Lấy booking với thông tin coupon đã sử dụng
-     */
     public function getBookingWithCoupon($bookingId)
     {
         return DB::table($this->table)
@@ -49,9 +43,7 @@ class Booking extends Model
             ->select('*')
             ->first();
     }
-    /**
-     * Lấy booking với đầy đủ thông tin tour
-     */
+
     public function getBookingWithTourDetails($bookingId, $checkoutId = null)
     {
         $query = DB::table($this->table . ' as b')

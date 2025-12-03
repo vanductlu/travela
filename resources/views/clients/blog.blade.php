@@ -4,7 +4,6 @@
 <section class="blog-list-page py-100 rel z-1">
     <div class="container">
         <div class="row">
-            <!-- Danh sách bài viết -->
             <div class="col-lg-8">
                 @if($blogs->count() > 0)
                     @foreach($blogs as $blog)
@@ -41,11 +40,9 @@
                 @endif
             </div>
 
-            <!-- Sidebar -->
             <div class="col-lg-4 col-md-8 col-sm-10 rmt-75">
                 <div class="blog-sidebar">
 
-                    <!-- Form tìm kiếm -->
                     <div class="widget widget-search" data-aos="fade-up">
                         <form action="{{ route('blog.search') }}" method="GET" class="default-search-form">
                             <input type="text" name="q" placeholder="Tìm kiếm..." required>
@@ -53,7 +50,6 @@
                         </form>
                     </div>
 
-                    <!-- Danh mục -->
                     <div class="widget widget-category" data-aos="fade-up">
                         <h5 class="widget-title">Danh mục</h5>
                         <ul class="list-style-three">
@@ -63,7 +59,6 @@
                         </ul>
                     </div>
 
-                    <!-- Bài viết mới -->
                     <div class="widget widget-news" data-aos="fade-up">
                         <h5 class="widget-title">Bài viết mới</h5>
                         <ul>

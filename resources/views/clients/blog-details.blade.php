@@ -23,11 +23,9 @@
                     <div>{!! $blog->content !!}</div>
 
                     <hr>
-                    {{-- ======================= PHẦN BÌNH LUẬN ======================= --}}
                     <div class="comment-section mt-5">
-                        <h5 class="mb-4">💬 Bình luận</h5>
+                        <h5 class="mb-4">Bình luận</h5>
 
-                        {{-- Thông báo --}}
                         @if(session('success'))
                             <div class="alert alert-success">{{ session('success') }}</div>
                         @elseif(session('error'))
@@ -35,10 +33,9 @@
                         @endif
 
                         @php
-                            $user = session('username'); // Lấy tên người dùng từ session
+                            $user = session('username'); 
                         @endphp
 
-                        {{-- Form bình luận --}}
                         @if($user)
                             <form action="{{ route('blog.comment', $blog->blogId) }}" method="POST" class="mb-4">
                                 @csrf
@@ -53,7 +50,6 @@
                             </p>
                         @endif
 
-                        {{-- Lấy bình luận gốc --}}
                         @php
                             $comments = DB::table('tbl_comments')
                                 ->where('blog_id', $blog->blogId)
@@ -62,7 +58,6 @@
                                 ->get();
                         @endphp
 
-                        {{-- Hàm hiển thị bình luận con --}}
                         @php
                         if (!function_exists('renderReplies')) {
                             function renderReplies($commentId) {
@@ -100,7 +95,6 @@
                         }
                         @endphp
 
-                        {{-- Hiển thị danh sách bình luận --}}
                         <div class="comments-list">
                             @foreach($comments as $comment)
                                 <div class="comment d-flex align-items-start border rounded p-3 mb-3">
@@ -126,7 +120,6 @@
                                     </div>
                                 </div>
 
-                                {{-- Gọi hiển thị bình luận con --}}
                                 {!! renderReplies($comment->id) !!}
                             @endforeach
 
@@ -137,11 +130,9 @@
                     </div>
                 </article>
             </div>
-            {{-- ================== CỘT BÊN PHẢI - SIDEBAR ================== --}}
             <div class="col-lg-4 col-md-8 col-sm-10 rmt-75">
                 <div class="blog-sidebar">
                     
-                    {{-- Widget Tìm kiếm --}}
                     <div class="widget widget-search">
                         <h5 class="widget-title">🔍 Tìm kiếm</h5>
                         <form action="{{ route('blog') }}" method="GET" class="search-form">
@@ -155,7 +146,6 @@
                         </form>
                     </div>
 
-                    {{-- Widget Danh mục --}}
                     <div class="widget widget-categories">
                         <h5 class="widget-title">📂 Danh mục</h5>
                         <ul class="category-list">
@@ -181,7 +171,6 @@
                         </ul>
                     </div>
 
-                    {{-- Widget Bài viết mới --}}
                     <div class="widget widget-recent-posts">
                         <h5 class="widget-title">🔥 Bài viết mới</h5>
                         <ul class="recent-posts-list">
@@ -204,7 +193,6 @@
                         </ul>
                     </div>
 
-                    {{-- Widget Bài viết phổ biến --}}
                     <div class="widget widget-popular-posts">
                         <h5 class="widget-title">⭐ Bài viết phổ biến</h5>
                         <ul class="popular-posts-list">
@@ -231,7 +219,6 @@
                         </ul>
                     </div>
 
-                    {{-- Widget Tags --}}
                     <div class="widget widget-tags">
                         <h5 class="widget-title">🏷️ Tags phổ biến</h5>
                         <div class="tags-cloud">
@@ -248,7 +235,6 @@
                         </div>
                     </div>
 
-                    {{-- Widget Newsletter --}}
                     <div class="widget widget-newsletter">
                         <h5 class="widget-title">📧 Đăng ký nhận tin</h5>
                         <p class="newsletter-desc">Nhận thông báo về bài viết mới nhất qua email</p>
@@ -267,7 +253,6 @@
                         </form>
                     </div>
 
-                    {{-- Widget Social --}}
                     <div class="widget widget-social">
                         <h5 class="widget-title">🌐 Theo dõi chúng tôi</h5>
                         <div class="social-links">
@@ -290,7 +275,6 @@
                         </div>
                     </div>
 
-                    {{-- Widget Banner quảng cáo --}}
                     <div class="widget widget-ad">
                         <a href="#" class="ad-banner">
                             <div class="ad-content">
@@ -308,7 +292,6 @@
     </div>
 </section>
 
-{{-- Form trả lời động --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const replyButtons = document.querySelectorAll('.reply-btn');

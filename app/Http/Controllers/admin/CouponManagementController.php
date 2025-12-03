@@ -13,8 +13,6 @@ class CouponManagementController extends Controller
     {   
         $title = 'Quản lý mã giảm giá';
         $coupons = CouponModel::orderBy("couponId", "desc")->get();
-        
-        // Thống kê - FIX: Đảm bảo tính toán đúng
         $now = Carbon::now();
         $stats = [
             'total' => $coupons->count(),
@@ -68,7 +66,6 @@ class CouponManagementController extends Controller
                 ->withInput();
         }
 
-        // Validate thêm cho percent
         if ($request->discount_type === 'percent' && $request->discount_value > 100) {
             return redirect()->back()
                 ->withErrors(['discount_value' => 'Giá trị giảm giá phần trăm không được vượt quá 100%'])
@@ -151,7 +148,6 @@ class CouponManagementController extends Controller
         try {
             $coupon = CouponModel::findOrFail($id);
             
-            // Kiểm tra xem coupon đã được sử dụng chưa
             if ($coupon->used_count > 0) {
                 return response()->json([
                     'success' => false, 
@@ -172,7 +168,6 @@ class CouponManagementController extends Controller
         }
     }
 
-    // Toggle status
     public function toggleStatus($id)
     {
         try {
@@ -193,15 +188,10 @@ class CouponManagementController extends Controller
         }
     }
 
-    // View chi tiết
     public function show($id)
     {
         $title = 'Chi tiết mã giảm giá';
         $coupon = CouponModel::findOrFail($id);
-        
-        // Lấy danh sách booking đã sử dụng coupon này (nếu có quan hệ)
-        // $bookings = $coupon->bookings()->latest()->paginate(10);
-        
         return view("admin.coupon.show", compact("coupon", "title"));
     }
 }

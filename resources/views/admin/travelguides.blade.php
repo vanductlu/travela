@@ -4,7 +4,6 @@
         @include('admin.blocks.sidebar')
 
         <div class="right_col" role="main">
-            {{-- Hiển thị thông báo --}}
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -17,7 +16,6 @@
                 <button id="btnShowForm" class="btn btn-success">Thêm mới</button>
             </div>
 
-            {{-- Form thêm / sửa --}}
             <div id="teamForm" class="card mb-4 p-3" style="display:none;">
                 <form id="formTravelGuide" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -58,7 +56,6 @@
                 </form>
             </div>
 
-            {{-- Danh sách hướng dẫn viên --}}
             <div class="row team-cards">
                 @foreach ($teams as $team)
                     <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
@@ -132,14 +129,12 @@
 
 @include('admin.blocks.footer')
 
-{{-- Script hiển thị form và load dữ liệu khi edit --}}
 <script>
     const btnShowForm = document.getElementById('btnShowForm');
     const teamForm = document.getElementById('teamForm');
     const btnCancel = document.getElementById('btnCancel');
     const form = document.getElementById('formTravelGuide');
 
-    // Hiển thị form thêm mới
     btnShowForm.addEventListener('click', () => {
         form.reset();
         document.getElementById('team_id').value = '';
@@ -149,13 +144,11 @@
         document.getElementById('btnSubmit').textContent = 'Thêm mới';
     });
 
-    // Ẩn form
     btnCancel.addEventListener('click', () => {
         teamForm.style.display = 'none';
         form.reset();
     });
 
-    // Load dữ liệu khi edit
     document.querySelectorAll('.btnEdit').forEach(btn => {
         btn.addEventListener('click', () => {
             const id = btn.dataset.id;
@@ -174,7 +167,6 @@
         });
     });
 
-    // Tự động ẩn thông báo sau 5 giây
     setTimeout(() => {
         const alerts = document.querySelectorAll('.alert');
         alerts.forEach(alert => {

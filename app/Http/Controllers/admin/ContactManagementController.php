@@ -21,8 +21,6 @@ class ContactManagementController extends Controller
         $title = 'Liên hệ';
 
         $contacts = $this->contact->getContacts();
-        // dd($contacts);
-
         return view('admin.contact', compact('title', 'contacts'));
     }
 
@@ -31,16 +29,14 @@ class ContactManagementController extends Controller
         $contactId = $request->contactId;
         $emailReply = $request->email;
         $messageContent = $request->message;
-        // Kiểm tra xem message có phải là chuỗi
         if (is_object($messageContent)) {
-            $messageContent = (string) $messageContent; // Chuyển đối tượng thành chuỗi nếu cần
+            $messageContent = (string) $messageContent;
         }
         try {
             Mail::send('admin.emails.reply-contact', compact('messageContent'), function ($message) use ($emailReply) {
                 $message->to($emailReply)
                     ->subject('Phản hồi liên lệ của khách hàng');
             });
-            // Cập nhật trạng thái
             $dataUpdate = [
                 'isReply' => 'y'
             ];

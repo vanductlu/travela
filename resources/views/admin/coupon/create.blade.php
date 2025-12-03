@@ -3,7 +3,6 @@
     <div class="main_container">
         @include('admin.blocks.sidebar')
 
-        <!-- page content -->
         <div class="right_col" role="main">
             <div class="">
                 <div class="page-title">
@@ -22,7 +21,6 @@
                 <div class="clearfix"></div>
 
                 <div class="row">
-                    <!-- Form chính -->
                     <div class="col-md-8 col-sm-12">
                         <div class="x_panel">
                             <div class="x_title">
@@ -36,7 +34,6 @@
                                 <form id="couponForm" action="{{ route('admin.coupon.store') }}" method="POST" class="form-horizontal form-label-left">
                                     @csrf
 
-                                    <!-- Mã coupon -->
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3">
                                             Mã giảm giá <span class="required">*</span>
@@ -64,7 +61,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Tiền tố -->
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3">Tiền tố</label>
                                         <div class="col-md-9 col-sm-9">
@@ -75,7 +71,6 @@
 
                                     <div class="ln_solid"></div>
 
-                                    <!-- Loại giảm giá -->
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3">
                                             Loại giảm giá <span class="required">*</span>
@@ -98,7 +93,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Giá trị giảm -->
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3" id="discount_value_label">
                                             Giá trị giảm <span class="required">*</span>
@@ -119,7 +113,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Giảm giá tối đa -->
                                     <div class="form-group" id="max_discount_group">
                                         <label class="control-label col-md-3 col-sm-3">Giảm giá tối đa (VNĐ)</label>
                                         <div class="col-md-9 col-sm-9">
@@ -142,7 +135,6 @@
                                     <h4><i class="fa fa-cog"></i> Điều kiện áp dụng</h4>
                                     <div class="ln_solid"></div>
 
-                                    <!-- Giá trị đơn hàng tối thiểu -->
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3">Đơn hàng tối thiểu (VNĐ)</label>
                                         <div class="col-md-9 col-sm-9">
@@ -160,7 +152,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Giới hạn sử dụng -->
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3">Giới hạn sử dụng</label>
                                         <div class="col-md-9 col-sm-9">
@@ -181,7 +172,6 @@
                                     <h4><i class="fa fa-calendar"></i> Thời gian hiệu lực</h4>
                                     <div class="ln_solid"></div>
 
-                                    <!-- Ngày bắt đầu -->
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3">
                                             Ngày bắt đầu <span class="required">*</span>
@@ -199,7 +189,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Ngày kết thúc -->
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3">
                                             Ngày kết thúc <span class="required">*</span>
@@ -219,7 +208,6 @@
 
                                     <div class="ln_solid"></div>
 
-                                    <!-- Trạng thái -->
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3">
                                             Trạng thái <span class="required">*</span>
@@ -242,7 +230,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Mô tả -->
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3">Mô tả</label>
                                         <div class="col-md-9 col-sm-9">
@@ -259,7 +246,6 @@
 
                                     <div class="ln_solid"></div>
 
-                                    <!-- Buttons -->
                                     <div class="form-group">
                                         <div class="col-md-9 col-sm-9 col-md-offset-3">
                                             <button type="submit" class="btn btn-success">
@@ -275,9 +261,7 @@
                         </div>
                     </div>
 
-                    <!-- Sidebar -->
                     <div class="col-md-4 col-sm-12">
-                        <!-- Preview Panel -->
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2><i class="fa fa-eye"></i> Xem trước kết quả</h2>
@@ -293,7 +277,6 @@
                             </div>
                         </div>
 
-                        <!-- Tips -->
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2><i class="fa fa-lightbulb-o"></i> Gợi ý hữu ích</h2>
@@ -310,7 +293,6 @@
                             </div>
                         </div>
 
-                        <!-- Quick Templates -->
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2><i class="fa fa-bolt"></i> Templates nhanh</h2>
@@ -332,25 +314,19 @@
                 </div>
             </div>
         </div>
-        <!-- /page content -->
     </div>
 </div>
 <script>
-// VÔ HIỆU HÓA DATEPICKER INIT CỦA GENTELELLA
 $(document).ready(function() {
-    // Override init_daterangepicker function
     if (typeof init_daterangepicker !== 'undefined') {
         var originalInit = init_daterangepicker;
         window.init_daterangepicker = function() {
-            // Không làm gì - disable hoàn toàn
         };
     }
     
-    // Override $.fn.daterangepicker
     if ($.fn.daterangepicker) {
         var originalDaterangepicker = $.fn.daterangepicker;
         $.fn.daterangepicker = function() {
-            // Chỉ disable cho date inputs trong form coupon
             if (this.closest('#couponForm').length > 0) {
                 return this;
             }
@@ -361,27 +337,20 @@ $(document).ready(function() {
 </script>
 @include('admin.blocks.footer')
 <script>
-// RESET DATE INPUTS SAU KHI FOOTER LOAD
 $(window).on('load', function() {
     setTimeout(function() {
-        // Reset hoàn toàn cả 2 date inputs
         $('#start_date, #end_date').each(function() {
             var $input = $(this);
             var originalValue = $input.attr('id') === 'start_date' ? '{{ date("Y-m-d") }}' : '';
             
-            // Xóa tất cả event handlers
             $input.off();
             
-            // Xóa data
             $input.removeData();
             
-            // Xóa classes của datepicker
             $input.removeClass('hasDatepicker single_cal1 single_cal2 single_cal3 single_cal4');
             
-            // Set lại type
             $input.attr('type', 'date');
             
-            // Set value
             $input.val(originalValue);
         });
         
@@ -392,7 +361,6 @@ $(window).on('load', function() {
 
 <script>
 $(document).ready(function() {
-    // Toggle discount type fields
     $('#discount_type').on('change', function() {
         const type = $(this).val();
         if (type === 'percent') {
@@ -408,7 +376,6 @@ $(document).ready(function() {
 
     $('#discount_type').trigger('change');
 
-    // Auto generate code
     $('#btn-generate-code').on('click', function() {
         const prefix = $('#code_prefix').val() || 'COUPON';
         const randomStr = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -416,7 +383,6 @@ $(document).ready(function() {
         $('#code').val(code);
     });
 
-    // Preview discount
     function previewDiscount() {
         const discountType = $('#discount_type').val();
         const discountValue = parseFloat($('#discount_value').val()) || 0;
@@ -458,7 +424,6 @@ $(document).ready(function() {
     previewDiscount();
 });
 
-// Template functions
 function fillTemplate(type) {
     const today = new Date().toISOString().split('T')[0];
     const nextMonth = new Date();

@@ -3,7 +3,6 @@
     <div class="main_container">
         @include('admin.blocks.sidebar')
 
-        <!-- page content -->
         <div class="right_col" role="main">
             <div class="page-title">
                 <div class="title_left">
@@ -13,7 +12,6 @@
             <div class="clearfix"></div>
 
             <div class="row profile-container">
-                <!-- LEFT: Avatar + Info -->
                 <div class="col-md-3 profile-left text-center">
                     <div class="profile-img mb-3">
                         <img id="avatarAdminPreview" class="rounded-circle"
@@ -29,7 +27,6 @@
                     <p class="text-muted"><i class="fa fa-map-marker"></i> {{ $admin->address }}</p>
                 </div>
 
-                <!-- RIGHT: Form chỉnh sửa -->
                 <div class="col-md-9 profile-right">
                     <form action="{{ route('admin.update-admin') }}" method="POST" id="formProfileAdmin">
                         @csrf
@@ -73,7 +70,6 @@
             </div>
 
         </div>
-        <!-- /page content -->
     </div>
 </div>
 @include('admin.blocks.footer')

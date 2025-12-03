@@ -31,7 +31,7 @@ class DashboardController extends Controller
         ];
 
         $paymentStatus = $this->dashboard->getValuePayment();
-        $summary['totalUsers'] = $this->users->getTotalUsers(); // thêm vào summary
+        $summary['totalUsers'] = $this->users->getTotalUsers();
         $toursBooked = $this->dashboard->getMostTourBooked();
         $newBooking = $this->dashboard->getNewBooking();
         $revenue = $this->dashboard->getRevenuePerMonth();

@@ -1,4 +1,4 @@
-/* Google Fonts - Inter */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap');
 
 * {
@@ -143,6 +143,7 @@ body.show-chatbot .chatbot-popup {
     display: flex;
     gap: 11px;
     align-items: center;
+    margin-bottom: 15px;
 }
 
 .chat-body .message .bot-avatar {
@@ -170,6 +171,7 @@ body.show-chatbot .chatbot-popup {
 .chat-body .bot-message .message-text {
     background: #F2F2FF;
     border-radius: 13px 13px 13px 3px;
+    padding-bottom: 15px;
 }
 
 .chat-body .user-message {
@@ -347,8 +349,6 @@ body.show-emoji-picker em-emoji-picker {
     visibility: visible;
 }
 
-
-/* Responsive media query for mobile screens */
 @media (max-width: 520px) {
 
     #chatbot-toggler {

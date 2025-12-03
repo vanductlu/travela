@@ -3,7 +3,6 @@
     <div class="main_container">
         @include('admin.blocks.sidebar')
 
-        <!-- page content -->
         <div class="right_col" role="main">
             <div class="">
                 <div class="page-title">
@@ -27,12 +26,10 @@
 
                             <div class="x_content">
 
-                                <!-- Nút thêm bài viết -->
                                 <a href="{{ route('admin.blog.create') }}" class="btn btn-success mb-3">
                                     <i class="fa fa-plus"></i> Thêm bài viết mới
                                 </a>
 
-                                <!-- Bảng danh sách -->
                                 <table id="datatable" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -85,7 +82,6 @@
                     </div>
                 </div>
 
-                {{-- Form thêm bài viết --}}
                 @if(request()->is('admin/blog/create'))
                 <div class="row">
                     <div class="col-md-12 col-sm-12 ">
@@ -131,7 +127,6 @@
                 </div>
                 @endif
 
-                {{-- Form chỉnh sửa --}}
                 @if(request()->is('admin/blog/*/edit'))
                 <div class="row">
                     <div class="col-md-12 col-sm-12 ">
@@ -185,7 +180,6 @@
 
             </div>
         </div>
-        <!-- /page content -->
 
         @include('admin.blocks.footer')
     </div>

@@ -1,7 +1,6 @@
 @include('clients.blocks.header')
 @include('clients.blocks.banner')
 @include('clients.partials.chat')
-<!-- Benefit Area start -->
 <section class="benefit-area mt-100 rel z-1">
     <div class="container">
         <div class="row align-items-center justify-content-between">
@@ -43,10 +42,8 @@
         </div>
     </div>
 </section>
-<!-- Benefit Area end -->
 
 
-<!-- Team Area start -->
 <section class="about-team-area pt-100 rel z-1">
     <div class="container">
         <div class="row justify-content-center">
@@ -81,7 +78,6 @@
 
     </div>
 </section>
-<!-- Team Area end -->
 
 
 @include('clients.blocks.new_letter')

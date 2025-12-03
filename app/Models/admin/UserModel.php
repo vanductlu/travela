@@ -29,17 +29,11 @@ class UserModel extends Model
             ->where('userId', $id) 
             ->update($data); 
     }
-    /**
-     * Đếm tổng số người dùng đã đăng ký
-     */
     public function getTotalUsers()
     {
         return DB::table($this->table)->count();
     }
 
-    /**
-     * Đếm số người dùng đã kích hoạt
-     */
     public function getTotalActiveUsers()
     {
         return DB::table($this->table)
@@ -47,9 +41,6 @@ class UserModel extends Model
             ->count();
     }
 
-    /**
-     * Đếm số người dùng đăng ký theo tháng hiện tại
-     */
     public function getUsersThisMonth()
     {
         return DB::table($this->table)
@@ -58,9 +49,6 @@ class UserModel extends Model
             ->count();
     }
 
-    /**
-     * Đếm số người dùng mới trong N ngày gần đây
-     */
     public function getNewUsers($days = 7)
     {
         return DB::table($this->table)

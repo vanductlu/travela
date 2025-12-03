@@ -21,7 +21,6 @@ class ContactController extends Controller
 
     public function createContact(Request $req)
     {
-        // Validate dữ liệu
         $validated = $req->validate([
             'name' => 'required|string|max:255',
             'phone_number' => 'required|string|max:20',
@@ -36,7 +35,6 @@ class ContactController extends Controller
         ]);
 
         try {
-            // Lưu vào database
             $contact = Contact::create([
                 'fullName' => $req->name,
                 'phoneNumber' => $req->phone_number,
@@ -44,10 +42,7 @@ class ContactController extends Controller
                 'message' => $req->message,
                 'isReply' => 'n'
             ]);
-
-            // Gửi email - wrapped trong try-catch riêng
             try {
-                // Email cho doanh nghiệp
                 Mail::to('nvd2k3@gmail.com')->send(
                     new ContactNotification([
                         'fullName' => $req->name,
@@ -56,18 +51,14 @@ class ContactController extends Controller
                         'message' => $req->message
                     ])
                 );
-                
-                // Email tự động cho khách hàng
+
                 Mail::to($req->email)->send(new ContactAutoReply($req->name));
                 
                 Log::info('Contact email sent successfully to: ' . $req->email);
                 
             } catch (Exception $mailError) {
-                // Log lỗi email nhưng vẫn báo thành công cho user
                 Log::error('Mail sending failed: ' . $mailError->getMessage());
                 Log::error('Mail error trace: ' . $mailError->getTraceAsString());
-                
-                // Vẫn thông báo thành công vì đã lưu được data
                 toastr()->warning('Đã lưu thông tin liên hệ. Chúng tôi sẽ phản hồi sớm!');
                 return redirect()->back();
             }

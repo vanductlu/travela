@@ -5,8 +5,6 @@ import torch
 
 app = Flask(__name__)
 CORS(app)
-
-# Danh sách model hỗ trợ
 MODELS = {
     "en-vi": "Helsinki-NLP/opus-mt-en-vi",
     "vi-en": "Helsinki-NLP/opus-mt-vi-en",
@@ -38,9 +36,9 @@ def get_model_pair(lang_pair):
 def split_into_sentences(text):
     """Chia text thành câu để dịch tốt hơn"""
     import re
-    # Tách câu dựa trên dấu câu
+    
     sentences = re.split(r'([.!?]+\s+|\n+)', text)
-    # Ghép lại câu với dấu câu
+    
     result = []
     for i in range(0, len(sentences), 2):
         if i + 1 < len(sentences):
@@ -70,10 +68,10 @@ def translate():
         if not tokenizer or not model:
             return jsonify({
                 "error": f"Không hỗ trợ {src}→{tgt}",
-                "translation": f"⚠️ Không hỗ trợ dịch {src} sang {tgt}"
+                "translation": f"Không hỗ trợ dịch {src} sang {tgt}"
             }), 400
         
-        # Chia nhỏ nếu text quá dài
+        
         if len(text) > 500:
             sentences = split_into_sentences(text)
             print(f"Split into {len(sentences)} sentences")
@@ -89,14 +87,14 @@ def translate():
             
             final_translation = " ".join(translations)
         else:
-            # Dịch trực tiếp với cấu hình tốt hơn
+            
             tokens = tokenizer([text], return_tensors="pt", padding=True, truncation=True, max_length=512)
             
             with torch.no_grad():
                 translated = model.generate(
                     **tokens,
                     max_length=512,
-                    num_beams=4,  # Tăng beam search
+                    num_beams=4,  
                     early_stopping=True,
                     length_penalty=1.0
                 )
@@ -112,7 +110,7 @@ def translate():
         print(f"ERROR: {str(e)}")
         return jsonify({
             "error": str(e),
-            "translation": "⚠️ Lỗi khi dịch"
+            "translation": "Lỗi khi dịch"
         }), 500
 
 @app.route("/api/health", methods=["GET"])
@@ -126,10 +124,10 @@ def health():
 
 if __name__ == "__main__":
     print("\n" + "="*60)
-    print("🚀 AI Translation Server")
+    print("AI Translation Server")
     print("="*60)
-    print("📡 Running on: http://127.0.0.1:5556")
-    print("🌐 Supported languages: VI, EN, FR, JA, ZH")
+    print("Running on: http://127.0.0.1:5556")
+    print("Supported languages: VI, EN, FR, JA, ZH")
     print("="*60 + "\n")
     
     app.run(host="127.0.0.1", port=5556, debug=True)

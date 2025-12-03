@@ -6,7 +6,6 @@
 
         <div class="clearfix"></div>
 
-        <!-- menu profile quick info -->
         <div class="profile clearfix">
             <div class="profile_pic">
                 <img src="{{ asset('clients/assets/images/user-profile/avt_admin.jpg') }}" alt="..."
@@ -17,11 +16,9 @@
                 <h2>Admin</h2>
             </div>
         </div>
-        <!-- /menu profile quick info -->
 
         <br />
 
-        <!-- sidebar menu -->
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
                 <h3>Tổng quan</h3>
@@ -41,7 +38,6 @@
 
                     <li><a href="{{ route('admin.booking') }}"><i class="fa fa-calendar-check-o"></i> Quản lý Booking</a></li>
                     
-                    <!-- Quản lý Coupon - MỚI -->
                     <li><a><i class="fa fa-ticket"></i> Quản lý Coupon<span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="{{ route('admin.coupon.index') }}">Danh sách mã giảm giá</a></li>
@@ -59,9 +55,7 @@
                 </ul>
             </div>
         </div>
-        <!-- /sidebar menu -->
 
-        <!-- /menu footer buttons -->
         <div class="sidebar-footer hidden-small">
             <a data-toggle="tooltip" data-placement="top" title="Settings">
                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
@@ -76,11 +70,9 @@
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
             </a>
         </div>
-        <!-- /menu footer buttons -->
     </div>
 </div>
 
-<!-- top navigation -->
 <div class="top_nav">
     <div class="nav_menu">
         <div class="nav toggle">
@@ -127,10 +119,8 @@
         </nav>
     </div>
 </div>
-<!-- /top navigation -->
 
 <style>
-/* Active menu highlighting */
 .side-menu li.active > a {
     background-color: #1ABB9C !important;
     color: #fff !important;
@@ -147,7 +137,6 @@
     font-weight: bold;
 }
 
-/* Hover effects */
 .side-menu li:hover > a {
     background-color: rgba(26, 187, 156, 0.1);
 }
@@ -155,28 +144,22 @@
 
 <script>
 $(document).ready(function() {
-    // Active menu highlighting
     var currentPath = window.location.pathname;
     
-    // Check each menu item
     $('.side-menu li a').each(function() {
         var href = $(this).attr('href');
         
         if (href && currentPath.indexOf(href) !== -1 && href !== '/admin') {
-            // Remove active from all
             $('.side-menu li').removeClass('active');
             
-            // Add active to current
             $(this).parent('li').addClass('active');
             
-            // If it's a child menu, also activate parent
             if ($(this).closest('.child_menu').length) {
                 $(this).closest('.child_menu').parent('li').addClass('active');
             }
         }
     });
     
-    // Special handling for coupon routes
     if (currentPath.indexOf('/admin/coupon') !== -1) {
         $('.side-menu li').removeClass('active');
         $('.side-menu li a').each(function() {

@@ -1,40 +1,4 @@
-/*-----------------------------------------------------------------------------------
-    Template Name: Ravelo - Travel & Tour Booking HTML Template
-    Template URI: https://webtend.net/demo/html/ravelo/
-    Author: WebTend
-    Author URI:  https://webtend.net/
-    Version: 1.0
 
-    Note: This is Main JS File.
------------------------------------------------------------------------------------
-	CSS INDEX
-	===================
-    ## Header Style
-    ## Dropdown menu
-    ## Submenu
-    ## Menu Hidden Sidebar
-    ## Search Box
-    ## Sidebar Menu
-    ## Video Popup
-    ## Testimonial Slider
-    ## Destination Carousel
-    ## Client Logo Carousel
-    ## Hot Deals Carousel
-    ## Gallery Slider
-    ## Product Slider
-    ## Gallery Popup
-    ## Instagram Gallery
-    ## SkillBar
-    ## Fact Counter
-    ## Destinations Filter
-    ## Price Range Fliter
-    ## Hover Content
-    ## Scroll to Top
-    ## Nice Select
-    ## AOS Animation
-    ## Preloader
-    
------------------------------------------------------------------------------------*/
 
 (function ($) {
 
@@ -42,7 +6,6 @@
 
     $(document).ready(function () {
 
-        // ## Header Style and Scroll to Top
         function headerStyle() {
             if ($('.main-header').length) {
                 var windowpos = $(window).scrollTop();
@@ -60,7 +23,6 @@
         headerStyle();
         
         
-        // ## Dropdown menu
         var mobileWidth = 992;
         var navcollapse = $('.navigation li.dropdown');
 
@@ -71,23 +33,19 @@
             }
         });
         
-        // ## Submenu Dropdown Toggle
         if ($('.main-header .navigation li.dropdown ul').length) {
             $('.main-header .navigation li.dropdown').append('<div class="dropdown-btn"><span class="far fa-angle-down"></span></div>');
 
-            //Dropdown Button
             $('.main-header .navigation li.dropdown .dropdown-btn').on('click', function () {
                 $(this).prev('ul').slideToggle(500);
                 $(this).prev('.megamenu').slideToggle(800);
             });
             
-            //Disable dropdown parent link
             $('.navigation li.dropdown > a').on('click', function (e) {
                 e.preventDefault();
             });
         }
         
-        //Submenu Dropdown Toggle
         if ($('.main-header .main-menu').length) {
             $('.main-header .main-menu .navbar-toggle').click(function () {
                 $(this).prev().prev().next().next().children('li.dropdown').hide();
@@ -95,32 +53,23 @@
         }
         
          
-        // ## Menu Hidden Sidebar Content Toggle
         if($('.menu-sidebar').length){
-            //Show Form
-            // $('.menu-sidebar').on('click', function(e) {
-            //     e.preventDefault();
-            //     $('body').toggleClass('side-content-visible');
-            // });
-            //Hide Form
+
             $('.hidden-bar .inner-box .cross-icon,.form-back-drop,.close-menu').on('click', function(e) {
                 e.preventDefault();
                 $('body').removeClass('side-content-visible');
             });
-            //Dropdown Menu
             $('.fullscreen-menu .navigation li.dropdown > a').on('click', function() {
                 $(this).next('ul').slideToggle(500);
             });
         }
          
         
-        // ## Search Box
 		$('.nav-search > button').on('click', function () {
 			$('.nav-search form').toggleClass('hide');
 		});
         
         
-        // Hide Box Search WHEN CLICK OUTSIDE
 		if ($(window).width() > 767){
 			$('body').on('click', function (event) {
 				if ($('.nav-search > button').has(event.target).length == 0 && !$('.nav-search > button').is(event.target)
@@ -133,18 +82,15 @@
 		}
         
         
-        // ## Sidebar Menu
         if ($('.sidebar-menu li.dropdown ul').length) {
             $('.sidebar-menu li.dropdown').append('<div class="dropdown-btn"><span class="far fa-angle-down"></span></div>');
 
-            //Dropdown Button
             $('.sidebar-menu li.dropdown .dropdown-btn').on('click', function () {
                 $(this).prev('ul').slideToggle(500);
                 $(this).prev('.megamenu').slideToggle(800);
                 $(this).parent('li.dropdown').toggleClass('active');
             });
             
-            //Disable dropdown parent link
             $('.sidebar-menu li.dropdown > a').on('click', function (e) {
                 e.preventDefault();
                 $(this).next('ul').slideToggle(500);
@@ -153,7 +99,6 @@
         }
         
   
-        // ## Video Popup
         if ($('.video-play').length) {
             $('.video-play').magnificPopup({
                 type: 'video',
@@ -161,7 +106,6 @@
         }
 
         
-        // ## Testimonial Slider
         if ($('.testimonials-active').length) {
             $('.testimonials-active').slick({
                 slidesToShow: 1,
@@ -177,7 +121,6 @@
         }
 
         
-        // ## Destination Carousel
         if ($('.destination-active').length) {
             $('.destination-active').slick({
                 infinite: true,
@@ -220,7 +163,6 @@
         }
         
         
-        // ## Client Logo Carousel
         if ($('.client-logo-active').length) {
             $('.client-logo-active').slick({
                 infinite: true,
@@ -256,7 +198,6 @@
         }
         
  
-        // ## Hot Deals Carousel
         if ($('.hot-deals-active').length) {
             $('.hot-deals-active').slick({
                 infinite: true,
@@ -286,7 +227,6 @@
         }
         
 
-        // ## Gallery Slider
         if ($('.gallery-slider-active').length) {
             $('.gallery-slider-active').slick({
                 slidesToShow: 4,
@@ -323,7 +263,6 @@
         }
         
         
-        // ## Product Slider
         if ($('.product-slider').length) {
             $('.product-slider').slick({
                 slidesToShow: 4,
@@ -360,7 +299,6 @@
         }
         
         
-        // ## Gallery Popup
         $('.gallery a').magnificPopup({
             type: 'image',
             gallery: {
@@ -370,7 +308,6 @@
         });
         
         
-        // ## Instagram Gallery 
         $('.instagram-item').magnificPopup({
             type: 'image',
             gallery: {
@@ -380,7 +317,6 @@
         });
         
         
-        // ## SkillBar
         if ($('.skillbar').length) {
             $('.skillbar').appear(function () {
                 $('.skillbar').skillBars({
@@ -392,7 +328,6 @@
         }
         
         
-         /* ## Fact Counter + Text Count - Our Success */
         if ($('.counter-text-wrap').length) {
             $('.counter-text-wrap').appear(function () {
                 
@@ -424,20 +359,17 @@
         }
         
         
-        // ## Destinations Filter
         $('.destinations-active').imagesLoaded(function () {
 			var items = $('.destinations-active').isotope({
 				itemSelector: '.item',
 				percentPosition: true,
 			});
-			// items on button click
 			$('.destinations-nav').on('click', 'li', function () {
 				var filterValue = $(this).attr('data-filter');
 				items.isotope({
 					filter: filterValue
 				});
 			});
-			// menu active class
 			$('.destinations-nav li').on('click', function (event) {
 				$(this).siblings('.active').removeClass('active');
 				$(this).addClass('active');
@@ -446,7 +378,6 @@
 		});
         
         
-        // ## Price Range Fliter jQuery UI
         if ($('.price-slider-range').length) {
             $(".price-slider-range").slider({
                 range: true,
@@ -467,7 +398,6 @@
         
         
         
-        // ## Hover Content
         $('.hover-content').hover(
             function(){
                 $(this).find('.inner-content').slideDown();
@@ -477,11 +407,9 @@
         );
         
         
-        // ## Scroll to Top
         if ($('.scroll-to-target').length) {
             $(".scroll-to-target").on('click', function () {
                 var target = $(this).attr('data-target');
-                // animate
                 $('html, body').animate({
                     scrollTop: $(target).offset().top
                 }, 1000);
@@ -490,20 +418,15 @@
         }
         
         
-        // ## Nice Select
         $('select').niceSelect();
         
         
-        // ## AOS Animation
         AOS.init();
         
  
     });
     
     
-    /* ==========================================================================
-       When document is resize, do
-    ========================================================================== */
 
     $(window).on('resize', function () {
         var mobileWidth = 992;
@@ -514,13 +437,9 @@
     });
 
 
-    /* ==========================================================================
-       When document is scroll, do
-    ========================================================================== */
 
     $(window).on('scroll', function () {
 
-        // Header Style and Scroll to Top
         function headerStyle() {
             if ($('.main-header').length) {
                 var windowpos = $(window).scrollTop();
@@ -540,13 +459,9 @@
 
     });
 
-    /* ==========================================================================
-       When document is loaded, do
-    ========================================================================== */
 
     $(window).on('load', function () {
 
-        // ## Preloader
         function handlePreloader() {
             if ($('.preloader').length) {
                 $('.preloader').delay(200).fadeOut(500);

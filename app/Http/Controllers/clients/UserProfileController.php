@@ -10,14 +10,13 @@ class UserProfileController extends Controller
 {   
     public function __construct()
     {   
-        parent::__construct(); // Gọi constructor của Controller để khởi tạo $user
+        parent::__construct();
     }
     public function index()
     {   
         $title = 'Thông tin cá nhân';
         $userId = $this->getUserId();
         $user = $this->user->getUser($userId);
-        // dd($userId);
         return view('clients.user-profile',compact('title','user'));
     }
 
@@ -65,27 +64,22 @@ class UserProfileController extends Controller
         $userId = $this->getUserId();
 
         $req->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
-        // Lấy tệp ảnh
         $avatar = $req->file('avatar');
 
-        // Tạo tên mới cho tệp ảnh
-        $filename = time() . '.' . $avatar->getClientOriginalExtension(); // Tên tệp mới theo thời gian
+        $filename = time() . '.' . $avatar->getClientOriginalExtension(); 
 
         $user = $this->user->getUser($userId);
         if ($user->avatar) {
-            // Đường dẫn đến ảnh cũ
             $oldAvatarPath = public_path('clients/assets/images/user-profile/' . $user->avatar);
 
-            // Kiểm tra tệp cũ có tồn tại và xóa nếu có
             if (file_exists($oldAvatarPath)) {
                 unlink($oldAvatarPath);
             }
         }
 
-        // Di chuyển ảnh vào thư mục public/admin/assets/images/user-profile/
         $avatar->move(public_path('clients/assets/images/user-profile'), $filename);
         $update = $this->user->updateUser($userId, ['avatar' => $filename]);
         $req->session()->put('avatar', $filename);

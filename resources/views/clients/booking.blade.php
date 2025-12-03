@@ -2,11 +2,9 @@
 @include('clients.blocks.banner')
 @include('clients.partials.chat')
 <section class="container" style="margin-top:50px; margin-bottom: 100px">
-    {{-- <h1 class="text-center booking-header">Tổng Quan Về Chuyến Đi</h1> --}}
 
     <form action="{{ route('create-booking') }}" method="post" class="booking-container">
         @csrf
-        <!-- Contact Information -->
         <div class="booking-info">
             <h2 class="booking-header">Thông Tin Liên Lạc</h2>
             <div class="booking__infor">
@@ -38,7 +36,6 @@
             </div>
 
 
-            <!-- Passenger Details -->
             <h2 class="booking-header">Hành Khách</h2>
 
             <div class="booking__quantity">
@@ -62,7 +59,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Privacy Agreement Section -->
             <div class="privacy-section">
                 <p>Bằng cách nhấp chuột vào nút "ĐỒNG Ý" dưới đây, Khách hàng đồng ý rằng các điều kiện điều khoản
                     này sẽ được áp dụng. Vui lòng đọc kỹ điều kiện điều khoản trước khi lựa chọn sử dụng dịch vụ của
@@ -73,7 +69,6 @@
                             toán</a></label>
                 </div>
             </div>
-            <!-- Payment Method -->
             <h2 class="booking-header">Phương Thức Thanh Toán</h2>
 
             <label class="payment-option">
@@ -85,15 +80,10 @@
                 <input type="radio" name="payment" value="momo-payment" required>
                 <img src="{{ asset('clients/assets/images/booking/thanh-toan-momo.jpg') }}" alt="MoMo">
                 Thanh toán bằng Momo
-                {{-- @if (!is_null($transIdMomo))
-                    <input type="hidden" name="transactionIdMomo" value="{{ $transIdMomo }}">
-                @endif --}}
             </label>
-
             <input type="hidden" name="payment_hidden" id="payment_hidden">
         </div>
 
-        <!-- Order Summary -->
         <div class="booking-summary">
             <div class="summary-section">
                 <div>

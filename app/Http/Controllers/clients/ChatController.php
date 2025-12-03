@@ -27,7 +27,6 @@ class ChatController extends Controller
 
     public function index(Request $request)
     {
-        // Kiểm tra đăng nhập bằng session
         if (!$request->session()->has('username')) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để sử dụng chatbot');
         }
@@ -95,7 +94,6 @@ class ChatController extends Controller
         
         Log::info('API Key exists: ' . substr($apiKey, 0, 10) . '...');
 
-        // Lưu tin nhắn của người dùng
         try {
             Chat::create([
                 'userId' => $userId,
@@ -108,13 +106,9 @@ class ChatController extends Controller
             Log::error('Failed to save user message: ' . $e->getMessage());
             throw $e;
         }
-
-        // Tạo ngữ cảnh
         Log::info('Getting tour context...');
         $context = $this->getTourContext($userMessage);
         Log::info('Context length: ' . strlen($context));
-
-        // Lấy lịch sử
         Log::info('Getting chat history...');
         $history = Chat::where('userId', $userId)
             ->orderBy('createdDate', 'desc')
@@ -122,8 +116,6 @@ class ChatController extends Controller
             ->get()
             ->reverse();
         Log::info('History count: ' . $history->count());
-
-        // Build contents
         $contents = $this->buildGeminiContents($history, $userMessage, $context);
         Log::info('Contents built, count: ' . count($contents));
         
@@ -147,7 +139,6 @@ class ChatController extends Controller
                 $reply = $result['candidates'][0]['content']['parts'][0]['text'];
             }
 
-            // Lưu phản hồi
             try {
                 Chat::create([
                     'userId' => $userId,
@@ -217,27 +208,23 @@ class ChatController extends Controller
 {
     $plainQuery = strtolower($this->removeAccents($query));
     
-    // Stop words tiếng Việt phổ biến
     $stopWords = [
         'the', 'thi', 'sao', 'nhu', 'la', 'co', 'gi', 'cho', 'toi', 'minh', 'ban',
         'va', 'cua', 'trong', 'voi', 'ma', 'den', 'se', 'duoc', 'hay', 'rat',
         'nhung', 'cac', 'mot', 'nay', 'do', 'khi', 'chi', 'ho', 'oi', 'a', 'an'
     ];
     
-    // Tách và lọc từ khóa
     $words = preg_split('/\s+/', $plainQuery);
     $keywords = array_filter($words, function($word) use ($stopWords) {
         return strlen($word) >= 2 && !in_array($word, $stopWords);
     });
     
-    // Nếu không có từ khóa nào, trả về rỗng
     if (empty($keywords)) {
         return "Vui lòng cung cấp thêm thông tin về tour bạn muốn tìm (ví dụ: địa điểm, thời gian).";
     }
     
     Log::info('Search keywords: ' . implode(', ', $keywords));
 
-    // Tìm kiếm tours
     $tours = Tours::all()->filter(function ($tour) use ($keywords) {
         $searchText = strtolower($this->removeAccents(
             $tour->title . ' ' . 
@@ -246,7 +233,6 @@ class ChatController extends Controller
             $tour->domain
         ));
         
-        // Đếm số từ khóa xuất hiện
         $matchCount = 0;
         foreach ($keywords as $keyword) {
             if (str_contains($searchText, $keyword)) {
@@ -254,12 +240,10 @@ class ChatController extends Controller
             }
         }
         
-        // Khớp ít nhất 30% số từ khóa hoặc ít nhất 1 từ khóa
         $threshold = max(1, ceil(count($keywords) * 0.3));
         return $matchCount >= $threshold;
     })
     ->sortByDesc(function ($tour) use ($keywords) {
-        // Tính điểm liên quan
         $searchText = strtolower($this->removeAccents(
             $tour->title . ' ' . 
             $tour->description . ' ' . 
@@ -270,7 +254,6 @@ class ChatController extends Controller
         $score = 0;
         foreach ($keywords as $keyword) {
             if (str_contains($searchText, $keyword)) {
-                // Từ khóa xuất hiện trong title có điểm cao hơn
                 if (str_contains(strtolower($this->removeAccents($tour->title)), $keyword)) {
                     $score += 3;
                 } else {
@@ -288,12 +271,12 @@ class ChatController extends Controller
 
     $context = "";
     foreach ($tours as $tour) {
-        $context .= "🏝️ Tour: {$tour->title}\n";
-        $context .= "⏱️ Thời gian: {$tour->time}\n";
-        $context .= "📍 Điểm đến: {$tour->destination} ({$tour->domain})\n";
-        $context .= "💰 Giá người lớn: " . number_format($tour->priceAdult) . "đ - Trẻ em: " . number_format($tour->priceChild) . "đ\n";
-        $context .= "📅 Khởi hành: {$tour->startDate} - Kết thúc: {$tour->endDate}\n";
-        $context .= "📝 Mô tả: {$tour->description}\n\n";
+        $context .= "Tour: {$tour->title}\n";
+        $context .= "Thời gian: {$tour->time}\n";
+        $context .= "Điểm đến: {$tour->destination} ({$tour->domain})\n";
+        $context .= "Giá người lớn: " . number_format($tour->priceAdult) . "đ - Trẻ em: " . number_format($tour->priceChild) . "đ\n";
+        $context .= "Khởi hành: {$tour->startDate} - Kết thúc: {$tour->endDate}\n";
+        $context .= "Mô tả: {$tour->description}\n\n";
     }
     
     Log::info('Found ' . $tours->count() . ' matching tours');

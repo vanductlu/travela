@@ -47,16 +47,11 @@ class ToursModel extends Model
             ->update($data);
     }
 
-    /**
-     * ✅ XÓA HẲN TOUR - Xóa theo đúng thứ tự foreign key
-     * Thứ tự xóa: checkout → reviews → booking → timeline → images → tour
-     */
     public function deleteTour($tourId)
     {
         try {
             DB::beginTransaction();
 
-            // Bước 1: Lấy tất cả bookingId liên quan đến tour
             $bookingIds = DB::table('tbl_booking')
                 ->where('tourId', $tourId)
                 ->pluck('bookingId')
@@ -64,39 +59,32 @@ class ToursModel extends Model
 
             Log::info("Deleting tour {$tourId}, found " . count($bookingIds) . " bookings");
 
-            // Bước 2: Xóa checkout (phụ thuộc vào booking)
             if (!empty($bookingIds)) {
                 $deletedCheckout = DB::table('tbl_checkout')
                     ->whereIn('bookingId', $bookingIds)
                     ->delete();
                 Log::info("Deleted {$deletedCheckout} checkout records");
             }
-
-            // Bước 3: Xóa reviews (phụ thuộc vào tour)
             $deletedReviews = DB::table('tbl_reviews')
                 ->where('tourId', $tourId)
                 ->delete();
             Log::info("Deleted {$deletedReviews} reviews");
 
-            // Bước 4: Xóa booking (phụ thuộc vào tour)
             $deletedBookings = DB::table('tbl_booking')
                 ->where('tourId', $tourId)
                 ->delete();
             Log::info("Deleted {$deletedBookings} bookings");
 
-            // Bước 5: Xóa timeline
             $deletedTimeline = DB::table('tbl_timeline')
                 ->where('tourId', $tourId)
                 ->delete();
             Log::info("Deleted {$deletedTimeline} timeline records");
 
-            // Bước 6: Xóa images
             $deletedImages = DB::table('tbl_images')
                 ->where('tourId', $tourId)
                 ->delete();
             Log::info("Deleted {$deletedImages} images");
 
-            // Bước 7: Xóa tour
             $deletedTour = DB::table($this->table)
                 ->where('tourId', $tourId)
                 ->delete();
@@ -144,9 +132,6 @@ class ToursModel extends Model
             ->get();
     }
 
-    /**
-     * ✅ Lấy danh sách ảnh dưới dạng mảng URL
-     */
     public function getImageUrls($tourId)
     {
         return DB::table('tbl_images')
@@ -165,9 +150,6 @@ class ToursModel extends Model
         return DB::table($tbl)->where('tourId', $tourId)->delete();
     }
 
-    /**
-     * ✅ Kiểm tra tour có ảnh chưa
-     */
     public function hasImages($tourId)
     {
         return DB::table('tbl_images')
@@ -175,9 +157,6 @@ class ToursModel extends Model
             ->exists();
     }
 
-    /**
-     * ✅ Đếm số lượng ảnh của tour
-     */
     public function countImages($tourId)
     {
         return DB::table('tbl_images')
@@ -185,9 +164,6 @@ class ToursModel extends Model
             ->count();
     }
 
-    /**
-     * ✅ Kiểm tra tour có booking không
-     */
     public function hasBookings($tourId)
     {
         return DB::table('tbl_booking')
@@ -195,9 +171,6 @@ class ToursModel extends Model
             ->exists();
     }
 
-    /**
-     * ✅ Đếm số booking của tour
-     */
     public function countBookings($tourId)
     {
         return DB::table('tbl_booking')
@@ -205,9 +178,6 @@ class ToursModel extends Model
             ->count();
     }
 
-    /**
-     * ✅ Lấy thông tin chi tiết về các bản ghi liên quan
-     */
     public function getRelatedRecords($tourId)
     {
         $bookings = DB::table('tbl_booking')->where('tourId', $tourId)->count();

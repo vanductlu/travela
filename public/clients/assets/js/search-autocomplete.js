@@ -1,6 +1,4 @@
-/****************************************
- *  HANDLE SEARCH AI - Lấy gợi ý từ Flask API (Port 5555)   *
- *****************************************/
+
 document.addEventListener("DOMContentLoaded", function () {
     const input = document.getElementById("searchInput");
     const suggestionList = document.getElementById("suggestionList");
@@ -17,12 +15,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let debounceTimer;
     const DEBOUNCE_DELAY = 300;
-    
-    // ✅ GỌI FLASK API TRÊN PORT 5555
+
     const API_URL = "http://127.0.0.1:5555/api/search-suggestions";
     
-    console.log("🚀 Search suggestion initialized");
-    console.log("📡 API URL:", API_URL);
+    console.log("Search suggestion initialized");
+    console.log("API URL:", API_URL);
     
     function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -40,11 +37,11 @@ document.addEventListener("DOMContentLoaded", function () {
         
         if (!suggestions || suggestions.length === 0) {
             suggestionList.style.display = "none";
-            console.log("❌ Không có gợi ý");
+            console.log("Không có gợi ý");
             return;
         }
 
-        console.log("✅ Hiển thị", suggestions.length, "gợi ý:", suggestions);
+        console.log("Hiển thị", suggestions.length, "gợi ý:", suggestions);
 
         suggestions.forEach(item => {
             const li = document.createElement("li");
@@ -80,46 +77,43 @@ document.addEventListener("DOMContentLoaded", function () {
         debounceTimer = setTimeout(async () => {
             try {
                 const url = `${API_URL}?keyword=${encodeURIComponent(keyword)}`;
-                console.log("📤 Fetching:", url);
+                console.log("Fetching:", url);
                 
                 const res = await fetch(url);
                 
-                console.log("📥 Response status:", res.status);
+                console.log("Response status:", res.status);
                 
                 if (!res.ok) {
-                    console.error("❌ API error:", res.status, res.statusText);
+                    console.error("API error:", res.status, res.statusText);
                     suggestionList.style.display = "none";
                     return;
                 }
 
                 const data = await res.json();
-                console.log("📦 Data received:", data);
+                console.log("Data received:", data);
                 
                 const suggestions = data.suggestions || [];
                 showSuggestions(suggestions, keyword);
 
             } catch (err) {
-                console.error("❌ Lỗi khi lấy gợi ý:", err);
+                console.error("Lỗi khi lấy gợi ý:", err);
                 suggestionList.style.display = "none";
             }
         }, DEBOUNCE_DELAY);
     }
 
-    // Lắng nghe sự kiện input
     input.addEventListener("input", e => {
         const keyword = e.target.value.trim();
         console.log("⌨️ User typed:", keyword);
         fetchSuggestions(keyword);
     });
 
-    // Ẩn gợi ý khi click ra ngoài
     document.addEventListener("click", e => {
         if (!suggestionList.contains(e.target) && e.target !== input) {
             suggestionList.style.display = "none";
         }
     });
 
-    // Xử lý phím mũi tên và Enter
     input.addEventListener("keydown", e => {
         const items = suggestionList.querySelectorAll("li");
         let currentFocus = Array.from(items).findIndex(item => item.classList.contains("active"));

@@ -20,12 +20,10 @@ class LoginController extends Controller
     }
     protected function redirectTo()
     {
-    // Nếu có tham số redirect thì quay lại trang cũ sau khi login
     if (request()->has('redirect')) {
         return request()->get('redirect');
     }
 
-    // Mặc định quay về trang chủ
     return '/';
     }
     public function index()
@@ -49,8 +47,7 @@ class LoginController extends Controller
             ]);
         }
 
-        $activation_token = Str::random(60); // Tạo token ngẫu nhiên
-        // Nếu không tồn tại, thực hiện đăng ký
+        $activation_token = Str::random(60);
         $dataInsert = [
             'username'         => $username_regis,
             'email'            => $email,
@@ -60,7 +57,6 @@ class LoginController extends Controller
 
         $this->login->registerAcount($dataInsert);
 
-        //Gửi email kích hoạt
         $this->sendActivationEmail($email, $activation_token);
 
         return response()->json([
@@ -89,8 +85,6 @@ class LoginController extends Controller
             return redirect('/login')->with('error', 'Mã kích hoạt không hợp lệ!');
         }
     }
-
-    //Xử lý người dùng đăng nhập
        public function login(Request $request)
     {
         $username = $request->username;
@@ -112,7 +106,7 @@ class LoginController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Đăng nhập thành công!',
-                'redirectUrl' => route('home'),  // Optional: dynamic home route
+                'redirectUrl' => route('home'),
             ]);
 
         } else {
@@ -123,10 +117,8 @@ class LoginController extends Controller
         }
     }
 
-    //Xử lý đăng xuất
     public function logout(Request $request)
     {
-        // Xóa session lưu trữ thông tin người dùng đã đăng nhập
         $request->session()->forget('username');
         $request->session()->forget('avatar');
         $request->session()->forget('userId');

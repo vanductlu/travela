@@ -44,17 +44,12 @@ class ToursManagementController extends Controller
         $end_date = $request->input('end_date');
         $description = $request->input('description');
 
-        // Chuyển start_date và end_date từ định dạng d/m/Y sang Y-m-d
         $startDate = Carbon::createFromFormat('d/m/Y', $start_date)->format('Y-m-d');
         $endDate = Carbon::createFromFormat('d/m/Y', $end_date)->format('Y-m-d');
 
-        // Tính số ngày giữa start_date và end_date
         $days = Carbon::createFromFormat('Y-m-d', $startDate)->diffInDays(Carbon::createFromFormat('Y-m-d', $endDate));
 
-        // Tính số đêm: số ngày - 1
         $nights = $days - 1;
-
-        // Định dạng thời gian theo kiểu "X ngày Y đêm"
         $time = "{$days} ngày {$nights} đêm";
 
         $dataTours = [
@@ -94,22 +89,18 @@ public function addImagesTours(Request $request)
             return response()->json(['success' => false, 'message' => 'Invalid file upload'], 400);
         }
 
-        // Tạo tên file mới
         $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $image->getClientOriginalExtension();
         $filename = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName) . '_' . time() . '.' . $extension;
 
-        // Thư mục lưu ảnh
         $destinationPath = public_path('clients/assets/images/gallery-tours/');
 
         if (!File::exists($destinationPath)) {
             File::makeDirectory($destinationPath, 0755, true);
         }
 
-        // LƯU FILE GỐC — KHÔNG DÙNG GD
         $image->move($destinationPath, $filename);
 
-        // Lưu DB
         $dataUpload = [
             'tourId' => $tourId,
             'imageUrl' => $filename,
@@ -141,7 +132,6 @@ public function addTimeline(Request $request)
 {
     $tourId = $request->tourId;
 
-    // Kiểm tra ID
     if (!$tourId) {
         return response()->json([
             'success' => false,
@@ -149,7 +139,6 @@ public function addTimeline(Request $request)
         ], 400);
     }
 
-    // Kiểm tra ảnh
     $hasImages = $this->tours->hasImages($tourId);
     if (!$hasImages) {
         return response()->json([
@@ -158,7 +147,6 @@ public function addTimeline(Request $request)
         ], 400);
     }
 
-    // Lấy dữ liệu timeline (JSON)
     $timelineJson = $request->timeline;
     $timelineArray = json_decode($timelineJson, true);
 
@@ -169,7 +157,6 @@ public function addTimeline(Request $request)
         ], 400);
     }
 
-    // Lưu timeline vào database
     foreach ($timelineArray as $item) {
         $this->tours->addTimeLine([
             'tourId' => $tourId,
@@ -177,8 +164,6 @@ public function addTimeline(Request $request)
             'description' => $item['content']
         ]);
     }
-
-    // Cập nhật trạng thái hoàn thành tour
     $this->tours->updateTour($tourId, ['availability' => 1]);
 
     return response()->json([
@@ -200,7 +185,6 @@ public function addTimeline(Request $request)
             ]);
         }
 
-        // Kiểm tra ngày bắt đầu
         $startDate = Carbon::parse($getTour->startDate);
         $today = Carbon::now();
 
@@ -235,20 +219,16 @@ public function uploadTempImagesTours(Request $request)
             return response()->json(['success' => false, 'message' => 'Invalid image upload'], 400);
         }
 
-        // Lấy tên file
         $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $image->getClientOriginalExtension();
         $filename = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName) . '_' . time() . '.' . $extension;
 
-        // Thư mục lưu ảnh tạm
         $destinationPath = public_path('clients/assets/images/gallery-tours-temp/');
 
-        // Nếu thư mục chưa tồn tại → tạo
         if (!File::exists($destinationPath)) {
             File::makeDirectory($destinationPath, 0755, true);
         }
 
-        // LƯU FILE GỐC — KHÔNG XỬ LÝ, KHÔNG DÙNG GD
         $image->move($destinationPath, $filename);
 
         return response()->json([
@@ -273,7 +253,6 @@ public function updateTour(Request $request)
 
         $name = $request->input('name');
         $description = $request->input('description');
-        // bạn có thể validate fields ở đây
 
         $dataTours = [
             'title' => $name,
@@ -285,14 +264,10 @@ public function updateTour(Request $request)
             'domain' => $request->input('domain'),
         ];
 
-        // XÓA DỮ LIỆU CŨ
         $this->tours->deleteData($tourId, 'tbl_timeline');
         $this->tours->deleteData($tourId, 'tbl_images');
-
-        // CẬP NHẬT TOUR
         $updateTour = $this->tours->updateTour($tourId, $dataTours);
 
-        // ADD images mới (JS gửi array filenames trực tiếp)
         $images = $request->input('images');
         if ($images && is_array($images)) {
             foreach ($images as $image) {
@@ -305,7 +280,6 @@ public function updateTour(Request $request)
             }
         }
 
-        // ADD timelines
         $timelines = $request->input('timeline');
         if ($timelines && is_array($timelines)) {
             foreach ($timelines as $timeline) {
@@ -320,7 +294,7 @@ public function updateTour(Request $request)
 
         return response()->json(['success' => true, 'message' => 'Sửa thành công!']);
     } catch (\Exception $e) {
-        \Log::error('updateTour error: '.$e->getMessage(), [
+        Log::error('updateTour error: '.$e->getMessage(), [
             'input' => $request->all()
         ]);
         return response()->json(['success' => false, 'message' => 'Lỗi server: '.$e->getMessage()], 500);
@@ -328,24 +302,13 @@ public function updateTour(Request $request)
 }
 
 
-    /**
- * ✅ Xóa tour - Hiển thị thông tin và xác nhận
- */
 public function deleteTour(Request $request)
 {
     $tourId = $request->tourId;
-
-    // Lấy thông tin các bản ghi liên quan
     $related = $this->tours->getRelatedRecords($tourId);
-    
-    // Log để debug
     Log::info("Attempting to delete tour {$tourId}", $related);
-
-    // Thực hiện xóa
     $result = $this->tours->deleteTour($tourId);
-    
     if ($result['success']) {
-        // Lấy danh sách tours mới sau khi xóa
         $tours = $this->tours->getAllTours();
         
         return response()->json([
@@ -361,10 +324,6 @@ public function deleteTour(Request $request)
         ], 500);
     }
 }
-
-/**
- * ✅ API kiểm tra thông tin trước khi xóa
- */
 public function checkBeforeDelete(Request $request)
 {
     $tourId = $request->tourId;
@@ -395,18 +354,16 @@ public function checkBeforeDelete(Request $request)
         'tour' => $tour,
         'related' => $related,
         'warnings' => $warnings,
-        'canDelete' => true, // Luôn cho phép xóa
+        'canDelete' => true,
         'message' => count($warnings) > 0 
             ? 'Tour có dữ liệu liên quan. Tất cả sẽ bị xóa!' 
             : 'Tour có thể xóa an toàn.'
     ]);
 }
-
-    // ✅ THÊM: Kiểm tra tour có ảnh chưa
     public function checkTourImages(Request $request)
     {
         $tourId = $request->tourId;
-         $count = DB::table('tbl_images')   // nhớ sửa tên bảng cho đúng
+         $count = DB::table('tbl_images')
         ->where('tourId', $tourId)
         ->count();
         

@@ -34,20 +34,7 @@ use App\Http\Controllers\admin\BookingManagementController;
 use App\Http\Controllers\admin\ContactManagementController;
 use App\Http\Controllers\admin\BlogManagementController;
 use App\Http\Controllers\admin\CommentManagementController;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
-// Route::get('/', function () {
-//     return view('home');
-// });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
@@ -64,7 +51,6 @@ Route::get('/user-profile', [UserProfileController::class, 'index'])->name('user
 Route::post('/user-profile', [UserProfileController::class, 'update'])->name('update-user-profile');
 Route::post('/createBooking', [BookingController::class, 'store'])->name('create-booking');
 
-//Handle Blog
 Route::get('/blog', [BlogController::class, 'index'])->name('blog')->middleware('checkLoginClient');  
 Route::get('/blog/search', [BlogController::class, 'search'])->name('blog.search')->middleware('checkLoginClient');
 Route::get('/blog/category/{category}', [BlogController::class, 'category'])->name('blog.category')->middleware('checkLoginClient');
@@ -72,106 +58,60 @@ Route::middleware(['web'])->group(function () {
     Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog-details');
 });
 
-// Like và Comment bắt buộc đăng nhập
 Route::post('/blog/{id}/like', [BlogController::class, 'like'])->name('blog.like');
 Route::post('/blog/{id}/comment', [BlogController::class, 'comment'])->name('blog.comment');
 
-//Handle Get tours , filter Tours
 Route::get('/tours', [ToursController::class, 'index'])->name('tours');
 Route::get('/filter-tours', [ToursController::class, 'filterTours'])->name('filter-tours');
 
-//Handle Login
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/register', [LoginController::class, 'register'])->name('register');
 Route::post('/login', [LoginController::class, 'login'])->name('user-login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('activate-account/{token}', [LoginController::class, 'activateAccount'])->name('activate.account');
-//Handle reset password
-// Quên mật khẩu
+
 Route::get('/forgot-password', [PasswordResetController::class, 'showForgotForm'])->name('password.forgot');
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('password.send');
 
-// Đặt lại mật khẩu
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset.form');
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.reset');
 
-//Login with google
 Route::get('auth/google', [LoginGoogleController::class, 'redirectToGoogle'])->name('login-google');
 Route::get('auth/google/callback', [LoginGoogleController::class, 'handleGoogleCallback']);
 
-// //Handle user profile
-// Route::get('/user-profile', [UserProfileController::class, 'index'])->name('user-profile');
-//Handle user profile
+
 Route::get('/user-profile', [UserProfileController::class, 'index'])->name('user-profile')->middleware('checkLoginClient');
 Route::post('/user-profile', [UserProfileController::class, 'update'])->name('update-user-profile');
 Route::post('/change-password-profile', [UserProfileController::class, 'changePassword'])->name('change-password');
 Route::post('/change-avatar-profile', [UserProfileController::class, 'changeAvatar'])->name('change-avatar');
 
-//Handle Checkout
-Route::post('/booking/{id?}', [BookingController::class, 'index'])->name('booking')->middleware('checkLoginClient');
+Route::get('/booking/{id?}', [BookingController::class, 'index'])->name('booking')->middleware('checkLoginClient');
 Route::post('/create-booking', [BookingController::class, 'createBooking'])->name('create-booking');
 Route::get('/booking', [BookingController::class, 'handlePaymentMomoCallback'])->name('handlePaymentMomoCallback');
 
-//My tour
 Route::get('/my-tours', [MyTourController::class, 'index'])->name('my-tours')->middleware('checkLoginClient');
 
-//Tour booked
 Route::get('/tour-booked', [TourBookedController::class, 'index'])->name('tour-booked')->middleware('checkLoginClient');
 Route::post('/cancel-booking', [TourBookedController::class, 'cancelBooking'])->name('cancel-booking');
 Route::post('/reviews', [TourDetailController::class, 'reviews'])->name('reviews')->middleware('checkLoginClient');
 Route::post('/checkBooking', [BookingController::class, 'checkBooking'])->name('checkBooking')->middleware('checkLoginClient');
 Route::post('/tour/apply-coupon', [TourBookedController::class, 'applyCoupon'])->name('tour.apply.coupon')->middleware('checkLoginClient');
-//Contact
+
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/create-contact', [ContactController::class, 'createContact'])->name('create-contact');
 
-//Payment with Momo
 Route::post('/create-momo-payment', [BookingController::class, 'createMomoPayment'])->name('createMomoPayment');
 Route::get('/booking/momo/callback', [BookingController::class, 'handlePaymentMomoCallback'])->name('booking.momo.callback');
-//Search 
+
 Route::get('/search', [SearchController::class, 'index'])->name(name: 'search');
 Route::get('/search-voice-text', [SearchController::class, 'searchTours'])->name('search-voice-text');
 Route::get('/api/search-suggestions', [SearchController::class, 'getSuggestions'])->name('api.search.suggestions');
-//Chatbot
-    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-    Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
-// Route::get('/test-gemini', function() {
-//     $apiKey = env('GEMINI_API_KEY');
-    
-//     $client = new \GuzzleHttp\Client([
-//         'base_uri' => 'https://generativelanguage.googleapis.com/v1beta/',
-//     ]);
-    
-//     try {
-//         $response = $client->post("models/gemini-2.0-flash:generateContent?key={$apiKey}", [
-//             'json' => [
-//                 'contents' => [
-//                     [
-//                         'role' => 'user',
-//                         'parts' => [['text' => 'Hello, say hi!']]
-//                     ]
-//                 ]
-//             ]
-//         ]);
-        
-//         $result = json_decode($response->getBody()->getContents(), true);
-        
-//         return response()->json([
-//             'success' => true,
-//             'result' => $result
-//         ]);
-        
-//     } catch (\Exception $e) {
-//         return response()->json([
-//             'success' => false,
-//             'error' => $e->getMessage(),
-//             'response' => $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : null
-//         ]);
-//     }
-// });
+
+Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
+
 Route::post('/ai/translate', [AiTranslateController::class, 'translate'])->name('ai.translate');
-//ADMIN
-// Routes without middleware
+
 Route::prefix('admin')->group(function () {
     Route::get('/login', [LoginAdminController::class, 'index'])->name('admin.login');
     Route::post('/login-account', [LoginAdminController::class, 'loginAdmin'])->name('admin.login-account');
@@ -181,17 +121,14 @@ Route::prefix('admin')->group(function () {
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    //Management admin
     Route::get('/admin', [AdminManagementController::class, 'index'])->name('admin.admin');
     Route::post('/update-admin', [AdminManagementController::class, 'updateAdmin'])->name('admin.update-admin');
     Route::post('/update-avatar', [AdminManagementController::class, 'updateAvatar'])->name('admin.update-avatar');
 
-    //Handler management user
     Route::get('/users', [UserManagementController::class, 'index'])->name('admin.users');
     Route::post('/active-user', [UserManagementController::class, 'activeUser'])->name('admin.active-user');
     Route::post('/status-user', [UserManagementController::class, 'changeStatus'])->name('admin.status-user');
 
-    //Management Tours
     Route::get('/tours', [ToursManagementController::class, 'index'])->name('admin.tours');
 
     Route::get('/page-add-tours', [ToursManagementController::class, 'pageAddTours'])->name('admin.page-add-tours');
@@ -205,14 +142,14 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/tour-edit', [ToursManagementController::class, 'getTourEdit'])->name('admin.tour-edit');
     Route::post('/edit-tour', [ToursManagementController::class, 'updateTour'])->name('admin.edit-tour');
     Route::post('/add-images-tours', [ToursManagementController::class, 'addImagesTours'])->name('admin.add-images-tours');
-    //Management Booking
+    
     Route::get('/booking', [BookingManagementController::class, 'index'])->name('admin.booking');
     Route::post('/confirm-booking', [BookingManagementController::class, 'confirmBooking'])->name('admin.confirm-booking');
     Route::get('/booking-detail/{id?}', [BookingManagementController::class, 'showDetail'])->name('admin.booking-detail');
     Route::post('/finish-booking', [BookingManagementController::class, 'finishBooking'])->name('admin.finish-booking');
     Route::post('/received-money', [BookingManagementController::class, 'receiviedMoney'])->name('admin.received');
 
-    //Coupon management
+    
     Route::post('/coupon/{id}/toggle-status', [CouponManagementController::class, 'toggleStatus'])->name('admin.coupon.toggle-status');
     Route::get('/coupon', [CouponManagementController::class, 'index'])->name('admin.coupon.index');
     Route::get('/coupon/create', [CouponManagementController::class, 'create'])->name('admin.coupon.create');
@@ -222,19 +159,19 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::put('/coupon/{id}', [CouponManagementController::class, 'update'])->name('admin.coupon.update');
     Route::delete('/coupon/{id}', [CouponManagementController::class, 'destroy'])->name('admin.coupon.destroy');
    
-    //Send mail pdf
+    
     Route::post('/send-pdf', [BookingManagementController::class, 'sendPdf'])->name('admin.send.pdf');
 
-    //Contact management
+    
     Route::get('/contact', [ContactManagementController::class, 'index'])->name('admin.contact');
     Route::post('/reply-contact', [ContactManagementController::class, 'replyContact'])->name('admin.reply-contact');
-    // Nhóm route cho admin/blog
-    Route::get('/blog', [BlogManagementController::class, 'index'])->name('admin.blog');        // /admin/blog
-    Route::get('/blog/create', [BlogManagementController::class, 'create'])->name('admin.blog.create'); // /admin/blog/create
-    Route::post('/blog/store', [BlogManagementController::class, 'store'])->name('admin.blog.store');   // POST /admin/blog/store
-    Route::get('/blog/{id}/edit', [BlogManagementController::class, 'edit'])->name('admin.blog.edit');  // /admin/blog/{id}/edit
-    Route::put('/blog/{id}/update', [BlogManagementController::class, 'update'])->name('admin.blog.update'); // POST /admin/blog/{id}/update
-    Route::delete('/blog/{id}/delete', [BlogManagementController::class, 'destroy'])->name('admin.blog.delete'); // GET /admin/blog/{id}/delete
+    
+    Route::get('/blog', [BlogManagementController::class, 'index'])->name('admin.blog');       
+    Route::get('/blog/create', [BlogManagementController::class, 'create'])->name('admin.blog.create'); 
+    Route::post('/blog/store', [BlogManagementController::class, 'store'])->name('admin.blog.store');   
+    Route::get('/blog/{id}/edit', [BlogManagementController::class, 'edit'])->name('admin.blog.edit');  
+    Route::put('/blog/{id}/update', [BlogManagementController::class, 'update'])->name('admin.blog.update'); 
+    Route::delete('/blog/{id}/delete', [BlogManagementController::class, 'destroy'])->name('admin.blog.delete'); 
     Route::get('/comments', [CommentManagementController::class, 'index'])->name('admin.comments');
     Route::delete('/comments/{id}', [CommentManagementController::class, 'destroy'])->name('admin.comments.delete');
     Route::delete('/comments/blog/{blogId}', [CommentManagementController::class, 'deleteByBlog'])->name('admin.comments.deleteByBlog');

@@ -1,7 +1,6 @@
 @include('clients.blocks.header')
 @include('clients.blocks.banner')
 @include('clients.partials.chat')
-<!-- Tour Grid Area start -->
 <section class="tour-grid-page py-100 rel z-2">
     <div class="container">
         <div class="row">
@@ -61,7 +60,6 @@
         </div>
     </div>
 </section>
-<!-- Tour Grid Area end -->
 
 @include('clients.blocks.new_letter')
 @include('clients.blocks.footer')

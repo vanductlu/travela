@@ -30,8 +30,8 @@ class AppServiceProvider extends ServiceProvider
 
         $view->with('unreadCount', $data['countUnread']);
         $view->with('unreadContacts', $data['contacts']);
-        Carbon::setLocale('vi'); // Nếu muốn hiển thị tiếng Việt
-        date_default_timezone_set('Asia/Ho_Chi_Minh'); // Giờ Việt Nam
+        Carbon::setLocale('vi'); 
+        date_default_timezone_set('Asia/Ho_Chi_Minh'); 
     });
     }
 }

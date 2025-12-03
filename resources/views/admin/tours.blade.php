@@ -3,7 +3,6 @@
     <div class="main_container">
         @include('admin.blocks.sidebar')
 
-        <!-- page content -->
         <div class="right_col" role="main">
             <div class="">
                 <div class="page-title">
@@ -66,8 +65,6 @@
                 </div>
             </div>
         </div>
-        <!-- /page content -->
-<!-- Modal Edit Tour -->
 <div class="modal fade" id="edit-tour-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">

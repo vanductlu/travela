@@ -34,7 +34,7 @@ class ContactModel extends Model
             ->orderBy('contactId', 'desc')
             ->get();
 
-        $countUnread = $contacts->count(); // Đếm số lượng thư chưa trả lời
+        $countUnread = $contacts->count();
 
         return [
             'countUnread' => $countUnread,

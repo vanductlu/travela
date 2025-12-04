@@ -51,7 +51,7 @@ class LoginController extends Controller
         $dataInsert = [
             'username'         => $username_regis,
             'email'            => $email,
-            'password'         => md5($request->password),
+            'password'         => md5($request->password_regis),
             'activation_token' => $activation_token
         ];
 

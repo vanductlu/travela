@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Illuminate\Http\Request;
 class Handler extends ExceptionHandler
 {
@@ -49,7 +50,7 @@ class Handler extends ExceptionHandler
     }
     public function render($request, Throwable $exception)
     {
-        if ($this->isHttpException($exception)) {
+        if ($exception instanceof HttpExceptionInterface) {
 
             if ($exception->getStatusCode() == 404) {
                 if ($request->is('admin/*')) {

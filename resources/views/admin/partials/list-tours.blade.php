@@ -20,7 +20,6 @@
         <td>{{ date('d-m-Y', strtotime($tour->endDate)) }}</td>
 
         <td>
-            <!-- NÚT SỬA -->
             <button type="button"
                 class="btn-action-listTours edit-tour"
                 data-toggle="modal"
@@ -33,7 +32,6 @@
         </td>
 
         <td>
-            <!-- NÚT XOÁ -->
             <button type="button"
                 class="btn-action-listTours delete-tour"
                 data-tourid="{{ $tour->tourId }}"

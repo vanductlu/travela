@@ -5,7 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\admin\UserModel;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 class UserManagementController extends Controller
 {
 
@@ -18,7 +18,6 @@ class UserManagementController extends Controller
     public function index()
     {
         $title = 'Quản lý người dùng';
-
         $users = $this->users->getAllUsers();
 
         foreach ($users as $user) {
@@ -28,10 +27,8 @@ class UserManagementController extends Controller
             if (!$user->avatar) {
                 $user->avatar = 'unnamed.png';
             }
-            if ($user->isActive == 'y')
-                $user->isActive = 'Đã kích hoạt';
-            else
-                $user->isActive = 'Chưa kích hoạt';
+            $user->statusText = $this->getStatusText($user->status);
+            $user->isActiveText = ($user->isActive == 'y') ? 'Đã kích hoạt' : 'Chưa kích hoạt';
         }
         return view('admin.users', compact('title', 'users'));
     }
@@ -39,7 +36,6 @@ class UserManagementController extends Controller
     public function activeUser(Request $request)
     {
         $userId = $request->userId;
-
         $updateActive = $this->users->updateActive($userId);
 
         if ($updateActive) {
@@ -80,10 +76,134 @@ class UserManagementController extends Controller
             ], 500);
         }
     }
+    public function blockUser(Request $request)
+    {
+        $request->validate([
+            'userId' => 'required|integer'
+        ]);
+
+        $userId = $request->userId;
+        $user = $this->users->getUserById($userId);
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Người dùng không tồn tại!'
+            ], 404);
+        }
+        if ($user->status === 'b') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Người dùng này đã bị chặn rồi!'
+            ], 400);
+        }
+
+        $blocked = $this->users->blockUser($userId);
+
+        if ($blocked) {
+            Log::info("User blocked", [
+                'userId' => $userId,
+                'username' => $user->username
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Chặn người dùng thành công!',
+                'status' => 'Đã chặn'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi chặn người dùng!'
+            ], 500);
+        }
+    }
+    public function unblockUser(Request $request)
+    {
+        $request->validate([
+            'userId' => 'required|integer'
+        ]);
+
+        $userId = $request->userId;
+        $user = $this->users->getUserById($userId);
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Người dùng không tồn tại!'
+            ], 404);
+        }
+
+        if ($user->status !== 'b') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Người dùng này không bị chặn!'
+            ], 400);
+        }
+
+        $unblocked = $this->users->unblockUser($userId);
+
+        if ($unblocked) {
+            Log::info("User unblocked", [
+                'userId' => $userId,
+                'username' => $user->username
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Khôi phục người dùng thành công!',
+                'status' => 'Hoạt động'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi khôi phục người dùng!'
+            ], 500);
+        }
+    }
+    public function deleteUser($id)
+{
+    $user = $this->users->getUserById($id);
+
+    if (!$user) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Người dùng không tồn tại!'
+        ], 404);
+    }
+    $result = $this->users->deleteUserCascade($id);
+
+    if ($result['success']) {
+
+        Log::info("User deleted successfully", [
+            'userId' => $id,
+            'username' => $user->username,
+            'deleted_data' => $result['data']
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Xóa người dùng và dữ liệu liên quan thành công!',
+            'data' => $result['data']
+        ]);
+    }
+
+    Log::error("Failed to delete user", [
+        'userId' => $id,
+        'error' => $result['error']
+    ]);
+
+    return response()->json([
+        'success' => false,
+        'message' => 'Có lỗi xảy ra: ' . $result['error']
+    ], 500);
+}
 
     private function getStatusText($status)
     {
         switch ($status) {
+            case null:
+                return 'Hoạt động';
             case 'b':
                 return 'Đã chặn';
             case 'd':

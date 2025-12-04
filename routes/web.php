@@ -57,8 +57,6 @@ Route::get('/blog/category/{category}', [BlogController::class, 'category'])->na
 Route::middleware(['web'])->group(function () {
     Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog-details');
 });
-
-Route::post('/blog/{id}/like', [BlogController::class, 'like'])->name('blog.like');
 Route::post('/blog/{id}/comment', [BlogController::class, 'comment'])->name('blog.comment');
 
 Route::get('/tours', [ToursController::class, 'index'])->name('tours');
@@ -128,6 +126,10 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/users', [UserManagementController::class, 'index'])->name('admin.users');
     Route::post('/active-user', [UserManagementController::class, 'activeUser'])->name('admin.active-user');
     Route::post('/status-user', [UserManagementController::class, 'changeStatus'])->name('admin.status-user');
+    Route::post('/block-user', [UserManagementController::class, 'blockUser'])->name('admin.block-user');
+    Route::post('/unblock-user', [UserManagementController::class, 'unblockUser'])->name('admin.unblock-user');
+    Route::delete('/delete-user/{id}', [UserManagementController::class, 'deleteUser'])->name('admin.delete-user');
+
 
     Route::get('/tours', [ToursManagementController::class, 'index'])->name('admin.tours');
 

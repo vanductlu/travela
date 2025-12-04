@@ -64,13 +64,6 @@ class BlogController extends Controller
 
         return view('clients.blog', compact('blogs', 'recent', 'categories', 'title'));
     }
-    public function like($id)
-    {
-    $blog = Blog::findOrFail($id);
-    $blog->increment('likes');
-    return response()->json(['likes' => $blog->likes]);
-    }
-
     public function comment(Request $request, $id)
     {
     if (!$request->session()->has('username')) {

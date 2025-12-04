@@ -99,7 +99,19 @@ class LoginController extends Controller
         $userId = $this->user->getUserId($username);
         $user = $this->user->getUser($userId);
 
-        if ($user_login != null) {
+            if ($user_login != null) {
+                if ($user->isActive == 'n') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tài khoản của bạn chưa được kích hoạt. Vui lòng kích hoạt tài khoản!',
+                ]);
+            }
+            if ($user->status == 'b') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tài khoản của bạn đã bị khóa!',
+                ]);
+            }
             $request->session()->put('username', $username);
             $request->session()->put('avatar', $user->avatar);
             toastr()->success("Đăng nhập thành công!",'Thông báo');

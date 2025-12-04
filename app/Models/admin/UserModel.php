@@ -16,7 +16,12 @@ class UserModel extends Model
     {
         return DB::table($this->table)->get();
     }
-
+    public function getUserById($id)
+    {
+        return DB::table($this->table)
+            ->where('userId', $id)
+            ->first();
+    }
     public function updateActive($id)
     {
         return DB::table($this->table)
@@ -28,6 +33,98 @@ class UserModel extends Model
         return DB::table($this->table)
             ->where('userId', $id) 
             ->update($data); 
+    }
+    public function blockUser($userId)
+    {
+        return DB::table($this->table)
+            ->where('userId', $userId)
+            ->update([
+                'status' => 'b',
+                'updatedDate' => now()
+            ]);
+    }
+    public function unblockUser($userId)
+    {
+        return DB::table($this->table)
+            ->where('userId', $userId)
+            ->update([
+                'status' => null,
+                'updatedDate' => now()
+            ]);
+    }
+    public function deleteUserCascade($userId)
+    {
+        DB::beginTransaction();
+
+        try {
+            $user = $this->getUserById($userId);
+            
+            if (!$user) {
+                throw new \Exception('User không tồn tại!');
+            }
+
+            $bookingIds = DB::table('tbl_booking')
+                ->where('userId', $userId)
+                ->pluck('bookingId')
+                ->toArray();
+
+            $checkoutDeleted = 0;
+            if (!empty($bookingIds)) {
+                $checkoutDeleted = DB::table('tbl_checkout')
+                    ->whereIn('bookingId', $bookingIds)
+                    ->delete();
+            }
+
+            $bookingDeleted = DB::table('tbl_booking')
+                ->where('userId', $userId)
+                ->delete();
+
+            $reviewsDeleted = DB::table('tbl_reviews')
+                ->where('userId', $userId)
+                ->delete();
+            $chatDeleted = DB::table('tbl_chat')
+                ->where('userId', $userId)
+                ->delete();
+            $commentsDeleted = 0;
+            if ($user->fullName) {
+                DB::table('tbl_comments')
+                    ->where('name', $user->fullName)
+                    ->whereNotNull('parent_id')
+                    ->delete();
+                $commentsDeleted = DB::table('tbl_comments')
+                    ->where('name', $user->fullName)
+                    ->delete();
+            }
+
+            $deleted = DB::table($this->table)
+                ->where('userId', $userId)
+                ->delete();
+
+            if (!$deleted) {
+                throw new \Exception('Không thể xóa user');
+            }
+
+            DB::commit();
+
+            return [
+                'success' => true,
+                'data' => [
+                    'checkouts_deleted' => $checkoutDeleted,
+                    'bookings_deleted' => $bookingDeleted,
+                    'reviews_deleted' => $reviewsDeleted,
+                    'comments_deleted' => $commentsDeleted,
+                    'chat_deleted' => $chatDeleted,
+                ]
+            ];
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
     }
     public function getTotalUsers()
     {

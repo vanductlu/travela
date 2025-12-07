@@ -138,7 +138,7 @@
                     </div>
                     <div class="circle-logo">
                         <img src="{{ asset('clients/assets/images/contact/icon.png') }}" alt="Logo">
-                        <span class="title h2">Travela</span>
+                        <span class="title h2">RAVELO</span>
                     </div>
                 </div>
             </div>

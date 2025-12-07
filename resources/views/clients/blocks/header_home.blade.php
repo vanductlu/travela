@@ -39,9 +39,10 @@
 
                     <div class="header-inner rel d-flex align-items-center">
                         <div class="logo-outer">
-                            <div class="logo"><a href="{{ route('home') }}"><img
-                                        src="{{ asset('clients/assets/images/logos/logo.png') }}" alt="Logo"
-                                        title="Logo"></a></div>
+                            <div class="logo"><a href="{{ route('home') }}">
+                                <img src="{{ asset('clients/assets/images/logos/logo.png') }}" alt="Logo"
+                                        title="Logo">
+                                        </a></div>
                         </div>
 
                         <div class="nav-outer mx-lg-auto ps-xxl-5 clearfix">

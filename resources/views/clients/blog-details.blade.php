@@ -132,20 +132,6 @@
             </div>
             <div class="col-lg-4 col-md-8 col-sm-10 rmt-75">
                 <div class="blog-sidebar">
-                    
-                    <div class="widget widget-search">
-                        <h5 class="widget-title">🔍 Tìm kiếm</h5>
-                        <form action="{{ route('blog') }}" method="GET" class="search-form">
-                            <div class="search-input-wrapper">
-                                <input type="text" name="search" placeholder="Tìm kiếm bài viết..." 
-                                       value="{{ request('search') }}" class="search-input">
-                                <button type="submit" class="search-button">
-                                    <i class="far fa-search"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
                     <div class="widget widget-categories">
                         <h5 class="widget-title">📂 Danh mục</h5>
                         <ul class="category-list">
@@ -235,40 +221,23 @@
                         </div>
                     </div>
 
-                    <div class="widget widget-newsletter">
-                        <h5 class="widget-title">📧 Đăng ký nhận tin</h5>
-                        <p class="newsletter-desc">Nhận thông báo về bài viết mới nhất qua email</p>
-                        <form action="#" method="POST" class="newsletter-form">
-                            @csrf
-                            <div class="newsletter-input-wrapper">
-                                <input type="email" name="email" placeholder="Email của bạn..." required class="newsletter-input">
-                                <button type="submit" class="newsletter-button">
-                                    <i class="far fa-paper-plane"></i>
-                                </button>
-                            </div>
-                            <div class="newsletter-checkbox">
-                                <input type="checkbox" id="agree" required>
-                                <label for="agree">Tôi đồng ý nhận email từ website</label>
-                            </div>
-                        </form>
-                    </div>
 
                     <div class="widget widget-social">
                         <h5 class="widget-title">🌐 Theo dõi chúng tôi</h5>
                         <div class="social-links">
-                            <a href="#" class="social-item facebook">
+                            <a href="facebook.com" class="social-item facebook">
                                 <i class="fab fa-facebook-f"></i>
                                 <span>Facebook</span>
                             </a>
-                            <a href="#" class="social-item instagram">
+                            <a href="instagram.com" class="social-item instagram">
                                 <i class="fab fa-instagram"></i>
                                 <span>Instagram</span>
                             </a>
-                            <a href="#" class="social-item youtube">
+                            <a href="youtube.com" class="social-item youtube">
                                 <i class="fab fa-youtube"></i>
                                 <span>Youtube</span>
                             </a>
-                            <a href="#" class="social-item tiktok">
+                            <a href="tiktok.com" class="social-item tiktok">
                                 <i class="fab fa-tiktok"></i>
                                 <span>Tiktok</span>
                             </a>
@@ -276,7 +245,7 @@
                     </div>
 
                     <div class="widget widget-ad">
-                        <a href="#" class="ad-banner">
+                        <a href="{{ route('about') }}" class="ad-banner">
                             <div class="ad-content">
                                 <div class="ad-icon">🎉</div>
                                 <h6>Khuyến mãi đặc biệt</h6>

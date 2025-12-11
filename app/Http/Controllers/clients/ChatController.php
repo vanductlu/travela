@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 class ChatController extends Controller
 {
     protected $client;
-    protected $geminiModel = 'gemini-2.0-flash';
+    protected $geminiModel = 'gemini-2.5-flash-preview-09-2025';
     protected $maxHistory = 6;
 
     public function __construct()

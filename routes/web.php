@@ -86,7 +86,7 @@ Route::post('/change-avatar-profile', [UserProfileController::class, 'changeAvat
 Route::post('/booking/{id?}', [BookingController::class, 'index'])->name('booking')->middleware('checkLoginClient');
 Route::get('/booking/{id?}', [BookingController::class, 'index'])->name('booking')->middleware('checkLoginClient');
 Route::post('/create-booking', [BookingController::class, 'createBooking'])->name('create-booking');
-Route::get('/booking', [BookingController::class, 'handlePaymentMomoCallback'])->name('handlePaymentMomoCallback');
+Route::get('/booking', [BookingController::class, 'handlePaymentMomsoCallback'])->name('handlePaymentMomoCallback');
 
 Route::get('/my-tours', [MyTourController::class, 'index'])->name('my-tours')->middleware('checkLoginClient');
 
